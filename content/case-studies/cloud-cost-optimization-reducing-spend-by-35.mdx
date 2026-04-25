@@ -1,0 +1,49 @@
+---
+title: "Cloud Cost Optimization: Reducing Spend by 35%"
+summary: "A practical FinOps effort across compute, storage, and observability that delivered measurable savings without service regressions."
+date: "2026-02-12"
+tags:
+  - FinOps
+  - AWS
+  - Cost Optimization
+image: "/media/photo-19.webp"
+images:
+  - "/media/photo-19.webp"
+  - "/media/photo-20.webp"
+  - "/media/photo-21.webp"
+impact: "35% spend reduction, ~$75k yearly savings"
+featured: true
+---
+
+## Context
+Our platform footprint grew quickly over two years. Engineering velocity was strong, but infrastructure spend increased faster than product usage.
+
+## Problem
+Monthly cloud costs were climbing without clear ownership. Teams could not confidently explain where spend came from or which workloads were driving the trend.
+
+## Constraints
+- No production downtime during optimization.
+- No aggressive rightsizing that could increase incident risk.
+- Savings had to be sustainable, not one-time cuts.
+
+## Solution
+I introduced a staged FinOps workflow:
+- tagged all critical workloads for clear allocation,
+- created weekly cost reports by service and environment,
+- rightsized underutilized compute,
+- moved bursty workloads to schedule-based scaling,
+- reduced log retention where compliance allowed,
+- migrated selected storage classes for infrequently accessed data.
+
+## Tools
+- AWS Cost Explorer
+- AWS Compute Optimizer
+- CloudWatch
+- Terraform
+- Internal cost dashboards
+
+## Result
+The environment reached **35% overall cloud cost reduction**, equivalent to approximately **$75k annual savings**, while maintaining service performance and deployment speed.
+
+## Lessons Learned
+Cost optimization works best when treated as an engineering routine, not a finance-only activity. Clear ownership, simple dashboards, and weekly reviews prevent drift.

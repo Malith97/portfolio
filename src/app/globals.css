@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  overflow-x: clip;
+}
+
+body {
+  background: #f7f4ef;
+  color: #1e1e1e;
+  font-feature-settings: "kern" 1, "liga" 1;
+  text-rendering: geometricPrecision;
+  line-height: 1.55;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: #d8d2c8;
+  color: #1e1e1e;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+.surface-card {
+  border: 1px solid #d8d2c8;
+  border-radius: 8px;
+  background: #f7f4ef;
+}
+
+.image-frame {
+  border-radius: 8px;
+}
+
+.hover-lift {
+  transition: transform 320ms ease, opacity 320ms ease, filter 360ms ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px) scale(1.01);
+}
+
+.quiet-link {
+  position: relative;
+  display: inline-block;
+}
+
+.quiet-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 1px;
+  background: #d8d2c8;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 280ms ease;
+}
+
+.quiet-link:hover::after {
+  transform: scaleX(1);
+}
+
+.content-prose {
+  @apply prose prose-neutral max-w-none text-[1rem] leading-relaxed;
+}
+
+.content-prose :where(h2, h3, h4) {
+  @apply font-serif text-text;
+}
+
+.content-prose :where(h2) {
+  @apply mt-10 border-t border-border pt-6 text-2xl;
+}
+
+.content-prose :where(h3) {
+  @apply mt-8 text-xl;
+}
+
+.content-prose :where(p, li) {
+  @apply text-text;
+}
+
+.content-prose :where(code) {
+  @apply rounded bg-[#EFEAE2] px-1 py-0.5 font-mono text-xs text-text;
+}
+
+.content-prose :where(a) {
+  @apply text-accent underline decoration-border underline-offset-4;
+}
