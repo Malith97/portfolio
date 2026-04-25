@@ -1,6 +1,8 @@
 import Image from "next/image";
 
 import { SectionHeading } from "@/components/section-heading";
+import { getDictionary } from "@/lib/i18n";
+import { getServerLanguage } from "@/lib/i18n-server";
 import { createMetadata } from "@/lib/metadata";
 
 const storyImages = [
@@ -19,15 +21,30 @@ export const metadata = createMetadata({
 });
 
 export default function StoryPage() {
+  const language = getServerLanguage();
+  const t = getDictionary(language);
+
   return (
     <div className="space-y-14">
       <SectionHeading
-        label="Story"
-        title="From Sri Lanka to Finland, and from software to systems"
-        description="A personal path shaped by curiosity, discipline, and a long-term interest in making technology calmer and more reliable."
+        label={t.storyPage.label}
+        title={t.storyPage.title}
+        description={t.storyPage.description}
       />
 
-      <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+      <section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
+        <figure>
+          <div className="aspect-[4/5] overflow-hidden rounded-md border border-border">
+            <Image
+              src={storyImages[0]}
+              alt="Portrait and notebook composition"
+              width={1200}
+              height={1500}
+              className="hover-lift image-frame h-full w-full object-cover grayscale transition duration-500 ease-out hover:grayscale-0"
+            />
+          </div>
+        </figure>
+
         <div className="space-y-6 text-base leading-relaxed text-text">
           <p>
             I started my career in Sri Lanka as a Software Engineer, learning how products are built under
@@ -39,6 +56,11 @@ export default function StoryPage() {
             infrastructure, and continuous improvement. I enjoy making complex workflows understandable,
             measurable, and easier for teams to maintain.
           </p>
+        </div>
+      </section>
+
+      <section className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+        <div className="space-y-6 text-base leading-relaxed text-text">
           <p>
             Relocating to Finland added a new chapter: adapting to a different culture, investing in Finnish
             language studies, and continuing to build technical depth while staying grounded in practical
@@ -51,12 +73,12 @@ export default function StoryPage() {
           </p>
         </div>
 
-        <section className="grid gap-3 sm:grid-cols-2">
+        <div className="grid gap-3 sm:grid-cols-2">
           <figure className="sm:col-span-2">
             <div className="aspect-[16/10] overflow-hidden rounded-md border border-border">
               <Image
-                src={storyImages[0]}
-                alt="Portrait and notebook composition"
+                src={storyImages[1]}
+                alt="City and travel notes image"
                 width={1400}
                 height={880}
                 className="hover-lift image-frame h-full w-full object-cover grayscale transition duration-500 ease-out hover:grayscale-0"
@@ -64,7 +86,7 @@ export default function StoryPage() {
             </div>
           </figure>
 
-          {storyImages.slice(1).map((image, index) => (
+          {storyImages.slice(2).map((image, index) => (
             <figure key={image}>
               <div className="aspect-[4/3] overflow-hidden rounded-md border border-border">
                 <Image
@@ -77,9 +99,8 @@ export default function StoryPage() {
               </div>
             </figure>
           ))}
-        </section>
-      </div>
+        </div>
+      </section>
     </div>
   );
 }
-

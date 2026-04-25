@@ -2,18 +2,20 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { SectionHeading } from "@/components/section-heading";
+import { getDictionary } from "@/lib/i18n";
+import { getServerLanguage } from "@/lib/i18n-server";
 import { formatDate } from "@/lib/format";
 import { getAllBeyondWorkPosts } from "@/lib/content";
 import { createMetadata } from "@/lib/metadata";
 
 const filters = [
-  { key: "all", label: "All" },
-  { key: "running", label: "Running" },
-  { key: "cycling", label: "Cycling" },
-  { key: "swimming", label: "Swimming" },
-  { key: "photography", label: "Photography" },
-  { key: "videography", label: "Videography" },
-  { key: "other", label: "Other" }
+  { key: "all" },
+  { key: "running" },
+  { key: "cycling" },
+  { key: "swimming" },
+  { key: "photography" },
+  { key: "videography" },
+  { key: "other" }
 ] as const;
 
 type FilterKey = (typeof filters)[number]["key"];
@@ -42,13 +44,37 @@ function toFilterKey(category?: string): Exclude<FilterKey, "all"> {
   return "other";
 }
 
+function buildMetadataLine(post: Awaited<ReturnType<typeof getAllBeyondWorkPosts>>[number]): string {
+  const category = (post.category ?? "Other").toUpperCase();
+  const parts: string[] = [category];
+
+  if (post.distance) parts.push(post.distance.toUpperCase());
+  if (post.duration) parts.push(post.duration.toUpperCase());
+  if (post.weather) parts.push(post.weather.toUpperCase());
+
+  if (!post.distance && !post.duration && !post.weather) {
+    if (post.location) parts.push(post.location.toUpperCase());
+    if (post.photoCount) parts.push(post.photoCount.toUpperCase());
+  }
+
+  return parts.join(" · ");
+}
+
+function isRouteActivity(category?: string): boolean {
+  const normalized = category?.toLowerCase() ?? "";
+  return normalized.includes("running") || normalized.includes("cycling");
+}
+
 export const metadata = createMetadata({
   title: "Beyond Work",
-  description: "A personal journal of running, cycling, swimming, photography, videography, and journeys.",
+  description: "Journal-style activity stories on running, cycling, swimming, photography, and videography.",
   path: "/beyond-work"
 });
 
 export default async function BeyondWorkPage({ searchParams }: BeyondWorkPageProps) {
+  const language = getServerLanguage();
+  const t = getDictionary(language);
+
   const selectedFilter = normalizeFilter(searchParams?.category);
   const posts = await getAllBeyondWorkPosts();
 
@@ -60,9 +86,9 @@ export default async function BeyondWorkPage({ searchParams }: BeyondWorkPagePro
   return (
     <div className="space-y-14">
       <SectionHeading
-        label="Beyond Work"
-        title="Image-focused journal"
-        description="A personal log of training, routes, and visual notes outside engineering work."
+        label={t.beyondWorkPage.label}
+        title={t.beyondWorkPage.title}
+        description={t.beyondWorkPage.description}
       />
 
       <nav aria-label="Beyond work categories" className="-mt-4 border-b border-border pb-5">
@@ -81,7 +107,7 @@ export default async function BeyondWorkPage({ searchParams }: BeyondWorkPagePro
                       : "border-border text-muted hover:border-accent hover:text-accent"
                   }`}
                 >
-                  {filter.label}
+                  {t.beyondWorkPage.filters[filter.key]}
                 </Link>
               </li>
             );
@@ -89,57 +115,49 @@ export default async function BeyondWorkPage({ searchParams }: BeyondWorkPagePro
         </ul>
       </nav>
 
-      <div className="space-y-7">
-        {filteredPosts.map((post) => {
-          const extraImages = post.images.slice(1, 5);
+      <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {filteredPosts.map((post) => (
+          <article key={post.slug} className="surface-card overflow-hidden">
+            <Link href={`/beyond-work/${post.slug}`} className="block h-full">
+              <div className="aspect-[16/10] overflow-hidden border-b border-border">
+                <Image
+                  src={post.image}
+                  alt={post.title}
+                  width={1200}
+                  height={760}
+                  className="hover-lift image-frame h-full w-full object-cover grayscale transition duration-500 ease-out hover:grayscale-0"
+                />
+              </div>
 
-          return (
-            <article key={post.slug} className="surface-card overflow-hidden p-4 sm:p-5">
-              <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-                <div className="space-y-3">
-                  <p className="font-mono text-xs uppercase tracking-label text-muted">
-                    {post.category ?? "Journal"} · {post.location ?? "Finland"}
-                  </p>
-                  <h2 className="font-serif text-3xl leading-tight text-text">
-                    <Link href={`/beyond-work/${post.slug}`} className="transition-colors hover:text-accent">
-                      {post.title}
-                    </Link>
-                  </h2>
-                  <p className="font-mono text-xs uppercase tracking-label text-muted">
-                    {formatDate(post.date)} · {post.readingTime}
-                  </p>
-                  <p className="max-w-reading text-sm leading-relaxed text-muted">{post.summary}</p>
-                </div>
+              <div className="space-y-3 p-4">
+                <p className="font-mono text-xs uppercase tracking-label text-muted">{formatDate(post.date)}</p>
+                <h2 className="font-serif text-2xl leading-tight text-text transition-colors hover:text-accent">
+                  {post.title}
+                </h2>
+                <p className="text-sm leading-relaxed text-muted">{post.summary}</p>
+                <p className="font-mono text-xs uppercase tracking-label text-accent">
+                  {buildMetadataLine(post)}
+                </p>
+              </div>
 
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <div className="sm:col-span-2 aspect-[16/10] overflow-hidden rounded-md border border-border">
+              {isRouteActivity(post.category) && post.routeImage ? (
+                <div className="space-y-2 border-t border-border px-4 pb-4 pt-3">
+                  <p className="font-mono text-[11px] uppercase tracking-label text-muted">{t.common.routeSnapshot}</p>
+                  <div className="aspect-[16/7] overflow-hidden rounded-md border border-border">
                     <Image
-                      src={post.image}
-                      alt={post.title}
-                      width={1400}
-                      height={880}
-                      className="hover-lift image-frame h-full w-full object-cover grayscale transition duration-500 ease-out hover:grayscale-0"
+                      src={post.routeImage}
+                      alt={`${post.title} route screenshot`}
+                      width={1200}
+                      height={520}
+                      className="image-frame h-full w-full object-cover"
                     />
                   </div>
-
-                  {extraImages.map((image, index) => (
-                    <div key={`${image}-${index}`} className="aspect-[4/3] overflow-hidden rounded-md border border-border">
-                      <Image
-                        src={image}
-                        alt={`${post.title} supporting photo ${index + 1}`}
-                        width={900}
-                        height={680}
-                        className="hover-lift image-frame h-full w-full object-cover grayscale transition duration-500 ease-out hover:grayscale-0"
-                      />
-                    </div>
-                  ))}
                 </div>
-              </div>
-            </article>
-          );
-        })}
+              ) : null}
+            </Link>
+          </article>
+        ))}
       </div>
     </div>
   );
 }
-

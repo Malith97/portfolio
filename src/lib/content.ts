@@ -16,10 +16,23 @@ export interface PostMeta {
   tags: string[];
   image: string;
   images: string[];
+  coverImage?: string;
+  photos: string[];
   impact?: string;
   category?: string;
   location?: string;
   featured?: boolean;
+  distance?: string;
+  duration?: string;
+  weather?: string;
+  route?: string;
+  routeImage?: string;
+  difficulty?: string;
+  theme?: string;
+  photoCount?: string;
+  notes?: string;
+  gear: string[];
+  highlights: string[];
   readingTime: string;
 }
 
@@ -45,27 +58,62 @@ function normalizeMeta(
   data: Record<string, unknown>,
   markdown: string
 ): PostMeta {
-  const images = Array.isArray(data.images)
-    ? data.images.filter((value): value is string => typeof value === "string" && value.length > 0)
-    : [];
+  const toStringArray = (value: unknown): string[] => {
+    if (Array.isArray(value)) {
+      return value.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
+    }
 
-  const primaryImage = typeof data.image === "string" ? data.image : images[0] ?? "";
-  const tags = Array.isArray(data.tags)
-    ? data.tags.filter((tag): tag is string => typeof tag === "string")
-    : [];
+    if (typeof value === "string" && value.trim().length > 0) {
+      return value
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+
+    return [];
+  };
+
+  const images = toStringArray(data.images);
+  const photos = toStringArray(data.photos);
+  const mergedImages = [...images, ...photos];
+  const uniqueImages = mergedImages.filter((image, index) => mergedImages.indexOf(image) === index);
+
+  const coverImage =
+    typeof data.coverImage === "string"
+      ? data.coverImage
+      : typeof data.image === "string"
+        ? data.image
+        : uniqueImages[0] ?? "";
+
+  const tags = toStringArray(data.tags);
+  const gear = toStringArray(data.gear);
+  const highlights = toStringArray(data.highlights);
 
   return {
-    slug,
+    slug: typeof data.slug === "string" ? data.slug : slug,
     title: typeof data.title === "string" ? data.title : slug,
     summary: typeof data.summary === "string" ? data.summary : "",
     date: typeof data.date === "string" ? data.date : "1970-01-01",
     tags,
-    image: primaryImage,
-    images: images.length > 0 ? images : primaryImage ? [primaryImage] : [],
+    image: coverImage,
+    images: uniqueImages.length > 0 ? uniqueImages : coverImage ? [coverImage] : [],
+    coverImage,
+    photos: uniqueImages.length > 0 ? uniqueImages : coverImage ? [coverImage] : [],
     impact: typeof data.impact === "string" ? data.impact : undefined,
     category: typeof data.category === "string" ? data.category : undefined,
     location: typeof data.location === "string" ? data.location : undefined,
     featured: typeof data.featured === "boolean" ? data.featured : false,
+    distance: typeof data.distance === "string" ? data.distance : undefined,
+    duration: typeof data.duration === "string" ? data.duration : undefined,
+    weather: typeof data.weather === "string" ? data.weather : undefined,
+    route: typeof data.route === "string" ? data.route : undefined,
+    routeImage: typeof data.routeImage === "string" ? data.routeImage : undefined,
+    difficulty: typeof data.difficulty === "string" ? data.difficulty : undefined,
+    theme: typeof data.theme === "string" ? data.theme : undefined,
+    photoCount: typeof data.photoCount === "string" ? data.photoCount : undefined,
+    notes: typeof data.notes === "string" ? data.notes : undefined,
+    gear,
+    highlights,
     readingTime: toReadingTime(markdown)
   };
 }

@@ -1,5 +1,7 @@
 import { PhotoGrid } from "@/components/photo-grid";
 import { SectionHeading } from "@/components/section-heading";
+import { getDictionary } from "@/lib/i18n";
+import { getServerLanguage } from "@/lib/i18n-server";
 import { createMetadata } from "@/lib/metadata";
 
 interface TimelineItem {
@@ -121,36 +123,42 @@ export const metadata = createMetadata({
 });
 
 export default function WorkEducationPage() {
+  const language = getServerLanguage();
+  const t = getDictionary(language);
+  const isFinnish = language === "fi";
+
   return (
     <div className="space-y-14">
       <SectionHeading
-        label="Work & Education"
-        title="Experience Timeline"
-        description="Work and education milestones presented in chronological order with practical context."
+        label={t.workEducationPage.label}
+        title={t.workEducationPage.title}
+        description={t.workEducationPage.description}
       />
 
-      <section className="relative pl-8">
+      <section className="relative pl-9">
         <span className="absolute bottom-0 left-2 top-2 w-px bg-border" aria-hidden="true" />
 
-        <div className="space-y-10">
+        <div className="space-y-9">
           {timeline.map((item) => (
             <article
               key={`${item.title}-${item.period}`}
               className="surface-card relative overflow-hidden p-5 sm:p-6"
             >
               <span
-                className="absolute -left-[1.6rem] top-7 h-3 w-3 rounded-full border border-accent/70 bg-background"
+                className="absolute -left-[1.65rem] top-7 h-3 w-3 rounded-full border border-accent/70 bg-background"
                 aria-hidden="true"
               />
 
-              <div className="grid gap-6 lg:grid-cols-[150px_1fr] lg:items-start">
-                <aside className="space-y-2 lg:pt-1">
+              <div className="grid gap-6 lg:grid-cols-[168px_1fr] lg:items-start">
+                <aside className="space-y-2 pt-0.5">
                   <p className="font-mono text-xs uppercase tracking-label text-muted">{item.period}</p>
-                  <p className="font-mono text-xs uppercase tracking-label text-accent">{item.kind}</p>
+                  <p className="font-mono text-xs uppercase tracking-label text-accent">
+                    {item.kind === "Work" ? (isFinnish ? "Työ" : "Work") : isFinnish ? "Koulutus" : "Education"}
+                  </p>
                 </aside>
 
-                <div className="space-y-6">
-                  <header className="space-y-2">
+                <div className="space-y-6 lg:min-h-[21rem]">
+                  <header className="space-y-2 border-b border-border pb-4">
                     <h2 className="font-serif text-3xl leading-tight text-text">{item.title}</h2>
                     <p className="text-sm text-muted">{item.place}</p>
                     <p className="max-w-reading text-sm leading-relaxed text-text">{item.story}</p>
@@ -158,7 +166,9 @@ export default function WorkEducationPage() {
 
                   <div className="grid gap-5 md:grid-cols-2">
                     <section className="space-y-2">
-                      <p className="font-mono text-xs uppercase tracking-label text-muted">Key responsibilities</p>
+                      <p className="font-mono text-xs uppercase tracking-label text-muted">
+                        {t.workEducationPage.responsibilities}
+                      </p>
                       <ul className="space-y-2 text-sm leading-relaxed text-text">
                         {item.responsibilities.map((responsibility) => (
                           <li key={responsibility}>• {responsibility}</li>
@@ -167,7 +177,9 @@ export default function WorkEducationPage() {
                     </section>
 
                     <section className="space-y-2">
-                      <p className="font-mono text-xs uppercase tracking-label text-muted">Key outcomes</p>
+                      <p className="font-mono text-xs uppercase tracking-label text-muted">
+                        {t.workEducationPage.outcomes}
+                      </p>
                       <ul className="space-y-2 text-sm leading-relaxed text-text">
                         {item.outcomes.map((outcome) => (
                           <li key={outcome}>• {outcome}</li>
@@ -177,7 +189,7 @@ export default function WorkEducationPage() {
                   </div>
 
                   <section className="space-y-3">
-                    <p className="font-mono text-xs uppercase tracking-label text-muted">Tools used</p>
+                    <p className="font-mono text-xs uppercase tracking-label text-muted">{t.workEducationPage.tools}</p>
                     <ul className="flex flex-wrap gap-2">
                       {item.tools.map((tool) => (
                         <li
@@ -193,7 +205,8 @@ export default function WorkEducationPage() {
                   <PhotoGrid
                     images={item.images}
                     altBase={item.title}
-                    aspectClass="aspect-[4/3]"
+                    aspectClass="aspect-[5/4]"
+                    maxItems={6}
                   />
                 </div>
               </div>
@@ -204,4 +217,3 @@ export default function WorkEducationPage() {
     </div>
   );
 }
-

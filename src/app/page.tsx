@@ -3,20 +3,22 @@ import Link from "next/link";
 
 import { formatDate } from "@/lib/format";
 import { getAllBeyondWorkPosts, getAllCaseStudies } from "@/lib/content";
+import { getDictionary } from "@/lib/i18n";
+import { getServerLanguage } from "@/lib/i18n-server";
 
-const metrics = [
-  { value: "6", label: "Years experience" },
-  { value: "35%", label: "Cloud cost reduction" },
-  { value: "$75k", label: "Annual cloud savings" },
-  { value: "40–50%", label: "Faster deployments" },
-  { value: "20%", label: "Downtime reduction" }
-];
+const metricValues = [
+  { value: "6", key: "yearsExperience" },
+  { value: "35%", key: "cloudCostReduction" },
+  { value: "$75k", key: "annualCloudSavings" },
+  { value: "40–50%", key: "fasterDeployments" },
+  { value: "20%", key: "downtimeReduction" }
+] as const;
 
 const certifications = [
-  { name: "AWS SAA-C03", provider: "Amazon Web Services", icon: "cloud" },
-  { name: "Azure AZ-104", provider: "Microsoft Azure", icon: "layers" },
-  { name: "Azure AZ-500", provider: "Microsoft Azure", icon: "shield" },
-  { name: "Sun Certified Java Developer", provider: "Oracle Java", icon: "code" }
+  { name: "AWS SAA-C03", provider: "Amazon Web Services", issuer: "AWS", icon: "cloud" },
+  { name: "Azure AZ-104", provider: "Microsoft Azure", issuer: "Azure", icon: "layers" },
+  { name: "Azure AZ-500", provider: "Microsoft Azure", issuer: "Azure", icon: "shield" },
+  { name: "Sun Certified Java Developer", provider: "Oracle Java", issuer: "Oracle", icon: "code" }
 ] as const;
 
 function CertificationIcon({ type }: { type: (typeof certifications)[number]["icon"] }) {
@@ -57,42 +59,40 @@ function CertificationIcon({ type }: { type: (typeof certifications)[number]["ic
 }
 
 export default async function HomePage() {
+  const language = getServerLanguage();
+  const t = getDictionary(language);
+
   const caseStudies = (await getAllCaseStudies()).slice(0, 3);
-  const notes = (await getAllBeyondWorkPosts()).slice(0, 5);
-  const leadNote = notes[0];
-  const supportingNotes = notes.slice(1, 5);
+  const notes = (await getAllBeyondWorkPosts()).slice(0, 6);
+  const metrics = metricValues.map((item) => ({
+    value: item.value,
+    label: t.home.metrics[item.key]
+  }));
 
   return (
     <div className="space-y-24">
       <section className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
         <div className="max-w-reading space-y-7">
-          <p className="font-mono text-xs uppercase tracking-label text-muted">Home</p>
+          <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.label}</p>
 
-          <h1 className="font-serif text-5xl leading-[1.03] text-text sm:text-6xl">
-            I&apos;m Malith Ileperuma, a DevOps Engineer based in Finland.
-          </h1>
+          <h1 className="font-serif text-5xl leading-[1.03] text-text sm:text-6xl">{t.home.heroTitle}</h1>
 
-          <p className="text-base leading-relaxed text-muted">
-            I build reliable cloud systems, automate delivery pipelines, and help teams reduce operational
-            complexity.
-          </p>
+          <p className="text-base leading-relaxed text-muted">{t.home.heroSummary}</p>
 
-          <p className="font-mono text-xs uppercase tracking-label text-muted">
-            Senior DevOps / Platform Engineer · Finland · Available for EU and remote roles
-          </p>
+          <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.heroMeta}</p>
 
           <div className="flex flex-wrap gap-4 pt-2">
             <Link
               href="/case-studies"
               className="inline-flex border border-border px-4 py-2 text-sm text-text transition-colors hover:border-accent hover:text-accent"
             >
-              View Work
+              {t.home.ctaViewWork}
             </Link>
             <Link
               href="/Malith-Ileperuma-Resume.txt"
               className="inline-flex border border-border px-4 py-2 text-sm text-text transition-colors hover:border-accent hover:text-accent"
             >
-              Download Resume
+              {t.home.ctaDownloadResume}
             </Link>
           </div>
         </div>
@@ -114,12 +114,10 @@ export default async function HomePage() {
 
       <section className="grid gap-10 border-y border-border py-10 md:grid-cols-[0.9fr_1.1fr] md:items-start">
         <div className="space-y-4">
-          <p className="font-mono text-xs uppercase tracking-label text-muted">Impact</p>
-          <h2 className="font-serif text-4xl leading-tight text-text sm:text-5xl">
-            Measurable platform outcomes
-          </h2>
+          <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.impactLabel}</p>
+          <h2 className="font-serif text-4xl leading-tight text-text sm:text-5xl">{t.home.impactTitle}</h2>
           <p className="max-w-reading text-sm leading-relaxed text-muted">
-            Focused on delivery speed, reliability, and cloud efficiency in enterprise engineering environments.
+            {t.home.impactDescription}
           </p>
         </div>
 
@@ -137,13 +135,38 @@ export default async function HomePage() {
       </section>
 
       <section className="space-y-8">
+        <div className="space-y-2 border-b border-border pb-4">
+          <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.certsLabel}</p>
+          <h2 className="font-serif text-4xl text-text sm:text-5xl">{t.home.certsTitle}</h2>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {certifications.map((cert) => (
+            <article key={cert.name} className="surface-card space-y-3 p-4">
+              <div className="flex items-center justify-between">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border text-accent">
+                  <CertificationIcon type={cert.icon} />
+                </span>
+                <span className="rounded-sm border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-label text-muted">
+                  {t.home.certified}
+                </span>
+              </div>
+              <h3 className="font-serif text-xl leading-tight text-text">{cert.name}</h3>
+              <p className="text-sm text-muted">{cert.provider}</p>
+              <p className="font-mono text-[11px] uppercase tracking-label text-accent">{cert.issuer}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="space-y-8">
         <div className="flex flex-wrap items-end justify-between gap-4 border-b border-border pb-4">
           <div className="space-y-2">
-            <p className="font-mono text-xs uppercase tracking-label text-muted">Case Studies</p>
-            <h2 className="font-serif text-4xl text-text sm:text-5xl">Selected work</h2>
+            <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.selectedWorkLabel}</p>
+            <h2 className="font-serif text-4xl text-text sm:text-5xl">{t.home.selectedWorkTitle}</h2>
           </div>
           <Link href="/case-studies" className="quiet-link text-sm text-accent">
-            View all
+            {t.common.viewAll}
           </Link>
         </div>
 
@@ -171,7 +194,7 @@ export default async function HomePage() {
                 </h3>
                 <p className="text-sm leading-relaxed text-muted">{post.summary}</p>
                 <p className="font-mono text-xs uppercase tracking-label text-accent">
-                  Result: {post.impact ?? "Operational improvements"}
+                  {t.common.result}: {post.impact ?? "Operational improvements"}
                 </p>
               </div>
             </article>
@@ -182,22 +205,22 @@ export default async function HomePage() {
       <section className="space-y-8 border-y border-border py-10">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="space-y-2">
-            <p className="font-mono text-xs uppercase tracking-label text-muted">Beyond Work</p>
-            <h2 className="font-serif text-4xl text-text sm:text-5xl">Photo Notes</h2>
+            <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.photoNotesLabel}</p>
+            <h2 className="font-serif text-4xl text-text sm:text-5xl">{t.home.photoNotesTitle}</h2>
           </div>
           <Link href="/beyond-work" className="quiet-link text-sm text-accent">
-            View journal
+            {t.common.viewJournal}
           </Link>
         </div>
 
-        {leadNote ? (
-          <div className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
-            <article className="surface-card overflow-hidden">
-              <div className="aspect-[16/10] overflow-hidden border-b border-border">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {notes.map((note) => (
+            <article key={note.slug} className="surface-card overflow-hidden">
+              <div className="aspect-[4/3] overflow-hidden border-b border-border">
                 <Image
-                  src={leadNote.image}
-                  alt={leadNote.title}
-                  width={1400}
+                  src={note.image}
+                  alt={note.title}
+                  width={1200}
                   height={900}
                   className="hover-lift image-frame h-full w-full object-cover grayscale transition duration-500 ease-out hover:grayscale-0"
                 />
@@ -205,61 +228,15 @@ export default async function HomePage() {
 
               <div className="space-y-2 p-4">
                 <p className="font-mono text-xs uppercase tracking-label text-muted">
-                  {leadNote.category} · {formatDate(leadNote.date)}
+                  {note.category} · {formatDate(note.date)}
                 </p>
-                <h3 className="font-serif text-3xl leading-tight text-text">
-                  <Link href={`/beyond-work/${leadNote.slug}`} className="transition-colors hover:text-accent">
-                    {leadNote.title}
+                <h3 className="font-serif text-2xl leading-tight text-text">
+                  <Link href={`/beyond-work/${note.slug}`} className="transition-colors hover:text-accent">
+                    {note.title}
                   </Link>
                 </h3>
-                <p className="max-w-reading text-sm leading-relaxed text-muted">{leadNote.summary}</p>
+                <p className="text-sm leading-relaxed text-muted">{note.summary}</p>
               </div>
-            </article>
-
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
-              {supportingNotes.map((note) => (
-                <article key={note.slug} className="surface-card overflow-hidden">
-                  <div className="aspect-[16/10] overflow-hidden border-b border-border">
-                    <Image
-                      src={note.image}
-                      alt={note.title}
-                      width={1200}
-                      height={760}
-                      className="hover-lift image-frame h-full w-full object-cover grayscale transition duration-500 ease-out hover:grayscale-0"
-                    />
-                  </div>
-
-                  <div className="space-y-2 p-3">
-                    <p className="font-mono text-xs uppercase tracking-label text-muted">
-                      {note.category} · {formatDate(note.date)}
-                    </p>
-                    <h4 className="font-serif text-xl leading-tight text-text">
-                      <Link href={`/beyond-work/${note.slug}`} className="transition-colors hover:text-accent">
-                        {note.title}
-                      </Link>
-                    </h4>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-        ) : null}
-      </section>
-
-      <section className="space-y-8">
-        <div className="space-y-2 border-b border-border pb-4">
-          <p className="font-mono text-xs uppercase tracking-label text-muted">Certifications</p>
-          <h2 className="font-serif text-4xl text-text sm:text-5xl">Professional credentials</h2>
-        </div>
-
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {certifications.map((cert) => (
-            <article key={cert.name} className="surface-card space-y-3 p-4">
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border text-accent">
-                <CertificationIcon type={cert.icon} />
-              </span>
-              <h3 className="font-serif text-xl leading-tight text-text">{cert.name}</h3>
-              <p className="text-sm text-muted">{cert.provider}</p>
             </article>
           ))}
         </div>
@@ -267,4 +244,3 @@ export default async function HomePage() {
     </div>
   );
 }
-

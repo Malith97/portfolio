@@ -1,0 +1,22 @@
+<svg width="1600" height="720" viewBox="0 0 1600 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="720" fill="#F3EFE8"/>
+  <path d="M140 590C250 520 330 440 430 410C550 374 640 430 760 390C890 347 980 240 1110 230C1240 220 1330 300 1460 275" stroke="#D8D2C8" stroke-width="30" stroke-linecap="round"/>
+  <path d="M170 560C280 500 350 430 455 400C565 369 650 420 770 380C900 336 990 232 1120 220C1248 209 1336 290 1450 265" stroke="#3F5F46" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="170" cy="560" r="12" fill="#3F5F46"/>
+  <circle cx="1450" cy="265" r="12" fill="#3F5F46"/>
+  <circle cx="770" cy="380" r="10" fill="#A35F3D"/>
+  <g stroke="#D8D2C8" stroke-width="2">
+    <path d="M120 160H1480"/>
+    <path d="M120 300H1480"/>
+    <path d="M120 440H1480"/>
+    <path d="M120 580H1480"/>
+    <path d="M270 90V630"/>
+    <path d="M520 90V630"/>
+    <path d="M770 90V630"/>
+    <path d="M1020 90V630"/>
+    <path d="M1270 90V630"/>
+  </g>
+  <rect x="120" y="70" width="350" height="72" rx="8" fill="#F7F4EF" stroke="#D8D2C8"/>
+  <text x="146" y="112" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="26" letter-spacing="2" fill="#6F6A61">RIVER RUN LOOP</text>
+</svg>
+
