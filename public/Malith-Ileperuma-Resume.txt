@@ -1,0 +1,45 @@
+Malith Ileperuma
+Senior DevOps / Platform Engineer
+Finland | Open to EU and Remote Roles
+
+Email: malith.ileperuma@example.com
+LinkedIn: https://www.linkedin.com/in/malith-ileperuma
+Medium: https://medium.com/@malithileperuma
+Stack Overflow: https://stackoverflow.com/users/0000000/malith-ileperuma
+
+Professional Summary
+DevOps Engineer with ~6 years of experience in cloud infrastructure, CI/CD automation,
+Kubernetes, and reliability engineering. Delivers measurable platform outcomes in
+enterprise environments through pragmatic automation and operational simplification.
+
+Impact Highlights
+- 35% cloud cost reduction
+- ~$75k annual cloud savings
+- 40–50% faster deployments
+- 20% downtime reduction
+
+Experience
+DevOps Engineer | London Stock Exchange Group Finland | 2023–2025
+- Improved platform reliability and release automation for critical systems.
+
+DevOps Engineer | Zebra Technologies Sri Lanka | 2022–2023
+- Modernized CI/CD workflows to improve delivery speed and release confidence.
+
+Software Engineer | SY Labs Sri Lanka | 2019–2021
+- Built product features and transitioned into automation and infrastructure ownership.
+
+Education
+BSc Computer Science | General Sir John Kotelawala Defence University | 2021
+Finnish Language Studies | Arffman Oy | 2025/2026
+
+Certifications
+- AWS SAA-C03
+- Azure AZ-104
+- Azure AZ-500
+- Sun Certified Java Developer
+
+Core Skills
+- AWS, Azure, Kubernetes, Docker
+- CI/CD (GitHub Actions, Azure DevOps)
+- Terraform and Infrastructure as Code
+- Monitoring, reliability, and operational improvement

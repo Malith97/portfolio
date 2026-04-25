@@ -1,0 +1,46 @@
+---
+title: "Kubernetes RBAC and Multi-Team Access"
+summary: "Designing access boundaries for multiple engineering teams without slowing down day-to-day delivery work."
+date: "2025-03-28"
+tags:
+  - Kubernetes
+  - Security
+  - Platform Engineering
+image: "/media/photo-31.webp"
+images:
+  - "/media/photo-31.webp"
+  - "/media/photo-32.webp"
+  - "/media/photo-33.webp"
+impact: "Least-privilege access across multi-team Kubernetes environments"
+---
+
+## Context
+As teams scaled, cluster access policies became inconsistent. Permissions were too broad in some areas and too restrictive in others.
+
+## Problem
+The platform needed clearer boundaries so teams could ship independently while reducing accidental cross-environment risks.
+
+## Constraints
+- No disruption to active delivery timelines.
+- Security hardening had to remain developer-friendly.
+- Existing service accounts required safe migration paths.
+
+## Solution
+I defined a role model by team and environment:
+- audited current permission usage,
+- mapped least-privilege roles for common workflows,
+- introduced namespace-level ownership boundaries,
+- standardized service-account creation and review,
+- documented access patterns in plain language runbooks.
+
+## Tools
+- Kubernetes RBAC
+- GitOps configuration repositories
+- Policy checks in CI
+- Internal access reviews
+
+## Result
+Access became predictable, security posture improved, and teams spent less time on ad-hoc permission troubleshooting.
+
+## Lessons Learned
+RBAC design succeeds when security and developer workflows are designed together. Documentation quality is part of the control.
