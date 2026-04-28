@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 
 import {
   getDictionary,
@@ -19,6 +20,7 @@ interface SiteHeaderProps {
 export function SiteHeader({ initialLanguage }: SiteHeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const prefersReducedMotion = useReducedMotion();
   const [language, setLanguage] = useState<Language>(initialLanguage);
   const t = useMemo(() => getDictionary(language), [language]);
 
@@ -42,8 +44,7 @@ export function SiteHeader({ initialLanguage }: SiteHeaderProps) {
 
   const navigation = [
     { href: "/", label: t.nav.home },
-    { href: "/story", label: t.nav.story },
-    { href: "/work-education", label: t.nav.workEducation },
+    { href: "/work-education", label: t.nav.experience },
     { href: "/case-studies", label: t.nav.caseStudies },
     { href: "/beyond-work", label: t.nav.beyondWork },
     { href: "/contact", label: t.nav.contact }
@@ -69,36 +70,52 @@ export function SiteHeader({ initialLanguage }: SiteHeaderProps) {
   };
 
   return (
-    <header className="border-b border-border">
+    <header className="border-b border-border/90 bg-background/95 backdrop-blur-sm">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-6 py-5 sm:px-8 md:flex-row md:items-center md:justify-between">
-        <Link href="/" className="font-serif text-2xl leading-none text-text transition-colors hover:text-accent">
+        <Link
+          href="/"
+          className="font-serif text-2xl leading-none text-text transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        >
           Malith Ileperuma
         </Link>
 
         <div className="flex flex-wrap items-center gap-4 md:justify-end">
           <nav aria-label="Primary">
-            <ul className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm md:justify-end">
+            <ul className="flex flex-wrap items-center justify-end gap-x-1 gap-y-2 text-sm">
               {navigation.map((item) => {
                 const isActive = isActiveLink(item.href);
 
                 return (
                   <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className={`group relative pb-1 transition-colors ${
-                        isActive ? "text-text" : "text-muted hover:text-text"
-                      }`}
-                      aria-current={isActive ? "page" : undefined}
+                    <motion.div
+                      whileHover={prefersReducedMotion ? undefined : { y: -1 }}
+                      whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
+                      transition={{ duration: 0.16, ease: "easeOut" }}
                     >
-                      {item.label}
-                      <span
-                        className={`absolute -bottom-[2px] left-0 h-[1px] w-full transition-transform ${
+                      <Link
+                        href={item.href}
+                        className={`relative inline-flex items-center rounded-md px-2.5 py-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                           isActive
-                            ? "bg-accent scale-x-100"
-                            : "bg-border scale-x-0 group-hover:scale-x-100"
+                            ? "bg-accent/14 text-accent shadow-[0_0_0_1px_rgba(242,199,91,0.36),0_0_18px_rgba(242,199,91,0.26)]"
+                            : "text-muted hover:bg-accent/5 hover:text-accent"
                         }`}
-                      />
-                    </Link>
+                        aria-current={isActive ? "page" : undefined}
+                      >
+                        {item.label}
+                        <motion.span
+                          aria-hidden="true"
+                          className="absolute inset-x-2 -bottom-[2px] h-[2px] rounded-full bg-accent"
+                          initial={false}
+                          animate={{
+                            scaleX: isActive ? 1 : 0,
+                            opacity: isActive ? 1 : 0.85
+                          }}
+                          whileHover={prefersReducedMotion ? undefined : { scaleX: 1, opacity: 1 }}
+                          transition={{ duration: 0.18, ease: "easeOut" }}
+                          style={{ transformOrigin: "left center" }}
+                        />
+                      </Link>
+                    </motion.div>
                   </li>
                 );
               })}
@@ -106,27 +123,25 @@ export function SiteHeader({ initialLanguage }: SiteHeaderProps) {
           </nav>
 
           <div
-            className="inline-flex items-center gap-2 rounded-full border border-border px-2.5 py-1 text-[11px] uppercase tracking-label text-muted"
+            className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-2.5 py-1 text-[11px] uppercase tracking-label text-muted"
             aria-label={t.language.label}
           >
-            <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.8">
-              <circle cx="12" cy="12" r="9" />
-              <path d="M3 12h18" />
-              <path d="M12 3a15 15 0 0 1 0 18" />
-              <path d="M12 3a15 15 0 0 0 0 18" />
-            </svg>
             <button
               type="button"
-              className={`bg-transparent p-0 ${language === "eng" ? "text-text" : "transition-colors hover:text-text"}`}
+              className={`rounded-full px-2 py-0.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 focus-visible:ring-offset-1 focus-visible:ring-offset-surface ${
+                language === "eng" ? "bg-accent/15 text-accent" : "hover:text-text"
+              }`}
               aria-pressed={language === "eng"}
               onClick={() => changeLanguage("eng")}
             >
               {t.language.eng}
             </button>
-            <span>/</span>
+            <span aria-hidden="true">↔</span>
             <button
               type="button"
-              className={`bg-transparent p-0 ${language === "fi" ? "text-text" : "transition-colors hover:text-text"}`}
+              className={`rounded-full px-2 py-0.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 focus-visible:ring-offset-1 focus-visible:ring-offset-surface ${
+                language === "fi" ? "bg-accent/15 text-accent" : "hover:text-text"
+              }`}
               aria-pressed={language === "fi"}
               onClick={() => changeLanguage("fi")}
             >
@@ -138,4 +153,3 @@ export function SiteHeader({ initialLanguage }: SiteHeaderProps) {
     </header>
   );
 }
-

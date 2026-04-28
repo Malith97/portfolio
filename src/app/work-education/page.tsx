@@ -1,214 +1,190 @@
-import { PhotoGrid } from "@/components/photo-grid";
+import Image from "next/image";
+
 import { SectionHeading } from "@/components/section-heading";
-import { getDictionary } from "@/lib/i18n";
+import { TechBadge } from "@/components/tech-badge";
 import { getServerLanguage } from "@/lib/i18n-server";
 import { createMetadata } from "@/lib/metadata";
+import { type ExperienceItem, experienceTimeline, getLocalizedText, sortExperienceByMostRecent } from "@/lib/profile";
 
-interface TimelineItem {
-  title: string;
-  place: string;
-  period: string;
-  kind: "Work" | "Education";
-  story: string;
-  responsibilities: string[];
-  outcomes: string[];
-  tools: string[];
-  images: string[];
+const COMPANY_LOGO_FALLBACK_MAP: Array<{ keyword: string; logo: string }> = [
+  { keyword: "almosafer", logo: "/logos/almosafer.svg" },
+  { keyword: "oracle", logo: "/logos/oracle.svg" },
+  { keyword: "london stock exchange", logo: "/logos/london-stock-exchange.png" },
+  { keyword: "zebra", logo: "/logos/zebra-technologies.png" },
+  { keyword: "sy labs", logo: "/logos/sylabs.png" },
+  { keyword: "sylabs", logo: "/logos/sylabs.png" }
+];
+
+function resolveCompanyLogo(item: ExperienceItem): string | null {
+  if (item.companyLogo) {
+    return item.companyLogo;
+  }
+
+  const normalized = item.company.toLowerCase();
+  const mapped = COMPANY_LOGO_FALLBACK_MAP.find((entry) => normalized.includes(entry.keyword));
+  return mapped?.logo ?? null;
 }
 
-const timeline: TimelineItem[] = [
-  {
-    title: "Software Engineer",
-    place: "SY Labs Sri Lanka",
-    period: "2019–2021",
-    kind: "Work",
-    story:
-      "Built product features while taking ownership of release quality and deployment reliability in fast-moving delivery cycles.",
-    responsibilities: [
-      "Implemented backend and integration features for enterprise products.",
-      "Improved build stability and deployment handoffs with repeatable runbooks.",
-      "Collaborated with QA and support teams on defect prevention and resolution."
-    ],
-    outcomes: [
-      "Reduced release friction and improved deployment predictability.",
-      "Created a foundation for later transition into DevOps-focused work."
-    ],
-    tools: ["Java", "CI Pipelines", "Git", "Issue Tracking"],
-    images: ["/media/photo-10.webp", "/media/photo-11.webp", "/media/photo-12.webp"]
-  },
-  {
-    title: "BSc Computer Science",
-    place: "General Sir John Kotelawala Defence University",
-    period: "2021",
-    kind: "Education",
-    story:
-      "Built strong foundations in software engineering, systems thinking, and structured problem solving.",
-    responsibilities: [
-      "Completed software engineering, algorithms, and systems coursework.",
-      "Delivered practical projects with collaborative planning and execution."
-    ],
-    outcomes: [
-      "Established core engineering discipline and analytical thinking patterns."
-    ],
-    tools: ["Computer Science Fundamentals", "Software Design", "Team Projects"],
-    images: ["/media/photo-13.webp", "/media/photo-14.webp", "/media/photo-15.webp"]
-  },
-  {
-    title: "DevOps Engineer",
-    place: "Zebra Technologies Sri Lanka",
-    period: "2022–2023",
-    kind: "Work",
-    story:
-      "Focused on CI/CD modernization and environment consistency to make releases safer and faster.",
-    responsibilities: [
-      "Standardized deployment workflows across multiple services.",
-      "Automated quality gates and rollback checks in CI/CD pipelines.",
-      "Improved delivery visibility through shared operational dashboards."
-    ],
-    outcomes: [
-      "Increased deployment speed while reducing release errors.",
-      "Improved confidence in production rollout decisions."
-    ],
-    tools: ["GitHub Actions", "Azure DevOps", "Docker", "Kubernetes"],
-    images: ["/media/photo-7.webp", "/media/photo-8.webp", "/media/photo-9.webp", "/media/photo-16.webp"]
-  },
-  {
-    title: "DevOps Engineer",
-    place: "London Stock Exchange Group Finland",
-    period: "2023–2025",
-    kind: "Work",
-    story:
-      "Drove platform reliability and operational simplicity in a high-stakes enterprise environment.",
-    responsibilities: [
-      "Automated infrastructure and deployment workflows for critical services.",
-      "Improved observability, incident readiness, and recovery routines.",
-      "Partnered with development teams to reduce operational complexity."
-    ],
-    outcomes: [
-      "Delivered measurable cost, uptime, and deployment improvements.",
-      "Improved platform stability and team delivery throughput."
-    ],
-    tools: ["AWS", "Azure", "Terraform", "Kubernetes", "Monitoring Stack"],
-    images: [
-      "/media/photo-4.webp",
-      "/media/photo-5.webp",
-      "/media/photo-6.webp",
-      "/media/photo-17.webp",
-      "/media/photo-18.webp",
-      "/media/photo-19.webp"
-    ]
-  },
-  {
-    title: "Finnish Language Studies",
-    place: "Arffman Oy",
-    period: "2025–2026",
-    kind: "Education",
-    story:
-      "Investing in language and communication skills to collaborate more effectively in local and international teams.",
-    responsibilities: [
-      "Completed structured Finnish language modules focused on professional communication."
-    ],
-    outcomes: [
-      "Improved cross-cultural communication and integration in Finland."
-    ],
-    tools: ["Finnish Language Training", "Communication Practice"],
-    images: ["/media/photo-20.webp", "/media/photo-21.webp", "/media/photo-22.webp"]
+function getCompanyInitials(company: string): string {
+  const words = company
+    .split(/[\s&/-]+/)
+    .map((token) => token.trim())
+    .filter(Boolean)
+    .slice(0, 2);
+
+  if (words.length === 0) {
+    return "CO";
   }
-];
+
+  if (words.length === 1) {
+    return words[0].slice(0, 2).toUpperCase();
+  }
+
+  return `${words[0].charAt(0)}${words[1].charAt(0)}`.toUpperCase();
+}
 
 export const metadata = createMetadata({
   title: "Work & Education",
-  description: "Experience timeline for Malith Ileperuma including roles and studies.",
+  description: "Work experience timeline and education highlights for Malith Ileperuma.",
   path: "/work-education"
 });
 
 export default function WorkEducationPage() {
   const language = getServerLanguage();
-  const t = getDictionary(language);
-  const isFinnish = language === "fi";
+  const workExperience = sortExperienceByMostRecent(experienceTimeline.filter((item) => item.kind === "work"));
+  const educationItems = sortExperienceByMostRecent(experienceTimeline.filter((item) => item.kind === "education"));
+
+  const copy =
+    language === "fi"
+      ? {
+          title: "Työ ja koulutus",
+          description: "Työkokemus aikajanana ja koulutus erillisenä, selkeänä osiona.",
+          workSection: "Työkokemus",
+          educationSection: "Koulutus",
+          work: "Työ",
+          impact: "Keskeinen vaikutus",
+          stack: "Tekninen pino"
+        }
+      : {
+          title: "Work & Education",
+          description: "Work experience in timeline format and education in a separate compact section.",
+          workSection: "Work Experience",
+          educationSection: "Education",
+          work: "Work",
+          impact: "Key impact",
+          stack: "Tech stack"
+        };
 
   return (
-    <div className="space-y-14">
+    <div className="space-y-16">
       <SectionHeading
-        label={t.workEducationPage.label}
-        title={t.workEducationPage.title}
-        description={t.workEducationPage.description}
+        label={copy.title}
+        title={copy.title}
+        description={copy.description}
       />
 
-      <section className="relative pl-9">
-        <span className="absolute bottom-0 left-2 top-2 w-px bg-border" aria-hidden="true" />
+      <section className="space-y-5">
+        <div className="space-y-2">
+          <p className="font-mono text-xs uppercase tracking-label text-muted">{copy.workSection}</p>
+        </div>
 
-        <div className="space-y-9">
-          {timeline.map((item) => (
-            <article
-              key={`${item.title}-${item.period}`}
-              className="surface-card relative overflow-hidden p-5 sm:p-6"
-            >
-              <span
-                className="absolute -left-[1.65rem] top-7 h-3 w-3 rounded-full border border-accent/70 bg-background"
-                aria-hidden="true"
-              />
+        <div className="relative space-y-5">
+          <span className="absolute bottom-0 left-4 top-0 w-px bg-border md:left-1/2 md:-translate-x-1/2" aria-hidden="true" />
 
-              <div className="grid gap-6 lg:grid-cols-[168px_1fr] lg:items-start">
-                <aside className="space-y-2 pt-0.5">
-                  <p className="font-mono text-xs uppercase tracking-label text-muted">{item.period}</p>
-                  <p className="font-mono text-xs uppercase tracking-label text-accent">
-                    {item.kind === "Work" ? (isFinnish ? "Työ" : "Work") : isFinnish ? "Koulutus" : "Education"}
-                  </p>
-                </aside>
+          {workExperience.map((item, index) => {
+            const companyLogo = resolveCompanyLogo(item);
 
-                <div className="space-y-6 lg:min-h-[21rem]">
-                  <header className="space-y-2 border-b border-border pb-4">
-                    <h2 className="font-serif text-3xl leading-tight text-text">{item.title}</h2>
-                    <p className="text-sm text-muted">{item.place}</p>
-                    <p className="max-w-reading text-sm leading-relaxed text-text">{item.story}</p>
+            return (
+              <div key={`${item.role}-${item.period}`} className="relative">
+                <span
+                  className="absolute left-4 top-8 h-3.5 w-3.5 -translate-x-1/2 rounded-full border border-accent/80 bg-background shadow-[0_0_0_1px_rgba(242,199,91,0.12)] md:left-1/2 md:-translate-x-1/2"
+                  aria-hidden="true"
+                />
+
+                <article
+                  className={`surface-card surface-card-interactive relative ml-10 flex min-h-[360px] flex-col p-5 hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 md:ml-0 md:w-[calc(50%-1.75rem)] ${
+                    index % 2 === 0 ? "md:mr-auto" : "md:ml-auto"
+                  }`}
+                >
+                  <header className="space-y-3 border-b border-border pb-4">
+                    <p className="font-mono text-xs uppercase tracking-label text-muted">{item.period}</p>
+
+                    <div className="flex items-start gap-3">
+                      <span className="logo-tile mt-0.5 shrink-0">
+                        {companyLogo ? (
+                          <Image
+                            src={companyLogo}
+                            alt={`${item.company} logo`}
+                            width={22}
+                            height={22}
+                            className="h-[22px] w-[22px] object-contain"
+                          />
+                        ) : (
+                          <span aria-hidden="true" className="font-mono text-[9px] font-semibold uppercase text-accent/90">
+                            {getCompanyInitials(item.company)}
+                          </span>
+                        )}
+                      </span>
+                      <div className="min-w-0">
+                        <h2 className="font-serif text-2xl leading-tight text-text">{item.role}</h2>
+                        <p className="text-sm text-muted">{item.company}</p>
+                      </div>
+                    </div>
+
+                    <p className="font-mono text-[11px] uppercase tracking-label text-accent">{copy.work}</p>
+                    <p className="pt-1 text-sm leading-relaxed text-muted">
+                      {getLocalizedText(item.summary, language)}
+                    </p>
                   </header>
 
-                  <div className="grid gap-5 md:grid-cols-2">
-                    <section className="space-y-2">
-                      <p className="font-mono text-xs uppercase tracking-label text-muted">
-                        {t.workEducationPage.responsibilities}
-                      </p>
-                      <ul className="space-y-2 text-sm leading-relaxed text-text">
-                        {item.responsibilities.map((responsibility) => (
-                          <li key={responsibility}>• {responsibility}</li>
+                  <div className="flex flex-1 flex-col justify-between gap-4 pt-4">
+                    <div className="space-y-2">
+                      <p className="font-mono text-xs uppercase tracking-label text-muted">{copy.impact}</p>
+                      <ul className="space-y-2 text-sm leading-relaxed text-muted">
+                        {item.impactBullets.map((bullet) => (
+                          <li key={bullet.eng}>• {getLocalizedText(bullet, language)}</li>
                         ))}
                       </ul>
-                    </section>
+                    </div>
 
-                    <section className="space-y-2">
-                      <p className="font-mono text-xs uppercase tracking-label text-muted">
-                        {t.workEducationPage.outcomes}
-                      </p>
-                      <ul className="space-y-2 text-sm leading-relaxed text-text">
-                        {item.outcomes.map((outcome) => (
-                          <li key={outcome}>• {outcome}</li>
+                    <div className="space-y-2">
+                      <p className="font-mono text-xs uppercase tracking-label text-muted">{copy.stack}</p>
+                      <ul className="flex flex-wrap gap-2">
+                        {item.tech.map((tool) => (
+                          <TechBadge key={tool} tool={tool} />
                         ))}
                       </ul>
-                    </section>
+                    </div>
                   </div>
+                </article>
+              </div>
+            );
+          })}
+        </div>
+      </section>
 
-                  <section className="space-y-3">
-                    <p className="font-mono text-xs uppercase tracking-label text-muted">{t.workEducationPage.tools}</p>
-                    <ul className="flex flex-wrap gap-2">
-                      {item.tools.map((tool) => (
-                        <li
-                          key={tool}
-                          className="rounded-md border border-border px-2 py-1 font-mono text-[11px] uppercase tracking-label text-muted"
-                        >
-                          {tool}
-                        </li>
-                      ))}
-                    </ul>
-                  </section>
+      <section className="space-y-5 border-t border-border pt-10">
+        <div className="space-y-2">
+          <p className="font-mono text-xs uppercase tracking-label text-muted">{copy.educationSection}</p>
+        </div>
 
-                  <PhotoGrid
-                    images={item.images}
-                    altBase={item.title}
-                    aspectClass="aspect-[5/4]"
-                    maxItems={6}
-                  />
-                </div>
+        <div className="grid items-stretch gap-4 md:grid-cols-2">
+          {educationItems.map((item) => (
+            <article key={`${item.role}-${item.period}`} className="surface-card flex h-full min-h-[250px] flex-col space-y-4 p-5">
+              <header className="space-y-1 border-b border-border pb-4">
+                <p className="font-mono text-xs uppercase tracking-label text-muted">{item.period}</p>
+                <h2 className="font-serif text-2xl leading-tight text-text">{item.role}</h2>
+                <p className="text-sm text-muted">{item.company}</p>
+                <p className="pt-1 text-sm leading-relaxed text-muted">{getLocalizedText(item.summary, language)}</p>
+              </header>
+
+              <div className="mt-auto space-y-2">
+                <p className="font-mono text-xs uppercase tracking-label text-muted">{copy.stack}</p>
+                <ul className="flex flex-wrap gap-2">
+                  {item.tech.map((tool) => (
+                    <TechBadge key={tool} tool={tool} />
+                  ))}
+                </ul>
               </div>
             </article>
           ))}

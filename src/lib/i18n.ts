@@ -11,10 +11,12 @@ export function normalizeLanguage(value: string | null | undefined): Language {
 interface Dictionary {
   nav: {
     home: string;
+    experience: string;
     story: string;
     workEducation: string;
     caseStudies: string;
     beyondWork: string;
+    certifications: string;
     contact: string;
   };
   language: {
@@ -37,6 +39,7 @@ interface Dictionary {
     availability: string;
     caseStudy: string;
     journal: string;
+    kitchenNotes: string;
   };
   footer: {
     builtWithCare: string;
@@ -96,6 +99,7 @@ interface Dictionary {
       swimming: string;
       photography: string;
       videography: string;
+      cooking: string;
       other: string;
     };
   };
@@ -116,6 +120,16 @@ interface Dictionary {
     cameraGear: string;
     session: string;
     notes: string;
+    dishType: string;
+    cuisine: string;
+    timeSpent: string;
+    cookingTime: string;
+    whatITried: string;
+    whatILearned: string;
+    personalNote: string;
+    ingredients: string;
+    steps: string;
+    notesForNextTime: string;
   };
   caseStudyDetail: {
     outcome: string;
@@ -138,15 +152,17 @@ const dictionaries: Record<Language, Dictionary> = {
   eng: {
     nav: {
       home: "Home",
+      experience: "Experience",
       story: "Story",
       workEducation: "Work & Education",
       caseStudies: "Case Studies",
       beyondWork: "Beyond Work",
+      certifications: "Certifications",
       contact: "Contact"
     },
     language: {
       label: "Language toggle",
-      eng: "ENG",
+      eng: "EN",
       fi: "FI"
     },
     common: {
@@ -163,19 +179,20 @@ const dictionaries: Record<Language, Dictionary> = {
       story: "Story",
       availability: "Availability",
       caseStudy: "Case Study",
-      journal: "Journal"
+      journal: "Journal",
+      kitchenNotes: "Kitchen Notes"
     },
     footer: {
       builtWithCare: "Built with care in Next.js, TypeScript, and restrained Tailwind."
     },
     home: {
       label: "Home",
-      heroTitle: "I'm Malith Ileperuma, a DevOps Engineer based in Finland.",
+      heroTitle: "Senior DevOps Engineer focused on cloud, automation, CI/CD, and reliability.",
       heroSummary:
-        "I build reliable cloud systems, automate delivery pipelines, and help teams reduce operational complexity.",
-      heroMeta: "Senior DevOps / Platform Engineer · Finland · Available for EU and remote roles",
+        "I design and operate dependable delivery platforms that help engineering teams release faster with less operational risk.",
+      heroMeta: "Based in Finland · Open to EU and remote opportunities",
       ctaViewWork: "View Work",
-      ctaDownloadResume: "Download Resume",
+      ctaDownloadResume: "Contact Me",
       impactLabel: "Impact",
       impactTitle: "Measurable platform outcomes",
       impactDescription:
@@ -184,9 +201,9 @@ const dictionaries: Record<Language, Dictionary> = {
       certsTitle: "Professional credentials",
       certified: "Certified",
       selectedWorkLabel: "Case Studies",
-      selectedWorkTitle: "Selected work",
+      selectedWorkTitle: "Selected Work",
       photoNotesLabel: "Beyond Work",
-      photoNotesTitle: "Photo Notes",
+      photoNotesTitle: "Beyond Work",
       metrics: {
         yearsExperience: "Years experience",
         cloudCostReduction: "Cloud cost reduction",
@@ -220,7 +237,7 @@ const dictionaries: Record<Language, Dictionary> = {
     beyondWorkPage: {
       label: "Beyond Work",
       title: "Image-focused journal",
-      description: "A field journal of activity stories, routes, and visual notes.",
+      description: "A field journal of activity stories, routes, visual notes, and kitchen notes.",
       filters: {
         all: "All",
         running: "Running",
@@ -228,6 +245,7 @@ const dictionaries: Record<Language, Dictionary> = {
         swimming: "Swimming",
         photography: "Photography",
         videography: "Videography",
+        cooking: "Cooking",
         other: "Other"
       }
     },
@@ -247,7 +265,17 @@ const dictionaries: Record<Language, Dictionary> = {
       photos: "Photos",
       cameraGear: "Camera / Gear",
       session: "Session",
-      notes: "Notes"
+      notes: "Notes",
+      dishType: "Dish Type",
+      cuisine: "Cuisine",
+      timeSpent: "Time Spent",
+      cookingTime: "Cooking Time",
+      whatITried: "What I Tried",
+      whatILearned: "What I Learned",
+      personalNote: "Personal Note",
+      ingredients: "Ingredients",
+      steps: "Steps",
+      notesForNextTime: "Notes for Next Time"
     },
     caseStudyDetail: {
       outcome: "Outcome",
@@ -271,15 +299,17 @@ const dictionaries: Record<Language, Dictionary> = {
   fi: {
     nav: {
       home: "Etusivu",
+      experience: "Kokemus",
       story: "Tarina",
       workEducation: "Työ ja koulutus",
       caseStudies: "Tapaustutkimukset",
       beyondWork: "Työn ulkopuolella",
+      certifications: "Sertifikaatit",
       contact: "Yhteystiedot"
     },
     language: {
       label: "Kielivalinta",
-      eng: "ENG",
+      eng: "EN",
       fi: "FI"
     },
     common: {
@@ -296,19 +326,20 @@ const dictionaries: Record<Language, Dictionary> = {
       story: "Tarina",
       availability: "Saatavuus",
       caseStudy: "Tapaustutkimus",
-      journal: "Päiväkirja"
+      journal: "Päiväkirja",
+      kitchenNotes: "Keittiömuistiinpanot"
     },
     footer: {
       builtWithCare: "Rakennettu huolellisesti Next.js:llä, TypeScriptillä ja hillityllä Tailwindilla."
     },
     home: {
       label: "Etusivu",
-      heroTitle: "Olen Malith Ileperuma, DevOps-insinööri Suomessa.",
+      heroTitle: "Senior DevOps -insinööri, jonka painopisteinä ovat pilvi, automaatio, CI/CD ja luotettavuus.",
       heroSummary:
-        "Rakennan luotettavia pilvijärjestelmiä, automatisoin toimitusputkia ja vähennän tiimien operatiivista monimutkaisuutta.",
-      heroMeta: "Senior DevOps / Platform Engineer · Suomi · Avoin EU- ja etärooleille",
+        "Suunnittelen ja operoin luotettavia toimitusalustoja, joiden avulla tiimit julkaisevat nopeammin pienemmällä operatiivisella riskillä.",
+      heroMeta: "Sijainti Suomi · Avoin EU- ja etärooleille",
       ctaViewWork: "Näytä työ",
-      ctaDownloadResume: "Lataa CV",
+      ctaDownloadResume: "Ota yhteyttä",
       impactLabel: "Vaikutus",
       impactTitle: "Mitattavat alustatulokset",
       impactDescription:
@@ -319,7 +350,7 @@ const dictionaries: Record<Language, Dictionary> = {
       selectedWorkLabel: "Tapaustutkimukset",
       selectedWorkTitle: "Valitut työt",
       photoNotesLabel: "Työn ulkopuolella",
-      photoNotesTitle: "Kuvamuistiinpanot",
+      photoNotesTitle: "Työn ulkopuolella",
       metrics: {
         yearsExperience: "Vuotta kokemusta",
         cloudCostReduction: "Pilvikulujen vähennys",
@@ -353,7 +384,7 @@ const dictionaries: Record<Language, Dictionary> = {
     beyondWorkPage: {
       label: "Työn ulkopuolella",
       title: "Kuvapainotteinen päiväkirja",
-      description: "Kenttäpäiväkirja aktiviteeteista, reiteistä ja visuaalisista muistiinpanoista.",
+      description: "Kenttäpäiväkirja aktiviteeteista, reiteistä, visuaalisista ja keittiömuistiinpanoista.",
       filters: {
         all: "Kaikki",
         running: "Juoksu",
@@ -361,6 +392,7 @@ const dictionaries: Record<Language, Dictionary> = {
         swimming: "Uinti",
         photography: "Valokuvaus",
         videography: "Videokuvaus",
+        cooking: "Ruoanlaitto",
         other: "Muu"
       }
     },
@@ -380,7 +412,17 @@ const dictionaries: Record<Language, Dictionary> = {
       photos: "Kuvat",
       cameraGear: "Kamera / Varusteet",
       session: "Harjoitus",
-      notes: "Muistiinpanot"
+      notes: "Muistiinpanot",
+      dishType: "Ruoan tyyppi",
+      cuisine: "Keittiö",
+      timeSpent: "Käytetty aika",
+      cookingTime: "Kypsennysaika",
+      whatITried: "Mitä kokeilin",
+      whatILearned: "Mitä opin",
+      personalNote: "Henkilökohtainen muistiinpano",
+      ingredients: "Ainekset",
+      steps: "Vaiheet",
+      notesForNextTime: "Muistiinpanot seuraavaa kertaa varten"
     },
     caseStudyDetail: {
       outcome: "Tulos",

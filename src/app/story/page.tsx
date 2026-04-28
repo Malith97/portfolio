@@ -23,6 +23,28 @@ export const metadata = createMetadata({
 export default function StoryPage() {
   const language = getServerLanguage();
   const t = getDictionary(language);
+  const copy =
+    language === "fi"
+      ? {
+          firstBlock: [
+            "Aloitin urani Sri Lankassa ohjelmistoinsinöörinä. Varhaisessa vaiheessa opin, miten toimituspaine voi tehdä järjestelmistä hauraita, vaikka ominaisuuksia rakennetaan nopeasti.",
+            "Vuosien aikana siirryin syvemmälle DevOps-rooleihin: automaatio, luotettavuus, pilvi-infrastruktuuri ja jatkuva parantaminen. Nautin siitä, että teen monimutkaisista työnkuluista selkeämpiä ja mitattavia."
+          ],
+          secondBlock: [
+            "Muutto Suomeen toi uuden vaiheen: kulttuuriin sopeutuminen, suomen kielen opiskelu ja teknisen osaamisen kehittäminen käytännön yhteistyötä unohtamatta.",
+            "Työn ulkopuolella juoksu, pyöräily, uinti, valokuvaus ja videokuvaus pitävät arjen tasapainossa. Kestävyysrutiinit ja luova työ näkyvät myös tavassani ratkaista teknisiä ongelmia."
+          ]
+        }
+      : {
+          firstBlock: [
+            "I started my career in Sri Lanka as a Software Engineer, learning how delivery pressure can quietly create fragile systems even when features move fast.",
+            "Over time, I moved deeper into DevOps engineering with a focus on automation, reliability, cloud infrastructure, and continuous improvement. I enjoy making complex workflows clear and measurable."
+          ],
+          secondBlock: [
+            "Relocating to Finland added a new chapter: adapting to a new culture, investing in Finnish language studies, and continuing to build technical depth through practical collaboration.",
+            "Outside work, running, cycling, swimming, photography, and videography keep me balanced. Endurance habits and creative practice both influence how I approach engineering challenges."
+          ]
+        };
 
   return (
     <div className="space-y-14">
@@ -46,31 +68,17 @@ export default function StoryPage() {
         </figure>
 
         <div className="space-y-6 text-base leading-relaxed text-text">
-          <p>
-            I started my career in Sri Lanka as a Software Engineer, learning how products are built under
-            real constraints and how delivery pressure can quietly create fragile systems. That early
-            experience made me care as much about operations as features.
-          </p>
-          <p>
-            Over time, I moved deeper into DevOps engineering, focusing on automation, reliability, cloud
-            infrastructure, and continuous improvement. I enjoy making complex workflows understandable,
-            measurable, and easier for teams to maintain.
-          </p>
+          {copy.firstBlock.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
         </div>
       </section>
 
       <section className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
         <div className="space-y-6 text-base leading-relaxed text-text">
-          <p>
-            Relocating to Finland added a new chapter: adapting to a different culture, investing in Finnish
-            language studies, and continuing to build technical depth while staying grounded in practical
-            collaboration.
-          </p>
-          <p>
-            Outside of work, running, cycling, swimming, photography, and videography keep me balanced.
-            Endurance habits and creative practice both influence how I solve engineering problems: steady
-            effort, clear observation, and respect for craft.
-          </p>
+          {copy.secondBlock.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2">

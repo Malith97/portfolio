@@ -7,18 +7,18 @@ import { getServerLanguage } from "@/lib/i18n-server";
 import { createMetadata } from "@/lib/metadata";
 
 interface ContactLink {
-  label: string;
+  id: "email" | "linkedin" | "medium" | "stackoverflow" | "youtube" | "dribbble";
   href: string;
   icon: "mail" | "linkedin" | "medium" | "stackoverflow" | "youtube" | "dribbble";
 }
 
 const links: ContactLink[] = [
-  { label: "Email", href: "mailto:malith.ileperuma@example.com", icon: "mail" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/malith-ileperuma", icon: "linkedin" },
-  { label: "Medium", href: "https://medium.com/@malithileperuma", icon: "medium" },
-  { label: "Stack Overflow", href: "https://stackoverflow.com/users/0000000/malith-ileperuma", icon: "stackoverflow" },
-  { label: "YouTube", href: "https://www.youtube.com/@malithileperuma", icon: "youtube" },
-  { label: "Dribbble", href: "https://dribbble.com/malithileperuma", icon: "dribbble" }
+  { id: "email", href: "mailto:malith.ileperuma@example.com", icon: "mail" },
+  { id: "linkedin", href: "https://www.linkedin.com/in/malith-ileperuma", icon: "linkedin" },
+  { id: "medium", href: "https://medium.com/@malithileperuma", icon: "medium" },
+  { id: "stackoverflow", href: "https://stackoverflow.com/users/0000000/malith-ileperuma", icon: "stackoverflow" },
+  { id: "youtube", href: "https://www.youtube.com/@malithileperuma", icon: "youtube" },
+  { id: "dribbble", href: "https://dribbble.com/malithileperuma", icon: "dribbble" }
 ];
 
 function LinkIcon({ kind }: { kind: ContactLink["icon"] }) {
@@ -93,6 +93,24 @@ export const metadata = createMetadata({
 export default function ContactPage() {
   const language = getServerLanguage();
   const t = getDictionary(language);
+  const contactLabels =
+    language === "fi"
+      ? {
+          email: "Sähköposti",
+          linkedin: "LinkedIn",
+          medium: "Medium",
+          stackoverflow: "Stack Overflow",
+          youtube: "YouTube",
+          dribbble: "Dribbble"
+        }
+      : {
+          email: "Email",
+          linkedin: "LinkedIn",
+          medium: "Medium",
+          stackoverflow: "Stack Overflow",
+          youtube: "YouTube",
+          dribbble: "Dribbble"
+        };
 
   return (
     <div className="space-y-14">
@@ -131,18 +149,18 @@ export default function ContactPage() {
 
           <ul className="grid gap-2 sm:grid-cols-2">
             {links.map((item) => (
-              <li key={item.label}>
+              <li key={item.id}>
                 <Link
                   href={item.href}
                   className="group inline-flex items-center gap-2 text-sm text-text transition-colors hover:text-accent"
                   target={item.href.startsWith("http") ? "_blank" : undefined}
                   rel={item.href.startsWith("http") ? "noreferrer" : undefined}
-                  aria-label={item.label}
+                  aria-label={contactLabels[item.id]}
                 >
                   <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-border text-muted transition-colors group-hover:border-accent group-hover:text-accent">
                     <LinkIcon kind={item.icon} />
                   </span>
-                  <span className="quiet-link">{item.label}</span>
+                  <span className="quiet-link">{contactLabels[item.id]}</span>
                 </Link>
               </li>
             ))}
