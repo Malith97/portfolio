@@ -8,6 +8,7 @@ import { getAllBeyondWorkPosts, getBeyondWorkPostBySlug, type Post } from "@/lib
 import { formatDate } from "@/lib/format";
 import { getDictionary } from "@/lib/i18n";
 import { getServerLanguage } from "@/lib/i18n-server";
+import { getLocalizedPostSummary, getLocalizedPostTitle } from "@/lib/post-translations";
 
 interface BeyondWorkPageProps {
   params: {
@@ -20,21 +21,40 @@ interface MetaItem {
   value: string;
 }
 
-function categoryType(category?: string): "run_ride" | "swim" | "visual" | "other" {
+function categoryType(category?: string): "run_ride" | "swim" | "visual" | "cooking" | "other" {
   const normalized = category?.toLowerCase() ?? "";
 
   if (normalized.includes("running") || normalized.includes("cycling")) return "run_ride";
   if (normalized.includes("swimming")) return "swim";
   if (normalized.includes("photography") || normalized.includes("videography")) return "visual";
+  if (normalized.includes("cooking")) return "cooking";
 
   return "other";
+}
+
+function localizedCategory(category: string | undefined, t: ReturnType<typeof getDictionary>): string {
+  const type = categoryType(category);
+
+  if (type === "run_ride") {
+    const normalized = category?.toLowerCase() ?? "";
+    if (normalized.includes("running")) return t.beyondWorkPage.filters.running;
+    return t.beyondWorkPage.filters.cycling;
+  }
+  if (type === "swim") return t.beyondWorkPage.filters.swimming;
+  if (type === "visual") {
+    const normalized = category?.toLowerCase() ?? "";
+    if (normalized.includes("videography")) return t.beyondWorkPage.filters.videography;
+    return t.beyondWorkPage.filters.photography;
+  }
+  if (type === "cooking") return t.beyondWorkPage.filters.cooking;
+  return t.beyondWorkPage.filters.other;
 }
 
 function buildMetaItems(post: Post, t: ReturnType<typeof getDictionary>): MetaItem[] {
   const type = categoryType(post.category);
   const items: MetaItem[] = [];
 
-  if (post.category) items.push({ label: t.beyondWorkDetail.category, value: post.category });
+  if (post.category) items.push({ label: t.beyondWorkDetail.category, value: localizedCategory(post.category, t) });
   items.push({ label: t.beyondWorkDetail.date, value: formatDate(post.date) });
   if (post.location) items.push({ label: t.beyondWorkDetail.location, value: post.location });
 
@@ -57,6 +77,14 @@ function buildMetaItems(post: Post, t: ReturnType<typeof getDictionary>): MetaIt
     if (post.route) items.push({ label: t.beyondWorkDetail.session, value: post.route });
     if (post.gear.length > 0) items.push({ label: t.beyondWorkDetail.gear, value: post.gear.join(", ") });
     if (post.notes) items.push({ label: t.beyondWorkDetail.notes, value: post.notes });
+  } else if (type === "cooking") {
+    if (post.dishType) items.push({ label: t.beyondWorkDetail.dishType, value: post.dishType });
+    if (post.cuisine) items.push({ label: t.beyondWorkDetail.cuisine, value: post.cuisine });
+    if (post.timeSpent) items.push({ label: t.beyondWorkDetail.timeSpent, value: post.timeSpent });
+    if (post.cookingTime) items.push({ label: t.beyondWorkDetail.cookingTime, value: post.cookingTime });
+    if (post.difficulty) items.push({ label: t.beyondWorkDetail.difficulty, value: post.difficulty });
+    if (post.whatITried) items.push({ label: t.beyondWorkDetail.whatITried, value: post.whatITried });
+    if (post.whatILearned) items.push({ label: t.beyondWorkDetail.whatILearned, value: post.whatILearned });
   } else {
     if (post.route) items.push({ label: t.beyondWorkDetail.route, value: post.route });
     if (post.weather) items.push({ label: t.beyondWorkDetail.weather, value: post.weather });
@@ -102,6 +130,12 @@ export default async function BeyondWorkDetailPage({ params }: BeyondWorkPagePro
   const nextPost = currentIndex >= 0 && currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
   const metaItems = buildMetaItems(post, t);
   const highlights = post.highlights.length > 0 ? post.highlights : post.tags;
+  const type = categoryType(post.category);
+  const kitchenLabel = type === "cooking" ? `${t.common.kitchenNotes} · ` : "";
+  const localizedTitle = getLocalizedPostTitle(post.slug, post.title, language);
+  const localizedSummary = getLocalizedPostSummary(post.slug, post.summary, language);
+  const localizedCategoryLabel = post.category ? localizedCategory(post.category, t) : t.common.journal;
+  const showEnglishBody = language !== "fi";
 
   return (
     <article className="space-y-12">
@@ -113,7 +147,7 @@ export default async function BeyondWorkDetailPage({ params }: BeyondWorkPagePro
         <div className="aspect-[16/9] overflow-hidden rounded-md border border-border">
           <Image
             src={post.image}
-            alt={post.title}
+            alt={localizedTitle}
             width={1600}
             height={900}
             className="hover-lift image-frame h-full w-full object-cover"
@@ -123,10 +157,11 @@ export default async function BeyondWorkDetailPage({ params }: BeyondWorkPagePro
 
         <header className="space-y-4 border-b border-border pb-8">
           <p className="font-mono text-xs uppercase tracking-label text-muted">
-            {post.category ?? t.common.journal} · {formatDate(post.date)}
+            {kitchenLabel}
+            {localizedCategoryLabel} · {formatDate(post.date)}
           </p>
-          <h1 className="max-w-4xl font-serif text-4xl leading-tight text-text sm:text-6xl">{post.title}</h1>
-          <p className="max-w-reading text-base leading-relaxed text-muted">{post.summary}</p>
+          <h1 className="max-w-4xl font-serif text-4xl leading-tight text-text sm:text-6xl">{localizedTitle}</h1>
+          <p className="max-w-reading text-base leading-relaxed text-muted">{localizedSummary}</p>
         </header>
       </div>
 
@@ -142,18 +177,56 @@ export default async function BeyondWorkDetailPage({ params }: BeyondWorkPagePro
         </div>
       </section>
 
-      {categoryType(post.category) === "run_ride" && post.routeImage ? (
+      {type === "run_ride" && post.routeImage ? (
         <section className="space-y-4">
           <p className="font-mono text-xs uppercase tracking-label text-muted">{t.common.routeScreenshot}</p>
           <div className="aspect-[16/7] overflow-hidden rounded-md border border-border">
             <Image
               src={post.routeImage}
-              alt={`${post.title} route screenshot`}
+              alt={`${localizedTitle} ${t.common.routeScreenshot.toLowerCase()}`}
               width={1600}
               height={720}
               className="image-frame h-full w-full object-cover"
             />
           </div>
+        </section>
+      ) : null}
+
+      {type === "cooking" ? (
+        <section className="space-y-10">
+          {post.personalNote ? (
+            <div className="max-w-reading space-y-2">
+              <p className="font-mono text-xs uppercase tracking-label text-muted">{t.beyondWorkDetail.personalNote}</p>
+              <p className="text-base leading-relaxed text-text">{post.personalNote}</p>
+            </div>
+          ) : null}
+
+          {post.ingredients.length > 0 ? (
+            <div className="max-w-reading space-y-3">
+              <p className="font-mono text-xs uppercase tracking-label text-muted">{t.beyondWorkDetail.ingredients}</p>
+              <ul className="grid gap-2">
+                {post.ingredients.map((ingredient) => (
+                  <li key={ingredient} className="rounded-md border border-border px-3 py-2 text-sm text-text">
+                    {ingredient}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+
+          {post.steps.length > 0 ? (
+            <div className="max-w-reading space-y-3">
+              <p className="font-mono text-xs uppercase tracking-label text-muted">{t.beyondWorkDetail.steps}</p>
+              <ol className="space-y-2 text-sm leading-relaxed text-text">
+                {post.steps.map((step, index) => (
+                  <li key={`${step}-${index}`} className="rounded-md border border-border px-3 py-2">
+                    <span className="font-mono text-xs uppercase tracking-label text-muted">{index + 1}.</span>{" "}
+                    {step}
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ) : null}
         </section>
       ) : null}
 
@@ -172,19 +245,42 @@ export default async function BeyondWorkDetailPage({ params }: BeyondWorkPagePro
 
       <section className="space-y-4">
         <p className="font-mono text-xs uppercase tracking-label text-muted">{t.common.story}</p>
-        <div className="content-prose max-w-reading" dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
+        {showEnglishBody ? (
+          <div className="content-prose max-w-reading" dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
+        ) : (
+          <p className="max-w-reading text-sm leading-relaxed text-muted">
+            Tämän päiväkirjamerkinnän pitkä teksti on toistaiseksi saatavilla englanniksi.
+          </p>
+        )}
       </section>
 
       <section className="space-y-4 border-t border-border pt-8">
         <p className="font-mono text-xs uppercase tracking-label text-muted">{t.common.gallery}</p>
-        <PhotoGrid images={post.photos} altBase={post.title} aspectClass="aspect-[4/3]" />
+        <PhotoGrid images={post.photos} altBase={localizedTitle} aspectClass="aspect-[4/3]" />
       </section>
+
+      {type === "cooking" && post.notesForNextTime.length > 0 ? (
+        <section className="space-y-3">
+          <p className="font-mono text-xs uppercase tracking-label text-muted">
+            {t.beyondWorkDetail.notesForNextTime}
+          </p>
+          <ul className="grid gap-2 sm:grid-cols-2">
+            {post.notesForNextTime.map((note) => (
+              <li key={note} className="rounded-md border border-border px-3 py-2 text-sm text-text">
+                {note}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       <nav className="grid gap-3 border-t border-border pt-8 sm:grid-cols-2" aria-label="Journal navigation">
         {previousPost ? (
           <Link href={`/beyond-work/${previousPost.slug}`} className="surface-card p-4">
             <p className="font-mono text-xs uppercase tracking-label text-muted">{t.common.previous}</p>
-            <p className="pt-1 font-serif text-xl text-text">{previousPost.title}</p>
+            <p className="pt-1 font-serif text-xl text-text">
+              {getLocalizedPostTitle(previousPost.slug, previousPost.title, language)}
+            </p>
           </Link>
         ) : (
           <div />
@@ -193,7 +289,9 @@ export default async function BeyondWorkDetailPage({ params }: BeyondWorkPagePro
         {nextPost ? (
           <Link href={`/beyond-work/${nextPost.slug}`} className="surface-card p-4 sm:text-right">
             <p className="font-mono text-xs uppercase tracking-label text-muted">{t.common.next}</p>
-            <p className="pt-1 font-serif text-xl text-text">{nextPost.title}</p>
+            <p className="pt-1 font-serif text-xl text-text">
+              {getLocalizedPostTitle(nextPost.slug, nextPost.title, language)}
+            </p>
           </Link>
         ) : (
           <div />

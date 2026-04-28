@@ -31,6 +31,16 @@ export interface PostMeta {
   theme?: string;
   photoCount?: string;
   notes?: string;
+  dishType?: string;
+  cuisine?: string;
+  timeSpent?: string;
+  whatITried?: string;
+  whatILearned?: string;
+  personalNote?: string;
+  ingredients: string[];
+  steps: string[];
+  cookingTime?: string;
+  notesForNextTime: string[];
   gear: string[];
   highlights: string[];
   readingTime: string;
@@ -88,6 +98,9 @@ function normalizeMeta(
   const tags = toStringArray(data.tags);
   const gear = toStringArray(data.gear);
   const highlights = toStringArray(data.highlights);
+  const ingredients = toStringArray(data.ingredients);
+  const steps = toStringArray(data.steps);
+  const notesForNextTime = toStringArray(data.notesForNextTime);
 
   return {
     slug: typeof data.slug === "string" ? data.slug : slug,
@@ -112,6 +125,16 @@ function normalizeMeta(
     theme: typeof data.theme === "string" ? data.theme : undefined,
     photoCount: typeof data.photoCount === "string" ? data.photoCount : undefined,
     notes: typeof data.notes === "string" ? data.notes : undefined,
+    dishType: typeof data.dishType === "string" ? data.dishType : undefined,
+    cuisine: typeof data.cuisine === "string" ? data.cuisine : undefined,
+    timeSpent: typeof data.timeSpent === "string" ? data.timeSpent : undefined,
+    whatITried: typeof data.whatITried === "string" ? data.whatITried : undefined,
+    whatILearned: typeof data.whatILearned === "string" ? data.whatILearned : undefined,
+    personalNote: typeof data.personalNote === "string" ? data.personalNote : undefined,
+    ingredients,
+    steps,
+    cookingTime: typeof data.cookingTime === "string" ? data.cookingTime : undefined,
+    notesForNextTime,
     gear,
     highlights,
     readingTime: toReadingTime(markdown)

@@ -7,6 +7,7 @@ import { getServerLanguage } from "@/lib/i18n-server";
 import { formatDate } from "@/lib/format";
 import { getAllCaseStudies } from "@/lib/content";
 import { createMetadata } from "@/lib/metadata";
+import { getLocalizedPostSummary, getLocalizedPostTitle } from "@/lib/post-translations";
 
 export const metadata = createMetadata({
   title: "Case Studies",
@@ -17,6 +18,7 @@ export const metadata = createMetadata({
 export default async function CaseStudiesPage() {
   const language = getServerLanguage();
   const t = getDictionary(language);
+  const fallbackOutcome = language === "fi" ? "Operatiiviset parannukset" : "Operational improvements";
 
   const posts = await getAllCaseStudies();
 
@@ -29,15 +31,16 @@ export default async function CaseStudiesPage() {
       />
 
       <section className="space-y-6">
-        <p className="font-mono text-xs uppercase tracking-label text-muted">{t.caseStudiesPage.allLabel}</p>
-
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid items-stretch gap-4 md:grid-cols-2">
           {posts.map((post) => (
-            <article key={post.slug} className="surface-card flex h-full flex-col overflow-hidden">
+            <article
+              key={post.slug}
+              className="surface-card surface-card-interactive flex h-full min-h-[420px] flex-col overflow-hidden hover:-translate-y-0.5 motion-reduce:hover:translate-y-0"
+            >
               <div className="aspect-[16/10] overflow-hidden border-b border-border">
                 <Image
                   src={post.image}
-                  alt={post.title}
+                  alt={getLocalizedPostTitle(post.slug, post.title, language)}
                   width={1200}
                   height={760}
                   className="hover-lift image-frame h-full w-full object-cover"
@@ -50,12 +53,14 @@ export default async function CaseStudiesPage() {
                 </p>
                 <h3 className="font-serif text-2xl leading-tight text-text">
                   <Link href={`/case-studies/${post.slug}`} className="transition-colors hover:text-accent">
-                    {post.title}
+                    {getLocalizedPostTitle(post.slug, post.title, language)}
                   </Link>
                 </h3>
-                <p className="text-sm leading-relaxed text-muted">{post.summary}</p>
+                <p className="text-sm leading-relaxed text-muted">
+                  {getLocalizedPostSummary(post.slug, post.summary, language)}
+                </p>
                 <p className="font-mono text-xs uppercase tracking-label text-accent">
-                  {t.common.result}: {post.impact ?? "Operational improvements"}
+                  {t.common.result}: {post.impact ?? fallbackOutcome}
                 </p>
                 <ul className="flex flex-wrap gap-2 pt-1">
                   {post.tags.map((tag) => (
