@@ -1,0 +1,21 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Demo Oulu Cycling Route Placeholder"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [25.4651, 65.0121],
+          [25.4725, 65.0142],
+          [25.4880, 65.0185],
+          [25.5035, 65.0210],
+          [25.5200, 65.0200]
+        ]
+      }
+    }
+  ]
+}

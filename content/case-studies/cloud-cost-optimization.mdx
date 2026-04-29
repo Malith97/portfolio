@@ -1,0 +1,165 @@
+---
+title: "Cloud Cost Optimization: Reducing Spend by 35%"
+summary: "Reducing cloud spend by 35% (~$75K/year) through governance, visibility, and automation."
+slug: "cloud-cost-optimization"
+date: "2025-08-30"
+tags:
+  - FinOps
+  - Cloud Optimization
+  - Cost Governance
+  - Automation
+category: "FinOps / Cloud Optimization"
+image: "/case-studies/cloud-cost-optimization/img1.webp"
+images:
+  - "/case-studies/cloud-cost-optimization/img1.webp"
+impact: "Reduced cloud spend by 35% (~$75K/year)"
+featured: true
+---
+
+**Full Case Study — Originally published on Medium**
+
+This write-up captures the full case study from my FinOps workstream and keeps the complete flow from problem to implementation and outcomes.
+
+## The Need for Cloud Cost Optimization
+As cloud adoption grows, costs grow with it.
+
+Without strong controls, cloud spend can drift faster than teams realize, affecting budgets, delivery flexibility, and year-end financial targets.
+
+Effective cloud cost optimization is about maximizing value while keeping reliability and scalability intact.
+
+![Cloud cost visibility and governance baseline](/case-studies/cloud-cost-optimization/img1.webp)
+
+## Rising Cloud Costs and Lack of Visibility
+As cloud environments expanded in my organization, so did monthly spend.
+
+Teams were moving quickly, launching new services and provisioning resources continuously, but cost visibility and centralized controls were not keeping pace.
+
+In practice, this created a pattern of avoidable waste:
+
+- Individual and distributed test environments were provisioned freely.
+- Non-production environments were left running overnight and on weekends.
+- Higher-spec machines were requested for workloads that did not need them.
+- Environments were not consistently destroyed after use.
+- Kubernetes clusters had over-provisioned pods/nodes, orphaned volumes, and scaling inefficiencies.
+
+These issues were amplified by fragmented ownership and missing governance standards, making forecasting and cost control difficult.
+
+## Data-Driven, Collaborative Solutions
+To address both rising costs and visibility gaps, I used a structured approach centered on data, cross-team collaboration, automation, and continuous improvement.
+
+Team context and baseline:
+- Cross-functional team of around 60 people (engineering, QA, product, business, DevOps).
+- Monthly spend baseline around $20K with projected growth to ~$24K if unchanged.
+- Initial reduction target: at least 30% in monthly spend.
+
+### Data Collection and Analysis
+I started by auditing billing and utilization data deeply.
+
+Using AWS Cost Explorer, custom tagging standards, and monitoring dashboards (Prometheus/Grafana), we mapped cost drivers by resource group and environment.
+
+This surfaced recurring inefficiency categories:
+- Idle databases
+- Oversized and unused snapshots
+- Outdated images
+- Off-hour runtime waste
+- Network transfer inefficiencies
+- Stale release/storage data
+- Over-provisioned instances
+- Excess Kubernetes node counts
+- Orphaned persistent volumes
+- Missed opportunities for Spot usage
+
+![Rightsizing and scaling optimization actions](/case-studies/cloud-cost-optimization/img2.webp)
+
+### Fixing Inefficiencies Through Automation and Governance
+After identifying hotspots, we implemented targeted improvements with policy enforcement and automation.
+
+#### 1. Idle Databases
+Lambda automation monitored CloudWatch CPU and connection metrics.
+
+If a development database stayed idle for over 4 continuous hours, it was automatically stopped to reduce compute spend.
+
+#### 2. Oversized and Unused Snapshots
+We applied age-based tagging (`usage=no_use_30`, `usage=no_use_60`) and automated deletion after defined retention thresholds.
+
+Snapshots tagged unused for 30 days were marked first, escalated at 60 days, and deleted after extended inactivity windows (for example 75 days) with pre-delete reporting.
+
+Deletion actions included review reporting to avoid accidental data loss, and snapshot size reviews reduced redundant retained data.
+
+#### 3. Outdated Images
+ECR lifecycle policies and image scanning workflows removed deprecated images.
+
+Outdated AMIs were also cleaned regularly, with security baseline alignment and patch hygiene maintained through scheduled automation.
+
+#### 4. Resource Uptime and Off-Hour Usage
+CloudWatch schedules and Lambda automation shut down non-critical resources outside business hours.
+
+EC2 and EKS non-production resources were scaled down during nights and weekends by schedule.
+
+Overrides were managed centrally for workloads that required extended uptime.
+
+#### 5. High Network Costs
+We reduced unnecessary transfer spend by regional placement improvements and tighter cross-region replication controls.
+
+Critical resiliency traffic remained intact; non-essential transfer was minimized.
+
+#### 6. Data Retention and Release Hygiene
+S3 lifecycle policies automated transitions and cleanup based on access patterns and retention rules.
+
+Unneeded logs and stale release data were removed, and colder data moved to lower-cost storage tiers.
+
+#### 7. Over-Provisioned Instances
+Provisioning guidance was tightened so requested specs matched actual workload needs.
+
+For example, request patterns like 6 vCPUs for work that needed only 4 were corrected through guidance and reviews.
+
+We standardized lower-cost instance classes where appropriate for dev/test workloads.
+
+#### 8. Excessive Kubernetes Node Counts
+Cluster Autoscaler behavior was tuned with improved thresholds and scale-down rules.
+
+Pod requests/limits were standardized to improve bin packing and reduce over-allocation.
+
+#### 9. Orphaned Persistent Volumes
+Scheduled checks identified unattached EBS volumes for review and safe cleanup.
+
+This removed long-running storage waste while preserving data safety checks.
+
+#### 10. Spot Instances
+Spot capacity was introduced for build workloads (especially short-lived CI jobs), with fallback logic to on-demand capacity on interruption.
+
+This was especially effective for build jobs in the 15-minute to 1-hour range.
+
+Spot fleets and instance diversification improved both cost savings and reliability.
+
+## Ensuring Sustainable Savings
+Cost reduction is not durable without operating discipline.
+
+We kept savings stable with real-time dashboards, alerting, policy-driven guardrails, and recurring cross-functional cost reviews.
+
+Key sustainability practices:
+- Continuous monitoring with anomaly alerting
+- Automated governance for tagging and provisioning
+- Regular stakeholder reviews and accountability loops
+- Ongoing cost-awareness training
+- Continuous automation expansion for lifecycle tasks
+- Strategy updates aligned to evolving product and usage patterns
+
+![Sustained optimization outcomes and operating model](/case-studies/cloud-cost-optimization/img3.webp)
+
+## Outcome & Lessons Learned
+This effort demonstrated that meaningful savings can be achieved without sacrificing platform reliability.
+
+In this portfolio case-study framing, the initiative delivered a **35%** spend reduction, equivalent to roughly **$75K/year** in annualized savings.
+
+In the original operating window discussed in the source article, monthly spend improvements were also tracked from roughly $20K to $12K during active optimization cycles.
+
+Key lesson: cost optimization is not a one-time project. It is an engineering capability that must be maintained through shared ownership, visibility, governance, and automation.
+
+## Key Takeaways
+- Cloud cost optimization is a shared responsibility across engineering and leadership.
+- Visibility and transparent cost allocation are the foundation for effective decisions.
+- Governance must be ongoing to prevent cost regression.
+- Automation is what makes savings repeatable and sustainable.
+
+[View original article on Medium](https://medium.com/@mileperuma/optimizing-cloud-spend-with-precision-my-approach-to-cutting-cloud-costs-by-40-d9ba311bc252)

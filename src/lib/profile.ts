@@ -48,11 +48,13 @@ export function sortExperienceByMostRecent<T extends { period: string }>(items: 
 export interface ExperienceItem {
   role: string;
   company: string;
+  companyUrl?: string;
   companyLogo?: string;
   period: string;
   kind: "work" | "education";
   summary: LocalizedText;
   impactBullets: LocalizedText[];
+  additionalImpactBullets?: LocalizedText[];
   tech: string[];
 }
 
@@ -76,60 +78,65 @@ export interface CredibilityStat {
 
 export const experienceTimeline: ExperienceItem[] = [
   {
-    role: "Software Engineer",
-    company: "SY Labs Sri Lanka",
-    companyLogo: "/logos/sylabs.png",
-    period: "2019–2021",
+    role: "DevOps Engineer",
+    company: "London Stock Exchange Group Finland",
+    companyLogo: "/logos/london-stock-exchange.png",
+    period: "2023–2025",
     kind: "work",
     summary: {
-      eng: "Built backend and integration features while improving release quality and deployment consistency.",
-      fi: "Rakensin backend- ja integraatio-ominaisuuksia sekä paransin julkaisujen laatua ja käyttöönottojen tasaisuutta."
+      eng: "Owned cloud infrastructure, reliability, and delivery systems for regulated financial platforms across trading and surveillance domains, operating in high-availability environments where system failure directly impacts business operations.",
+      fi: "Owned cloud infrastructure, reliability, and delivery systems for regulated financial platforms across trading and surveillance domains, operating in high-availability environments where system failure directly impacts business operations."
     },
     impactBullets: [
       {
-        eng: "Reduced release friction with repeatable runbooks and better handoffs.",
-        fi: "Vähensin julkaisujen kitkaa toistettavilla runbookeilla ja selkeämmillä luovutuksilla."
+        eng: "Reduced cloud costs by 35% (~$75K/year) by introducing governance models and usage controls across multi-account environments.",
+        fi: "Reduced cloud costs by 35% (~$75K/year) by introducing governance models and usage controls across multi-account environments."
       },
       {
-        eng: "Created a practical base for moving deeper into DevOps work.",
-        fi: "Loin käytännöllisen perustan syvemmälle DevOps-työlle."
-      }
-    ],
-    tech: ["Java", "CI Pipelines", "Git", "Issue Tracking"]
-  },
-  {
-    role: "High School",
-    company: "Royal College Colombo",
-    period: "2003–2016",
-    kind: "education",
-    summary: {
-      eng: "Completed secondary education with a strong academic base in mathematics and science.",
-      fi: "Suoritti toisen asteen koulutuksen vahvalla matematiikan ja luonnontieteiden perustalla."
-    },
-    impactBullets: [
+        eng: "Led migration of regulated workloads from on-prem to cloud, redesigning architecture for isolation, security, and scalability.",
+        fi: "Led migration of regulated workloads from on-prem to cloud, redesigning architecture for isolation, security, and scalability."
+      },
       {
-        eng: "Built the early foundation for engineering and analytical thinking.",
-        fi: "Loi varhaisen perustan insinööri- ja analyyttiselle ajattelulle."
-      }
-    ],
-    tech: ["Academic Foundation"]
-  },
-  {
-    role: "BSc Computer Science",
-    company: "General Sir John Kotelawala Defence University",
-    period: "2021",
-    kind: "education",
-    summary: {
-      eng: "Completed core software engineering, systems, and algorithm studies with project-based collaboration.",
-      fi: "Suoritin ohjelmistotekniikan, järjestelmien ja algoritmien ydinkokonaisuudet projektipohjaisella yhteistyöllä."
-    },
-    impactBullets: [
+        eng: "Introduced Chaos Engineering practices to simulate failures and improve resilience, reducing downtime by 20%.",
+        fi: "Introduced Chaos Engineering practices to simulate failures and improve resilience, reducing downtime by 20%."
+      },
       {
-        eng: "Strengthened structured problem-solving and software design fundamentals.",
-        fi: "Vahvisti systemaattista ongelmanratkaisua ja ohjelmistosuunnittelun perusteita."
+        eng: "Owned end-to-end delivery systems (infrastructure + CI/CD), reducing deployment time by 40% and errors by 35%.",
+        fi: "Owned end-to-end delivery systems (infrastructure + CI/CD), reducing deployment time by 40% and errors by 35%."
+      },
+      {
+        eng: "Defined and enforced Kubernetes RBAC and network segmentation for secure multi-team environments.",
+        fi: "Defined and enforced Kubernetes RBAC and network segmentation for secure multi-team environments."
       }
     ],
-    tech: ["Computer Science Fundamentals", "Software Design", "Team Projects"]
+    additionalImpactBullets: [
+      {
+        eng: "Led incident response, root cause analysis, and reliability improvements across production systems.",
+        fi: "Led incident response, root cause analysis, and reliability improvements across production systems."
+      },
+      {
+        eng: "Introduced AI-assisted DevOps automation with governance controls to prevent sensitive data exposure.",
+        fi: "Introduced AI-assisted DevOps automation with governance controls to prevent sensitive data exposure."
+      }
+    ],
+    tech: [
+      "GitLab CI",
+      "Docker",
+      "Kubernetes",
+      "ArgoCD",
+      "Ansible",
+      "Terraform",
+      "AWS",
+      "Azure",
+      "Python",
+      "Go",
+      "Jira",
+      "Confluence",
+      "Prometheus",
+      "Grafana",
+      "Datadog",
+      "PostgreSQL"
+    ]
   },
   {
     role: "DevOps Engineer",
@@ -138,79 +145,170 @@ export const experienceTimeline: ExperienceItem[] = [
     period: "2022–2023",
     kind: "work",
     summary: {
-      eng: "Modernized CI/CD workflows and environment consistency to deliver faster with less risk.",
-      fi: "Modernisoin CI/CD-työnkulkuja ja ympäristöjen yhtenäisyyttä, jotta toimitukset nopeutuivat pienemmällä riskillä."
+      eng: "Led DevOps transformation for SDK engineering teams, driving cloud migration, delivery standardization, and automation strategy.",
+      fi: "Led DevOps transformation for SDK engineering teams, driving cloud migration, delivery standardization, and automation strategy."
     },
     impactBullets: [
       {
-        eng: "Standardized release workflows across services and reduced release errors.",
-        fi: "Standardoin palvelujen julkaisuprosesseja ja vähensin julkaisuvirheitä."
+        eng: "Built CI/CD pipelines from scratch, reducing deployment time by 50% and improving delivery reliability.",
+        fi: "Built CI/CD pipelines from scratch, reducing deployment time by 50% and improving delivery reliability."
       },
       {
-        eng: "Improved deployment confidence through stronger automation and rollback checks.",
-        fi: "Paransin käyttöönottoluottamusta vahvemmalla automaatiolla ja rollback-tarkistuksilla."
+        eng: "Led cloud migration to Azure, improving scalability, security, and infrastructure efficiency.",
+        fi: "Led cloud migration to Azure, improving scalability, security, and infrastructure efficiency."
+      },
+      {
+        eng: "Increased engineering productivity by 30% through workflow standardization.",
+        fi: "Increased engineering productivity by 30% through workflow standardization."
+      },
+      {
+        eng: "Automated testing, reducing QA effort by 40% and accelerating feedback cycles.",
+        fi: "Automated testing, reducing QA effort by 40% and accelerating feedback cycles."
+      },
+      {
+        eng: "Reduced operational overhead by 40% via reusable infrastructure and scripting.",
+        fi: "Reduced operational overhead by 40% via reusable infrastructure and scripting."
       }
     ],
-    tech: ["GitHub Actions", "Azure DevOps", "Docker", "Kubernetes"]
+    additionalImpactBullets: [
+      {
+        eng: "Improved cross-team delivery (Dev, QA, BA), accelerating release cycles by 15%.",
+        fi: "Improved cross-team delivery (Dev, QA, BA), accelerating release cycles by 15%."
+      },
+      {
+        eng: "Reduced issue resolution time by 20% and incident frequency by 25% through improved monitoring and logging.",
+        fi: "Reduced issue resolution time by 20% and incident frequency by 25% through improved monitoring and logging."
+      }
+    ],
+    tech: [
+      "Jenkins",
+      "Docker",
+      "Kubernetes",
+      "ArgoCD",
+      "GitHub Actions",
+      "Azure",
+      "Python",
+      "Shell",
+      "Jira",
+      "Prometheus",
+      "Grafana",
+      "MongoDB",
+      "PostgreSQL",
+      "Selenium"
+    ]
   },
   {
-    role: "DevOps Engineer",
-    company: "London Stock Exchange Group Finland",
-    companyLogo: "/logos/london-stock-exchange.png",
-    period: "2023–2025",
+    role: "Software Engineer",
+    company: "SY Labs Sri Lanka",
+    companyLogo: "/logos/sylabs.png",
+    period: "2019–2021",
     kind: "work",
     summary: {
-      eng: "Focused on platform reliability, infrastructure automation, and incident readiness in enterprise systems.",
-      fi: "Keskityin alustaluotettavuuteen, infrastruktuuriautomaatioon ja incident-valmiuteen enterprise-järjestelmissä."
+      eng: "Built and scaled a production-grade rental platform, combining full-stack engineering with DevOps practices.",
+      fi: "Built and scaled a production-grade rental platform, combining full-stack engineering with DevOps practices."
     },
     impactBullets: [
       {
-        eng: "Delivered measurable gains in cost efficiency, uptime, and deployment throughput.",
-        fi: "Toin mitattavia parannuksia kustannustehokkuuteen, käytettävyyteen ja julkaisujen läpimenoon."
+        eng: "Delivered a real-time rental platform with tracking and user management.",
+        fi: "Delivered a real-time rental platform with tracking and user management."
       },
       {
-        eng: "Reduced operational complexity through repeatable tooling and shared practices.",
-        fi: "Vähensin operatiivista monimutkaisuutta toistettavilla työkaluilla ja yhteisillä käytännöillä."
+        eng: "Built scalable applications using React, Node.js, PostgreSQL.",
+        fi: "Built scalable applications using React, Node.js, PostgreSQL."
+      },
+      {
+        eng: "Implemented secure authentication and RBAC systems.",
+        fi: "Implemented secure authentication and RBAC systems."
+      },
+      {
+        eng: "Reduced deployment time by 40% via CI/CD automation.",
+        fi: "Reduced deployment time by 40% via CI/CD automation."
+      },
+      {
+        eng: "Optimized database performance and system efficiency.",
+        fi: "Optimized database performance and system efficiency."
       }
     ],
-    tech: ["AWS", "Azure", "Terraform", "Kubernetes", "Monitoring Stack"]
+    additionalImpactBullets: [
+      {
+        eng: "Applied clean architecture and design principles for scalability.",
+        fi: "Applied clean architecture and design principles for scalability."
+      }
+    ],
+    tech: ["React", "Node.js", "PostgreSQL", "Docker", "Jenkins", "AWS", "OAuth2", "JWT"]
   },
   {
-    role: "Finnish Language Studies",
+    role: "Finnish Language Studies (A1–B2)",
     company: "Arffman Oy",
+    companyUrl: "https://www.arffman.fi",
     period: "2025–2026",
     kind: "education",
     summary: {
-      eng: "Invested in Finnish communication skills to collaborate effectively across local and international teams.",
-      fi: "Panostin suomen kielen viestintätaitoihin, jotta yhteistyö sujuu tehokkaasti paikallisissa ja kansainvälisissä tiimeissä."
+      eng: "Structured Finnish integration and language studies focused on professional and day-to-day communication.",
+      fi: "Structured Finnish integration and language studies focused on professional and day-to-day communication."
     },
     impactBullets: [
       {
-        eng: "Improved day-to-day collaboration in Finland-based environments.",
-        fi: "Paransi päivittäistä yhteistyötä Suomessa toimivissa ympäristöissä."
+        eng: "Developed practical communication capability from A1 to B2 level for workplace integration.",
+        fi: "Developed practical communication capability from A1 to B2 level for workplace integration."
       }
     ],
-    tech: ["Finnish Language Training", "Communication Practice"]
+    tech: ["Finnish Language Training"]
+  },
+  {
+    role: "BSc (Hons) Computer Science",
+    company: "General Sir John Kotelawala Defence University",
+    period: "2018–2021",
+    kind: "education",
+    summary: {
+      eng: "Completed undergraduate studies in software engineering, systems, and applied computing with project-based delivery.",
+      fi: "Completed undergraduate studies in software engineering, systems, and applied computing with project-based delivery."
+    },
+    impactBullets: [
+      {
+        eng: "Built a strong base in engineering fundamentals, problem solving, and software design.",
+        fi: "Built a strong base in engineering fundamentals, problem solving, and software design."
+      }
+    ],
+    tech: ["Computer Science", "Software Engineering", "Project Collaboration"]
+  },
+  {
+    role: "High School",
+    company: "Royal College Colombo",
+    companyUrl: "https://royalcollege.lk",
+    period: "2003–2016",
+    kind: "education",
+    summary: {
+      eng: "Major: Physical Sciences (Mathematics, Chemistry, Physics).",
+      fi: "Major: Physical Sciences (Mathematics, Chemistry, Physics)."
+    },
+    impactBullets: [
+      {
+        eng: "Built strong analytical and quantitative foundations for later engineering work.",
+        fi: "Built strong analytical and quantitative foundations for later engineering work."
+      }
+    ],
+    tech: ["Physical Sciences", "Mathematics", "Chemistry", "Physics"]
   }
 ];
 
 export const certifications: CredentialItem[] = [
   {
-    name: "AWS SAA-C03",
+    name: "AWS Certified Solutions Architect – Associate (SAA-C03)",
     provider: "Amazon Web Services",
     issuer: "AWS",
     icon: "/logos/certs/saa-c03.png",
     status: "active"
   },
   {
-    name: "Azure AZ-104",
+    name: "Microsoft Certified Azure Administrator Associate (AZ-104)",
     provider: "Microsoft Azure",
     issuer: "Azure",
     icon: "/logos/certs/az-104.png",
     status: "active"
   },
   {
-    name: "Azure AZ-500",
+    name: "Microsoft Certified Azure Security Engineer Associate (AZ-500)",
     provider: "Microsoft Azure",
     issuer: "Azure",
     icon: "/logos/certs/az-500.png",
@@ -219,9 +317,9 @@ export const certifications: CredentialItem[] = [
   {
     name: "Certified Kubernetes Administrator (CKA)",
     provider: "Cloud Native Computing Foundation",
-    issuer: "CKA",
+    issuer: "Kubernetes",
     icon: "/logos/certs/cka.png",
-    status: "expired"
+    status: "active"
   }
 ];
 
@@ -266,14 +364,14 @@ export const credibilityStats: CredibilityStat[] = [
 export const toolCategories: ToolCategory[] = [
   {
     label: { eng: "Cloud", fi: "Pilvi" },
-    tools: ["AWS", "Azure", "Oracle Cloud"]
+    tools: ["AWS", "Azure"]
   },
   {
     label: { eng: "CI/CD", fi: "CI/CD" },
     tools: ["GitHub Actions", "Azure DevOps", "GitLab CI", "Jenkins"]
   },
   {
-    label: { eng: "Containers", fi: "Kontit" },
+    label: { eng: "Containers & Orchestration", fi: "Kontit & orkestrointi" },
     tools: ["Docker", "Kubernetes", "Helm", "EKS"]
   },
   {
@@ -285,23 +383,22 @@ export const toolCategories: ToolCategory[] = [
     tools: ["Prometheus", "Grafana", "Datadog", "CloudWatch"]
   },
   {
-    label: { eng: "Scripting", fi: "Skriptaus" },
+    label: { eng: "Programming & Scripting", fi: "Ohjelmointi & skriptaus" },
     tools: ["Bash", "Python", "Go", "Rust"]
   },
   {
-    label: { eng: "Security", fi: "Tietoturva" },
-    tools: ["RBAC", "IAM", "Secrets Management", "Vulnerability Scanning"]
+    label: { eng: "Security & Networking", fi: "Tietoturva & verkot" },
+    tools: ["RBAC", "IAM", "Secrets Management", "Nginx"]
   },
   {
-    label: { eng: "OS / Networking", fi: "OS / Verkot" },
-    tools: ["Linux", "Nginx", "DNS", "TCP/IP"]
+    label: { eng: "Databases", fi: "Tietokannat" },
+    tools: ["PostgreSQL", "MongoDB"]
   }
 ];
 
 export const selectedCaseStudySlugs = [
-  "cloud-cost-optimization-reducing-spend-by-35",
-  "cicd-modernization-faster-and-safer-deployments",
-  "chaos-engineering-for-better-reliability"
+  "cloud-cost-optimization",
+  "kubernetes-rbac-okta"
 ] as const;
 
 export const selectedBeyondWorkSlugs = [

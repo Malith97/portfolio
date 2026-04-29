@@ -8,6 +8,7 @@ import { getDictionary } from "@/lib/i18n";
 import { createMetadata } from "@/lib/metadata";
 
 import "./globals.css";
+import "leaflet/dist/leaflet.css";
 
 const headingFont = Fraunces({
   variable: "--font-serif",

@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+
 interface TechBadgeProps {
   tool: string;
 }
@@ -20,6 +24,7 @@ const DEVICON_RULES: DeviconRule[] = [
   { keywords: ["oracle cloud", "oracle"], iconPath: "oracle/oracle-original.svg" },
   { keywords: ["azure devops"], iconPath: "azuredevops/azuredevops-original.svg" },
   { keywords: ["azure"], iconPath: "azure/azure-original.svg" },
+  { keywords: ["argocd", "argo cd"], iconPath: "argocd/argocd-original.svg" },
   { keywords: ["gitlab ci", "gitlab"], iconPath: "gitlab/gitlab-original.svg" },
   { keywords: ["github actions"], iconPath: "githubactions/githubactions-original.svg" },
   { keywords: ["jenkins"], iconPath: "jenkins/jenkins-original.svg" },
@@ -28,9 +33,14 @@ const DEVICON_RULES: DeviconRule[] = [
   { keywords: ["helm"], iconPath: "helm/helm-original.svg" },
   { keywords: ["terraform"], iconPath: "terraform/terraform-original.svg" },
   { keywords: ["ansible"], iconPath: "ansible/ansible-original.svg" },
+  { keywords: ["selenium"], iconPath: "selenium/selenium-original.svg" },
   { keywords: ["prometheus"], iconPath: "prometheus/prometheus-original.svg" },
   { keywords: ["grafana"], iconPath: "grafana/grafana-original.svg" },
   { keywords: ["datadog"], iconPath: "datadog/datadog-original.svg" },
+  { keywords: ["react"], iconPath: "react/react-original.svg" },
+  { keywords: ["node.js", "nodejs"], iconPath: "nodedotjs/nodedotjs-original.svg" },
+  { keywords: ["postgresql", "postgres"], iconPath: "postgresql/postgresql-original.svg" },
+  { keywords: ["powershell", "pwsh"], iconPath: "powershell/powershell-original.svg" },
   { keywords: ["bash"], iconPath: "bash/bash-original.svg" },
   { keywords: ["python"], iconPath: "python/python-original.svg" },
   { keywords: ["go"], iconPath: "go/go-original.svg" },
@@ -66,8 +76,9 @@ function fallbackGlyph(tool: string): string {
 
 export function TechIcon({ tool, className = "h-4 w-4" }: TechIconProps) {
   const iconPath = resolveDeviconPath(tool);
+  const [iconLoadFailed, setIconLoadFailed] = useState(false);
 
-  if (iconPath) {
+  if (iconPath && !iconLoadFailed) {
     return (
       <img
         src={`${DEVICON_BASE_URL}/${iconPath}`}
@@ -76,6 +87,7 @@ export function TechIcon({ tool, className = "h-4 w-4" }: TechIconProps) {
         className={`${className} object-contain`}
         loading="lazy"
         decoding="async"
+        onError={() => setIconLoadFailed(true)}
       />
     );
   }

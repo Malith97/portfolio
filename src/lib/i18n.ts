@@ -187,10 +187,10 @@ const dictionaries: Record<Language, Dictionary> = {
     },
     home: {
       label: "Home",
-      heroTitle: "Senior DevOps Engineer focused on cloud, automation, CI/CD, and reliability.",
+      heroTitle: "DevOps Engineer building resilient cloud systems.",
       heroSummary:
-        "I design and operate dependable delivery platforms that help engineering teams release faster with less operational risk.",
-      heroMeta: "Based in Finland · Open to EU and remote opportunities",
+        "I design, automate, and operate delivery platforms for teams that need speed, reliability, and control.",
+      heroMeta: "Open to EU, Finland, and remote DevOps opportunities",
       ctaViewWork: "View Work",
       ctaDownloadResume: "Contact Me",
       impactLabel: "Impact",
@@ -334,10 +334,10 @@ const dictionaries: Record<Language, Dictionary> = {
     },
     home: {
       label: "Etusivu",
-      heroTitle: "Senior DevOps -insinööri, jonka painopisteinä ovat pilvi, automaatio, CI/CD ja luotettavuus.",
+      heroTitle: "DevOps-insinööri, joka rakentaa resilienttejä pilvijärjestelmiä.",
       heroSummary:
-        "Suunnittelen ja operoin luotettavia toimitusalustoja, joiden avulla tiimit julkaisevat nopeammin pienemmällä operatiivisella riskillä.",
-      heroMeta: "Sijainti Suomi · Avoin EU- ja etärooleille",
+        "Suunnittelen, automatisoin ja operoin toimitusalustoja tiimeille, jotka tarvitsevat nopeutta, luotettavuutta ja hallintaa.",
+      heroMeta: "Avoin EU-, Suomi- ja etä-DevOps-mahdollisuuksille",
       ctaViewWork: "Näytä työ",
       ctaDownloadResume: "Ota yhteyttä",
       impactLabel: "Vaikutus",

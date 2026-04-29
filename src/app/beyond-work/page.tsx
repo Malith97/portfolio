@@ -56,6 +56,10 @@ function buildMetadataLine(
   post: Awaited<ReturnType<typeof getAllBeyondWorkPosts>>[number],
   t: ReturnType<typeof getDictionary>
 ): string {
+  if (post.cardMeta) {
+    return post.cardMeta.toUpperCase();
+  }
+
   if (isCookingCategory(post.category)) {
     const parts: string[] = [t.common.kitchenNotes.toUpperCase()];
     if (post.dishType) parts.push(post.dishType.toUpperCase());
@@ -77,11 +81,6 @@ function buildMetadataLine(
   }
 
   return parts.join(" · ");
-}
-
-function isRouteActivity(category?: string): boolean {
-  const normalized = category?.toLowerCase() ?? "";
-  return normalized.includes("running") || normalized.includes("cycling");
 }
 
 export const metadata = createMetadata({
@@ -138,13 +137,14 @@ export default async function BeyondWorkPage({ searchParams }: BeyondWorkPagePro
       <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {filteredPosts.map((post) => (
           <article key={post.slug} className="surface-card overflow-hidden">
-            <Link href={`/beyond-work/${post.slug}`} className="block h-full">
+            <Link href={`/beyond-work/${post.slug}`} className="block">
               <div className="aspect-[16/10] overflow-hidden border-b border-border">
                 <Image
                   src={post.image}
                   alt={getLocalizedPostTitle(post.slug, post.title, language)}
                   width={1200}
                   height={760}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="hover-lift image-frame h-full w-full object-cover grayscale transition duration-500 ease-out hover:grayscale-0"
                 />
               </div>
@@ -189,21 +189,6 @@ export default async function BeyondWorkPage({ searchParams }: BeyondWorkPagePro
                   </div>
                 ) : null}
               </div>
-
-              {isRouteActivity(post.category) && post.routeImage ? (
-                <div className="space-y-2 border-t border-border px-4 pb-4 pt-3">
-                  <p className="font-mono text-[11px] uppercase tracking-label text-muted">{t.common.routeSnapshot}</p>
-                  <div className="aspect-[16/7] overflow-hidden rounded-md border border-border">
-                    <Image
-                      src={post.routeImage}
-                      alt={`${getLocalizedPostTitle(post.slug, post.title, language)} ${t.common.routeScreenshot.toLowerCase()}`}
-                      width={1200}
-                      height={520}
-                      className="image-frame h-full w-full object-cover"
-                    />
-                  </div>
-                </div>
-              ) : null}
             </Link>
           </article>
         ))}

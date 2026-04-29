@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { BeyondWorkMap } from "@/components/BeyondWorkMap";
 import { PhotoGrid } from "@/components/photo-grid";
 import { getAllBeyondWorkPosts, getBeyondWorkPostBySlug, type Post } from "@/lib/content";
 import { formatDate } from "@/lib/format";
@@ -136,6 +137,12 @@ export default async function BeyondWorkDetailPage({ params }: BeyondWorkPagePro
   const localizedSummary = getLocalizedPostSummary(post.slug, post.summary, language);
   const localizedCategoryLabel = post.category ? localizedCategory(post.category, t) : t.common.journal;
   const showEnglishBody = language !== "fi";
+  const storyLabel =
+    post.slug === "cycling-to-kiiminki-from-oulu"
+      ? "Ride story"
+      : post.slug === "running-to-vartto"
+        ? "Run story"
+        : t.common.story;
 
   return (
     <article className="space-y-12">
@@ -150,6 +157,7 @@ export default async function BeyondWorkDetailPage({ params }: BeyondWorkPagePro
             alt={localizedTitle}
             width={1600}
             height={900}
+            sizes="(max-width: 768px) 100vw, 1200px"
             className="hover-lift image-frame h-full w-full object-cover"
             priority
           />
@@ -177,20 +185,14 @@ export default async function BeyondWorkDetailPage({ params }: BeyondWorkPagePro
         </div>
       </section>
 
-      {type === "run_ride" && post.routeImage ? (
-        <section className="space-y-4">
-          <p className="font-mono text-xs uppercase tracking-label text-muted">{t.common.routeScreenshot}</p>
-          <div className="aspect-[16/7] overflow-hidden rounded-md border border-border">
-            <Image
-              src={post.routeImage}
-              alt={`${localizedTitle} ${t.common.routeScreenshot.toLowerCase()}`}
-              width={1600}
-              height={720}
-              className="image-frame h-full w-full object-cover"
-            />
-          </div>
-        </section>
-      ) : null}
+      <BeyondWorkMap
+        category={post.category}
+        map={post.map}
+        postTitle={localizedTitle}
+        sectionLabel={t.common.routeSnapshot}
+        className="space-y-4"
+        view="detail"
+      />
 
       {type === "cooking" ? (
         <section className="space-y-10">
@@ -244,7 +246,7 @@ export default async function BeyondWorkDetailPage({ params }: BeyondWorkPagePro
       ) : null}
 
       <section className="space-y-4">
-        <p className="font-mono text-xs uppercase tracking-label text-muted">{t.common.story}</p>
+        <p className="font-mono text-xs uppercase tracking-label text-muted">{storyLabel}</p>
         {showEnglishBody ? (
           <div className="content-prose max-w-reading" dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
         ) : (
@@ -256,7 +258,12 @@ export default async function BeyondWorkDetailPage({ params }: BeyondWorkPagePro
 
       <section className="space-y-4 border-t border-border pt-8">
         <p className="font-mono text-xs uppercase tracking-label text-muted">{t.common.gallery}</p>
-        <PhotoGrid images={post.photos} altBase={localizedTitle} aspectClass="aspect-[4/3]" />
+        <PhotoGrid
+          images={post.photos}
+          altBase={localizedTitle}
+          aspectClass="aspect-[4/3]"
+          enableLightbox={post.slug === "cycling-to-kiiminki-from-oulu" || post.slug === "running-to-vartto"}
+        />
       </section>
 
       {type === "cooking" && post.notesForNextTime.length > 0 ? (
@@ -276,7 +283,7 @@ export default async function BeyondWorkDetailPage({ params }: BeyondWorkPagePro
 
       <nav className="grid gap-3 border-t border-border pt-8 sm:grid-cols-2" aria-label="Journal navigation">
         {previousPost ? (
-          <Link href={`/beyond-work/${previousPost.slug}`} className="surface-card p-4">
+          <Link href={`/beyond-work/${previousPost.slug}`} className="surface-card block p-4">
             <p className="font-mono text-xs uppercase tracking-label text-muted">{t.common.previous}</p>
             <p className="pt-1 font-serif text-xl text-text">
               {getLocalizedPostTitle(previousPost.slug, previousPost.title, language)}
@@ -287,7 +294,7 @@ export default async function BeyondWorkDetailPage({ params }: BeyondWorkPagePro
         )}
 
         {nextPost ? (
-          <Link href={`/beyond-work/${nextPost.slug}`} className="surface-card p-4 sm:text-right">
+          <Link href={`/beyond-work/${nextPost.slug}`} className="surface-card block p-4 sm:text-right">
             <p className="font-mono text-xs uppercase tracking-label text-muted">{t.common.next}</p>
             <p className="pt-1 font-serif text-xl text-text">
               {getLocalizedPostTitle(nextPost.slug, nextPost.title, language)}

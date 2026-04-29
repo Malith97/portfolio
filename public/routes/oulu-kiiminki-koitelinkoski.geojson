@@ -1,0 +1,20 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Oulu to Koitelinkoski Ride"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [25.4651, 65.0121],
+          [25.5730, 65.0960],
+          [25.7970, 65.1310],
+          [25.9274, 65.1887]
+        ]
+      }
+    }
+  ]
+}
