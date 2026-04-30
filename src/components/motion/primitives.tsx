@@ -21,27 +21,36 @@ const heroContainerVariants: Variants = {
 };
 
 const heroItemVariants: Variants = {
-  hidden: { opacity: 0, y: 28, filter: "blur(8px)" },
+  hidden: { opacity: 0, y: 12 },
   visible: (delay: number = 0) => ({
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: {
-      duration: 0.56,
+      duration: 0.58,
       ease: [0.22, 1, 0.36, 1],
       delay
     }
   })
 };
 
-const heroTitleVariants: Variants = {
-  hidden: { opacity: 0, y: 34, filter: "blur(12px)" },
+const heroTitleContainerVariants: Variants = {
+  hidden: { opacity: 1 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.06
+    }
+  }
+};
+
+const heroTitleWordVariants: Variants = {
+  hidden: { opacity: 0, y: 12 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: {
-      duration: 0.7,
+      duration: 0.62,
       ease: [0.22, 1, 0.36, 1]
     }
   }
@@ -112,9 +121,23 @@ export function HeroTitleReveal({ children, className }: MotionWrapperProps) {
     return <h1 className={className}>{children}</h1>;
   }
 
+  if (typeof children !== "string") {
+    return (
+      <motion.h1 className={className} variants={heroItemVariants}>
+        {children}
+      </motion.h1>
+    );
+  }
+
+  const words = children.trim().split(/\s+/);
+
   return (
-    <motion.h1 className={className} variants={heroTitleVariants}>
-      {children}
+    <motion.h1 className={className} variants={heroTitleContainerVariants}>
+      {words.map((word, index) => (
+        <motion.span key={`${word}-${index}`} variants={heroTitleWordVariants} className="inline-block whitespace-pre">
+          {index < words.length - 1 ? `${word} ` : word}
+        </motion.span>
+      ))}
     </motion.h1>
   );
 }
@@ -129,9 +152,9 @@ export function HeroCtaRow({ children, className }: MotionWrapperProps) {
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
-      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      transition={{ duration: 0.52, ease: [0.22, 1, 0.36, 1], delay: 0.62 }}
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.56, ease: [0.22, 1, 0.36, 1], delay: 0.88 }}
     >
       {children}
     </motion.div>

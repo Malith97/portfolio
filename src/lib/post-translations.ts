@@ -14,7 +14,7 @@ const postTranslations: Record<string, PostTranslation> = {
     titleFi: "CI/CD-modernisointi: nopeammat ja turvallisemmat julkaisut",
     summaryFi: "Putkien uudistus, ympäristöjen yhdenmukaisuus ja vahvemmat laatuportit lisäsivät toimitusnopeutta ja vähensivät julkaisuriskiä."
   },
-  "cloud-cost-optimization-reducing-spend-by-35": {
+  "cloud-cost-optimization": {
     titleFi: "Pilvikustannusten optimointi: kulut alas 35 %",
     summaryFi: "Käytännöllinen FinOps-kokonaisuus laski kustannuksia ilman palvelutason regressioita."
   },

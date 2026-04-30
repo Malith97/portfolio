@@ -154,7 +154,7 @@ export default function ContactPage() {
                   href={item.href}
                   className="group inline-flex items-center gap-2 text-sm text-text transition-colors hover:text-accent"
                   target={item.href.startsWith("http") ? "_blank" : undefined}
-                  rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+                  rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
                   aria-label={contactLabels[item.id]}
                 >
                   <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-border text-muted transition-colors group-hover:border-accent group-hover:text-accent">
@@ -174,6 +174,8 @@ export default function ContactPage() {
               alt="Malith working with notes and camera gear"
               width={1200}
               height={1500}
+              sizes="(max-width: 1024px) 100vw, 38vw"
+              loading="lazy"
               className="hover-lift image-frame h-full w-full object-cover grayscale transition duration-500 ease-out hover:grayscale-0"
             />
           </div>

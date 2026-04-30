@@ -1,0 +1,184 @@
+---
+title: "Enable Multiple I2C Ports on Raspberry Pi"
+summary: "Configuring multiple I2C buses on Raspberry Pi to connect and test multiple sensor modules."
+slug: "multiple-i2c-ports-raspberry-pi"
+date: "2022-10-01"
+tags:
+  - Raspberry Pi
+  - I2C
+  - Embedded Systems
+  - Python
+  - MPU6050
+category: "IoT / Raspberry Pi / Embedded Systems"
+image: "/case-studies/multiple-i2c-ports-raspberry-pi/cover_or_first.webp"
+coverImage: "/case-studies/multiple-i2c-ports-raspberry-pi/cover_or_first.webp"
+images:
+  - "/case-studies/multiple-i2c-ports-raspberry-pi/cover_or_first.webp"
+  - "/case-studies/multiple-i2c-ports-raspberry-pi/img_1.webp"
+  - "/case-studies/multiple-i2c-ports-raspberry-pi/img_2.webp"
+  - "/case-studies/multiple-i2c-ports-raspberry-pi/img_3.webp"
+  - "/case-studies/multiple-i2c-ports-raspberry-pi/img_4.webp"
+  - "/case-studies/multiple-i2c-ports-raspberry-pi/img_5.webp"
+  - "/case-studies/multiple-i2c-ports-raspberry-pi/img_6.webp"
+impact: "Multiple software I2C buses configured and validated on Raspberry Pi"
+featured: true
+---
+
+**Full Case Study — Originally published on Medium**
+
+Let’s checkout how to enable I2C protocol and configure multiple I2C devices on Raspberry Pi.
+
+## Introduction
+In some scenarios we need to setup multiple sensor modules into Raspberry Pi to interact with multiple modules. But by default, Raspberry Pi boards do not come with I2C interface pre-enabled and we need to change board configuration to enable it.
+
+In this post, I discuss how to enable I2C communication in Raspberry Pi and configure multiple I2C ports.
+
+![Raspberry Pi multi-device setup](/case-studies/multiple-i2c-ports-raspberry-pi/cover_or_first.webp)
+
+## What is I2C?
+I2C is a well-known communication protocol when it comes to microcontrollers. The advantage of I2C is that it allows us to establish communication between multiple modules by using only Serial Data Line (SDA) and Serial Clock Line (SCL).
+
+## Enable I2C Interface in Raspberry Pi
+Let’s look at how to enable I2C interface in Raspberry Pi in detail.
+
+Before we start, let’s upgrade packages and install essential libraries.
+
+```bash
+sudo apt-get update
+sudo apt-get install -y python-smbus i2c-tools libi2c-dev vim
+```
+
+Let’s run this command to open Raspberry Pi configuration management tool.
+
+```bash
+sudo raspi-config
+```
+
+Then select `Interface Options` → `I2C`.
+
+![raspi-config interface options](/case-studies/multiple-i2c-ports-raspberry-pi/img_1.webp)
+
+Then click on `Yes` when prompted to enable I2C interface.
+
+![raspi-config i2c option](/case-studies/multiple-i2c-ports-raspberry-pi/img_2.webp)
+
+Finally select `Yes` and reboot.
+
+![enable ARM I2C interface prompt](/case-studies/multiple-i2c-ports-raspberry-pi/img_3.webp)
+
+Now you have successfully enabled I2C interface on your Raspberry Pi.
+
+## Ports
+You can run the following command to list your I2C buses:
+
+```bash
+sudo i2cdetect -l
+```
+
+![pinout](/case-studies/multiple-i2c-ports-raspberry-pi/img_4.webp)
+
+## Enabling Multiple I2C
+Let’s edit `config.txt` to enable multiple I2C ports.
+
+First navigate and open:
+
+```bash
+sudo vim boot/config.txt
+```
+
+Then add your configuration. In this case:
+
+```bash
+dtparam=i2c_arm=on #add after this line
+dtoverlay=i2c-gpio,bus=4,i2c_gpio_sda=8,i2c_gpio_scl=9
+dtoverlay=i2c-gpio,bus=5,i2c_gpio_sda=12,i2c_gpio_scl=13
+dtoverlay=i2c-gpio,bus=6,i2c_gpio_sda=22,i2c_gpio_scl=23
+```
+
+Finally, restart Raspberry Pi (save before exit):
+
+```bash
+sudo reboot -h now
+```
+
+## Testing the Port
+You can test each new port by typing the following command (`bus` → `4`/`5`/`6`):
+
+```bash
+sudo i2cdetect -y [bus]
+```
+
+You will get a response like:
+
+```text
+0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:          -- -- -- -- -- -- -- -- -- -- -- -- --
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+50: -- -- -- -- -- -- -- 68 -- -- -- -- -- -- -- --
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+70: -- -- -- -- -- -- -- --
+```
+
+## Test multiple I2C modules
+In this example, I add 3 MPU6050 modules to Raspberry Pi to show sensor readings.
+
+### Diagram
+![sensor wiring diagram](/case-studies/multiple-i2c-ports-raspberry-pi/img_5.webp)
+
+Here 3 modules labeled as `A`, `B`, and `C` are connected to different I2C ports on Raspberry Pi.
+
+### Pinout
+![pinout](/case-studies/multiple-i2c-ports-raspberry-pi/img_6.webp)
+
+## Installing MPU6050 Library
+There are two ways to install MPU6050 library on Raspberry Pi. Here we install using PyPI repository.
+
+To install run (use `pip3` if you’re using Python 3):
+
+```bash
+pip install mpu6050-raspberrypi
+```
+
+## Example Code
+Run this example code to check your sensors:
+
+```python
+from mpu6050 import mpu6050
+
+mpuA = mpu6050(0x68, bus=5)
+mpuB = mpu6050(0x68, bus=4)
+mpuC = mpu6050(0x68, bus=6)
+
+while True:
+    accel_data_mpuA = mpuA.get_accel_data()
+    print("Acceleration mpuA X -> " + str(accel_data_mpuA["x"]))
+    print()
+
+    accel_data_mpuB = mpuB.get_accel_data()
+    print("Acceleration mpuB X -> " + str(accel_data_mpuB["x"]))
+    print()
+
+    accel_data_mpuC = mpuC.get_accel_data()
+    print("Acceleration mpuC X -> " + str(accel_data_mpuC["x"]))
+    print()
+    print("------------")
+```
+
+## Final Thoughts
+To conclude, there are alternative methods to use multiple I2C devices, such as having multiple devices on the same port or using multiplexers.
+
+However, this setup allows using additional ports to connect I2C devices directly.
+
+## References
+1. https://github.com/m-rtijn/mpu6050
+2. https://forums.raspberrypi.com/viewtopic.php?t=205576
+3. https://forums.raspberrypi.com/viewtopic.php?t=244947
+4. https://forums.raspberrypi.com/viewtopic.php?t=271200
+
+### LinkedIn
+https://www.linkedin.com/in/malith-ileperuma-8a6a97167/
+
+[View original article on Medium](https://medium.com/@mileperuma/enable-multiple-i2c-ports-on-raspberry-pi-5a8807471737)

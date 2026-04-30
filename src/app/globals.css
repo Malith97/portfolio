@@ -30,6 +30,11 @@ a {
   text-decoration: none;
 }
 
+:focus-visible {
+  outline: 2px solid #f2c75b;
+  outline-offset: 2px;
+}
+
 ::selection {
   background: #e2b449;
   color: #0b0b0b;
@@ -168,7 +173,7 @@ img {
 }
 
 .content-prose {
-  @apply prose prose-invert max-w-none text-[1rem] leading-relaxed;
+  @apply prose prose-invert max-w-none text-[1rem] leading-8;
 }
 
 .content-prose :where(h2, h3, h4) {
@@ -176,15 +181,27 @@ img {
 }
 
 .content-prose :where(h2) {
-  @apply mt-10 border-t border-border pt-6 text-2xl;
+  @apply mt-14 border-t border-border pt-8 text-2xl;
 }
 
 .content-prose :where(h3) {
-  @apply mt-8 text-xl;
+  @apply mt-10 text-xl;
+}
+
+.content-prose :where(h4) {
+  @apply mt-8 text-lg;
 }
 
 .content-prose :where(p, li) {
-  @apply text-text;
+  @apply text-text leading-8;
+}
+
+.content-prose :where(p) {
+  @apply my-5;
+}
+
+.content-prose :where(ul, ol) {
+  @apply my-6;
 }
 
 .content-prose :where(code) {
@@ -193,4 +210,8 @@ img {
 
 .content-prose :where(a) {
   @apply text-accent underline decoration-border underline-offset-4;
+}
+
+.content-prose :where(img) {
+  @apply my-6 h-auto w-full rounded-md border border-border;
 }

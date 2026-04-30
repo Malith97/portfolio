@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { ReactNode } from "react";
 
 import {
   FadeInOnView,
@@ -12,11 +13,13 @@ import {
   StaggerInView,
   StaggerItem
 } from "@/components/motion/primitives";
+import { SafeImage } from "@/components/safe-image";
 import { TechBadge, TechIcon } from "@/components/tech-badge";
 import { formatDate } from "@/lib/format";
 import { getAllBeyondWorkPosts, getAllCaseStudies } from "@/lib/content";
 import { getDictionary } from "@/lib/i18n";
 import { getServerLanguage } from "@/lib/i18n-server";
+import { createMetadata } from "@/lib/metadata";
 import { getLocalizedPostSummary, getLocalizedPostTitle } from "@/lib/post-translations";
 import {
   type ExperienceItem,
@@ -60,15 +63,21 @@ function localizeBeyondCategory(
   const normalized = category.toLowerCase();
   if (normalized.includes("running")) return t.beyondWorkPage.filters.running;
   if (normalized.includes("cycling")) return t.beyondWorkPage.filters.cycling;
-  if (normalized.includes("swimming")) return t.beyondWorkPage.filters.swimming;
   if (normalized.includes("photography")) return t.beyondWorkPage.filters.photography;
-  if (normalized.includes("videography")) return t.beyondWorkPage.filters.videography;
   if (normalized.includes("cooking")) return t.beyondWorkPage.filters.cooking;
+  if (normalized.includes("achievements")) return t.beyondWorkPage.filters.achievements;
 
   return t.beyondWorkPage.filters.other;
 }
 
 const HERO_PORTRAIT_SRC = "/media/malith-portrait.png";
+
+export const metadata = createMetadata({
+  title: "Home",
+  description: "DevOps portfolio of Malith Ileperuma with selected case studies, experience highlights, and beyond-work stories.",
+  path: "/",
+  image: HERO_PORTRAIT_SRC
+});
 
 const COMPANY_LOGO_FALLBACK_MAP: Array<{ keyword: string; logo: string }> = [
   { keyword: "almosafer", logo: "/logos/almosafer.svg" },
@@ -107,6 +116,120 @@ function getCompanyInitials(company: string): string {
   return `${words[0].charAt(0)}${words[1].charAt(0)}`.toUpperCase();
 }
 
+interface RecentExperiencePreview {
+  role: string;
+  company: string;
+  location: string;
+  period: string;
+  summary: string;
+  impacts: string[];
+  stackPreview: string[];
+}
+
+const RECENT_EXPERIENCE_PREVIEW: RecentExperiencePreview[] = [
+  {
+    role: "DevOps Engineer",
+    company: "London Stock Exchange Group",
+    location: "Finland",
+    period: "2023–2025",
+    summary:
+      "Operating and scaling regulated financial systems where downtime directly impacts trading operations.",
+    impacts: [
+      "Reduced cloud costs by 35% (~$75K/year) through governance across multi-account environments",
+      "Led migration of regulated workloads to cloud with secure architecture",
+      "Introduced Chaos Engineering, reducing downtime by 20%",
+      "Reduced deployment and provisioning time by 40%",
+      "Designed secure Kubernetes architecture (RBAC + segmentation)"
+    ],
+    stackPreview: [
+      "GitLab CI",
+      "Docker",
+      "Kubernetes",
+      "ArgoCD",
+      "Ansible",
+      "Terraform",
+      "AWS",
+      "Azure",
+      "Python",
+      "Go",
+      "Jira",
+      "Confluence",
+      "Prometheus",
+      "Grafana",
+      "Datadog",
+      "PostgreSQL"
+    ]
+  },
+  {
+    role: "DevOps Engineer",
+    company: "Zebra Technologies",
+    location: "Sri Lanka",
+    period: "2022–2023",
+    summary:
+      "Led DevOps transformation across SDK engineering teams, improving delivery speed, reliability, and cloud adoption at scale.",
+    impacts: [
+      "Built CI/CD pipelines from scratch, reducing deployment time by 50%",
+      "Led cloud migration to Azure, improving scalability and security",
+      "Improved engineering productivity by 30%",
+      "Reduced QA effort by 40% through automation",
+      "Reduced operational overhead by 40%"
+    ],
+    stackPreview: [
+      "Jenkins",
+      "Docker",
+      "Kubernetes",
+      "ArgoCD",
+      "GitHub Actions",
+      "Azure",
+      "Python",
+      "Shell",
+      "Jira",
+      "Prometheus",
+      "Grafana",
+      "MongoDB",
+      "PostgreSQL",
+      "Selenium"
+    ]
+  }
+];
+
+const METRIC_HIGHLIGHT_SPLIT_REGEX = /(~?\$\d+(?:[.,]\d+)?(?:K|M|B)?(?:\/[a-zA-Z]+)?|\d+(?:[.,]\d+)?%)/g;
+const METRIC_HIGHLIGHT_MATCH_REGEX = /^(~?\$\d+(?:[.,]\d+)?(?:K|M|B)?(?:\/[a-zA-Z]+)?|\d+(?:[.,]\d+)?%)$/;
+
+function renderMetricText(text: string): ReactNode {
+  return text.split(METRIC_HIGHLIGHT_SPLIT_REGEX).map((part, index) => {
+    if (part.length === 0) {
+      return null;
+    }
+
+    if (METRIC_HIGHLIGHT_MATCH_REGEX.test(part)) {
+      return (
+        <span key={`${part}-${index}`} className="font-semibold text-accent">
+          {part}
+        </span>
+      );
+    }
+
+    return <span key={`${part}-${index}`}>{part}</span>;
+  });
+}
+
+function toConciseSummary(text: string): string {
+  const normalized = text.replace(/\s+/g, " ").trim();
+  if (!normalized) {
+    return "";
+  }
+
+  const [firstSentence] = normalized.split(/(?<=[.!?])\s+/);
+  const concise = firstSentence && firstSentence.length > 0 ? firstSentence : normalized;
+
+  if (concise.length <= 150) {
+    return concise;
+  }
+
+  return `${concise.slice(0, 147).trimEnd()}…`;
+}
+
 export default async function HomePage() {
   const language = getServerLanguage();
   const t = getDictionary(language);
@@ -132,17 +255,19 @@ export default async function HomePage() {
           pastCertificationLabel: "Vanhentunut",
           toolsLabel: "Työkalut ja teknologiat",
           toolsDescription: "Ryhmät nopeaan arviointiin rekrytoijille ja tiiminvetäjille.",
-          experienceLabel: "Kokemus",
-          experienceTitle: "Kokemus yhdellä silmäyksellä",
-          experienceDescription: "Rooli, vaikutus ja tekninen pinopaino ilman ylimääräistä kohinaa.",
-          keyImpact: "Keskeinen vaikutus",
-          techStack: "Tekninen pino",
+          experienceLabel: "Recent Experience",
+          experienceTitle: "Trusted with business-critical cloud systems",
+          experienceDescription:
+            "Designing and operating systems where reliability is not optional.",
+          impactLabel: "Impact",
+          stackPreviewLabel: "Stack preview",
+          viewFullExperience: "Explore full experience →",
           selectedWorkDescription: "Vain vahvimmat, tulospohjaiset toimitukset.",
           beyondWorkDescription:
             "Tavoitteellinen tekeminen työn ulkopuolella: juoksu, pyöräily ja keittiöprojektit, jotka tukevat jatkuvuutta ja luovuutta.",
           fallbackOutcome: "Operatiiviset parannukset",
-          viewCaseStudy: "Avaa tapaustutkimus",
-          viewEntry: "Avaa merkintä"
+          viewCaseStudy: "View case study →",
+          viewEntry: "Read entry →"
         }
       : {
           summaryLabel: "Summary",
@@ -153,52 +278,48 @@ export default async function HomePage() {
           pastCertificationLabel: "Expired",
           toolsLabel: "Tools & Technologies",
           toolsDescription: "Organized for quick recruiter and hiring-manager scanning.",
-          experienceLabel: "Experience",
-          experienceTitle: "Experience at a glance",
-          experienceDescription: "Role, impact, and stack context without noise.",
-          keyImpact: "Key impact",
-          techStack: "Tech stack",
+          experienceLabel: "Recent Experience",
+          experienceTitle: "Trusted with business-critical cloud systems",
+          experienceDescription:
+            "Designing and operating systems where reliability is not optional.",
+          impactLabel: "Impact",
+          stackPreviewLabel: "Stack preview",
+          viewFullExperience: "Explore full experience →",
           selectedWorkDescription: "Only the strongest outcome-focused deliveries.",
           beyondWorkDescription:
             "Personal consistency outside work: running, cycling, and cooking sessions that reinforce discipline and creativity.",
           fallbackOutcome: "Operational improvements",
-          viewCaseStudy: "Open case study",
-          viewEntry: "Open entry"
+          viewCaseStudy: "View case study →",
+          viewEntry: "Read entry →"
         };
 
   return (
     <div className="space-y-20">
-      <section className="relative isolate grid gap-8 overflow-hidden border-b border-border pb-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
+      <section className="relative isolate grid gap-8 overflow-hidden border-b border-border pb-12 md:overflow-visible lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
         <HeroAmbientBackground />
 
         <HeroStagger className="relative z-10 max-w-3xl space-y-6">
-          <HeroStaggerItem>
-            <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.label}</p>
-          </HeroStaggerItem>
+          <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.label}</p>
 
-          <HeroTitleReveal className="font-serif text-4xl leading-tight text-text sm:text-5xl lg:text-6xl">
+          <HeroTitleReveal className="max-w-[16ch] font-serif text-4xl leading-[1.06] text-text sm:max-w-[18ch] sm:text-5xl lg:max-w-[20ch] lg:text-6xl">
             {t.home.heroTitle}
           </HeroTitleReveal>
 
-          <HeroStaggerItem>
+          <HeroStaggerItem delay={0.56}>
             <p className="max-w-2xl text-base leading-relaxed text-muted sm:text-lg">{t.home.heroSummary}</p>
           </HeroStaggerItem>
 
-          <HeroStaggerItem>
-            <p
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/90 px-3 py-1 font-mono text-xs text-text shadow-[0_0_14px_rgba(0,0,0,0.35)]"
-              aria-label="Current location: Finland"
-            >
-              <span className="status-dot" aria-hidden="true">
-                <span className="status-dot-pulse" />
-              </span>
-              Currently in Finland 🇫🇮
-            </p>
-          </HeroStaggerItem>
+          <p
+            className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/90 px-3 py-1 font-mono text-xs text-text shadow-[0_0_14px_rgba(0,0,0,0.35)]"
+            aria-label="Current location: Finland"
+          >
+            <span className="status-dot" aria-hidden="true">
+              <span className="status-dot-pulse" />
+            </span>
+            Currently in Finland 🇫🇮
+          </p>
 
-          <HeroStaggerItem>
-            <p className="font-mono text-xs uppercase tracking-label text-accent">{t.home.heroMeta}</p>
-          </HeroStaggerItem>
+          <p className="font-mono text-xs uppercase tracking-label text-accent">{t.home.heroMeta}</p>
 
           <HeroCtaRow className="flex flex-wrap gap-3 pt-1">
             <Link
@@ -216,20 +337,20 @@ export default async function HomePage() {
           </HeroCtaRow>
         </HeroStagger>
 
-        <div className="relative z-10 mx-auto w-full max-w-sm lg:mx-0 lg:justify-self-end">
+        <div className="relative z-10 mx-auto w-full max-w-[396px] translate-y-2 sm:max-w-[408px] sm:translate-y-3 md:max-w-[420px] md:translate-y-4 lg:mx-0 lg:max-w-[430px] lg:translate-y-5 lg:justify-self-end">
           <div className="relative overflow-visible">
             <span
               aria-hidden="true"
               className="pointer-events-none absolute left-1/2 top-[46%] -z-10 h-[80%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,158,92,0.34)_0%,rgba(255,158,92,0.18)_38%,rgba(255,158,92,0.08)_56%,rgba(11,11,11,0)_78%)] blur-3xl"
             />
-            <figure className="relative rounded-2xl">
-              <div className="relative aspect-[4/5] rounded-[0.95rem]">
+            <figure className="relative w-full rounded-2xl">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-[0.95rem]">
                 <Image
                   src={HERO_PORTRAIT_SRC}
                   alt="Portrait of Malith Ileperuma"
                   fill
-                  sizes="(max-width: 1024px) 100vw, 420px"
-                  className="object-contain object-center drop-shadow-[0_18px_28px_rgba(0,0,0,0.38)]"
+                  sizes="(max-width: 640px) 90vw, (max-width: 1024px) 54vw, 430px"
+                  className="origin-top scale-[1.03] object-cover object-[50%_22%] sm:scale-[1.04] sm:object-[50%_21%] md:scale-[1.05] md:object-[50%_20%] lg:scale-[1.07] lg:object-[50%_18%] drop-shadow-[0_18px_28px_rgba(0,0,0,0.38)]"
                   priority
                 />
               </div>
@@ -257,7 +378,18 @@ export default async function HomePage() {
                 {educationItems.map((item) => (
                   <li key={`${item.role}-${item.period}`} className="border-l-2 border-border pl-3">
                     <p className="text-sm font-semibold text-text">{item.role}</p>
-                    <p className="text-sm text-muted">{item.company}</p>
+                    {item.companyUrl ? (
+                      <a
+                        href={item.companyUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-muted transition-colors hover:text-accent"
+                      >
+                        {item.company}
+                      </a>
+                    ) : (
+                      <p className="text-sm text-muted">{item.company}</p>
+                    )}
                     <p className="font-mono text-[11px] uppercase tracking-label text-muted">{item.period}</p>
                   </li>
                 ))}
@@ -312,11 +444,12 @@ export default async function HomePage() {
                 <div className="flex w-full items-center gap-3.5">
                   <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-border/75 bg-[#101010] shadow-[inset_0_0_0_1px_rgba(242,199,91,0.04)] sm:h-14 sm:w-14">
                     {certification.icon ? (
-                      <Image
+                      <SafeImage
                         src={certification.icon}
-                        alt={`${certification.name} badge`}
+                        alt={`${certification.name} certification badge`}
                         width={56}
                         height={56}
+                        sizes="56px"
                         className="h-10 w-10 object-contain sm:h-12 sm:w-12"
                         loading="lazy"
                       />
@@ -351,81 +484,97 @@ export default async function HomePage() {
       </section>
 
       <section className="space-y-6">
-        <div className="space-y-2">
-          <p className="font-mono text-xs uppercase tracking-label text-muted">{copy.experienceLabel}</p>
-          <h2 className="font-serif text-3xl leading-tight text-text sm:text-4xl">{copy.experienceTitle}</h2>
-          <p className="text-sm text-muted">{copy.experienceDescription}</p>
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div className="space-y-2">
+            <p className="font-mono text-xs uppercase tracking-label text-muted">{copy.experienceLabel}</p>
+            <h2 className="font-serif text-3xl leading-tight text-text sm:text-4xl">{copy.experienceTitle}</h2>
+            <p className="max-w-3xl text-sm leading-relaxed text-muted">{copy.experienceDescription}</p>
+          </div>
+          <Link
+            href="/work-education"
+            className="inline-flex items-center rounded-md border border-accent bg-accent px-4 py-2 text-sm font-medium text-[#0b0b0b] transition-colors hover:bg-[#f1cc74] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/90 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          >
+            {copy.viewFullExperience}
+          </Link>
         </div>
 
-        <div className="relative space-y-5">
-          <span className="absolute bottom-0 left-4 top-0 w-px bg-border md:left-1/2 md:-translate-x-1/2" aria-hidden="true" />
-
-          {workExperience.map((item, index) => {
-            const companyLogo = resolveCompanyLogo(item);
+        <StaggerInView className="grid gap-4 md:grid-cols-2">
+          {RECENT_EXPERIENCE_PREVIEW.map((item, index) => {
+            const normalizedCompany = item.company.toLowerCase();
+            const matchingExperience = workExperience.find((workItem) =>
+              workItem.company.toLowerCase().includes(normalizedCompany)
+            );
+            const companyLogo = matchingExperience ? resolveCompanyLogo(matchingExperience) : null;
 
             return (
-              <FadeInOnView key={`${item.role}-${item.period}`} delay={index * 0.05} className="relative">
-                <span
-                  className="absolute left-4 top-8 h-3.5 w-3.5 -translate-x-1/2 rounded-full border border-accent/80 bg-background shadow-[0_0_0_1px_rgba(242,199,91,0.12)] md:left-1/2 md:-translate-x-1/2"
-                  aria-hidden="true"
-                />
-                <article
-                  className={`surface-card surface-card-interactive relative ml-12 flex min-h-[360px] flex-col px-5 py-5 shadow-soft hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 md:ml-0 md:w-[calc(50%-1.75rem)] ${
-                    index % 2 === 0 ? "md:mr-auto" : "md:ml-auto"
-                  }`}
-                >
-                  <header className="space-y-3 border-b border-border pb-4">
-                    <p className="font-mono text-xs uppercase tracking-label text-muted">{item.period}</p>
-                    <div className="flex items-start gap-3">
-                      <span className="logo-tile mt-0.5 shrink-0">
-                        {companyLogo ? (
-                          <Image
-                            src={companyLogo}
-                            alt={`${item.company} logo`}
-                            width={22}
-                            height={22}
-                            className="h-[22px] w-[22px] object-contain"
-                          />
-                        ) : (
-                          <span aria-hidden="true" className="font-mono text-[9px] font-semibold uppercase text-accent/90">
-                            {getCompanyInitials(item.company)}
-                          </span>
-                        )}
-                      </span>
-                      <div className="min-w-0">
-                        <h3 className="font-serif text-2xl leading-tight text-text">{item.role}</h3>
-                        <p className="text-sm text-muted">{item.company}</p>
+              <StaggerItem key={`${item.company}-${item.period}`} delay={index * 0.05} className="h-full">
+                <HoverLift className="h-full" glow>
+                  <article className="surface-card surface-card-interactive flex h-full min-h-[330px] flex-col p-5">
+                    <header className="space-y-3 border-b border-border pb-3">
+                      <div className="flex items-start gap-3">
+                        <span className="mt-0.5 inline-flex h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-border bg-[#101010] shadow-[inset_0_0_0_1px_rgba(242,199,91,0.06)] sm:h-16 sm:w-16">
+                          {companyLogo ? (
+                            <SafeImage
+                              src={companyLogo}
+                              alt={`${item.company} logo`}
+                              width={64}
+                              height={64}
+                              sizes="64px"
+                              className="h-full w-full object-cover object-center"
+                            />
+                          ) : (
+                            <span aria-hidden="true" className="inline-flex h-full w-full items-center justify-center font-mono text-xs font-semibold uppercase text-accent/90">
+                              {getCompanyInitials(item.company)}
+                            </span>
+                          )}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                            <div className="min-w-0">
+                              <h3 className="font-serif text-2xl leading-tight text-text">{item.role}</h3>
+                              <p className="text-sm text-muted">
+                                {item.company} · {item.location}
+                              </p>
+                            </div>
+                            <p className="font-mono text-[11px] uppercase tracking-label text-muted sm:pt-1 sm:text-right">
+                              {item.period}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <p className="pt-1 text-sm leading-relaxed text-muted">{item.summary}</p>
+                    </header>
+
+                    <div className="mt-1 space-y-3 border-t border-border/70 pt-4">
+                      <div className="space-y-2">
+                        <p className="font-mono text-xs font-semibold uppercase tracking-label text-text">{copy.impactLabel}</p>
+                        <ul className="space-y-1.5 text-sm leading-relaxed text-muted">
+                          {item.impacts.map((impactText) => (
+                            <li key={`${item.company}-${impactText}`} className="flex items-start gap-2 text-text">
+                              <span className="pt-0.5 text-accent" aria-hidden="true">
+                                •
+                              </span>
+                              <span>{renderMetricText(impactText)}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div className="space-y-2 pt-1">
+                        <p className="font-mono text-xs uppercase tracking-label text-muted">{copy.stackPreviewLabel}</p>
+                        <ul className="flex flex-wrap gap-2">
+                          {item.stackPreview.map((tool) => (
+                            <TechBadge key={`${item.company}-${tool}`} tool={tool} />
+                          ))}
+                        </ul>
                       </div>
                     </div>
-                    <p className="pt-2 text-sm leading-relaxed text-muted">
-                      {getLocalizedText(item.summary, language)}
-                    </p>
-                  </header>
-
-                  <div className="flex flex-1 flex-col justify-between gap-4 pt-4">
-                    <div className="space-y-2">
-                      <p className="font-mono text-xs uppercase tracking-label text-muted">{copy.keyImpact}</p>
-                      <ul className="space-y-2 text-sm leading-relaxed text-muted">
-                        {item.impactBullets.map((bullet) => (
-                          <li key={bullet.eng}>• {getLocalizedText(bullet, language)}</li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div className="space-y-2">
-                      <p className="font-mono text-xs uppercase tracking-label text-muted">{copy.techStack}</p>
-                      <ul className="flex flex-wrap gap-2">
-                        {item.tech.map((tech) => (
-                          <TechBadge key={tech} tool={tech} />
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </article>
-              </FadeInOnView>
+                  </article>
+                </HoverLift>
+              </StaggerItem>
             );
           })}
-        </div>
+        </StaggerInView>
       </section>
 
       <section className="space-y-6 border-t border-border pt-10">
@@ -450,14 +599,14 @@ export default async function HomePage() {
                     {getLocalizedPostTitle(post.slug, post.title, language)}
                   </h3>
                   <p className="pt-2 text-sm leading-relaxed text-muted">
-                    {getLocalizedPostSummary(post.slug, post.summary, language)}
+                    {toConciseSummary(getLocalizedPostSummary(post.slug, post.summary, language))}
                   </p>
                   <p className="pt-4 font-mono text-xs uppercase tracking-label text-accent">
                     {t.common.result}: {post.impact ?? copy.fallbackOutcome}
                   </p>
                   <Link
                     href={`/case-studies/${post.slug}`}
-                    className="mt-auto pt-5 text-sm text-text transition-colors hover:text-accent"
+                    className="mt-auto pt-5 text-sm font-medium text-accent transition-colors hover:text-[#f1cc74]"
                   >
                     {copy.viewCaseStudy}
                   </Link>
@@ -496,7 +645,7 @@ export default async function HomePage() {
                   </p>
                   <Link
                     href={`/beyond-work/${post.slug}`}
-                    className="mt-auto pt-5 text-sm text-text transition-colors hover:text-accent"
+                    className="mt-auto pt-5 text-sm font-medium text-accent transition-colors hover:text-[#f1cc74]"
                   >
                     {copy.viewEntry}
                   </Link>

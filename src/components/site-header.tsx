@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -74,9 +75,18 @@ export function SiteHeader({ initialLanguage }: SiteHeaderProps) {
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-6 py-5 sm:px-8 md:flex-row md:items-center md:justify-between">
         <Link
           href="/"
-          className="font-serif text-2xl leading-none text-text transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="inline-flex items-center gap-2.5 text-text transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
-          Malith Ileperuma
+          <span className="inline-flex h-8 w-8 overflow-hidden rounded-full border border-border bg-surface shadow-[inset_0_0_0_1px_rgba(242,199,91,0.08)]">
+            <Image
+              src="/media/malith-avatar.png"
+              alt="Malith avatar"
+              width={32}
+              height={32}
+              className="h-full w-full object-cover"
+            />
+          </span>
+          <span className="font-serif text-2xl leading-none">Malith</span>
         </Link>
 
         <div className="flex flex-wrap items-center gap-4 md:justify-end">

@@ -59,9 +59,11 @@ export default function StoryPage() {
           <div className="aspect-[4/5] overflow-hidden rounded-md border border-border">
             <Image
               src={storyImages[0]}
-              alt="Portrait and notebook composition"
+              alt="Portrait with notebook and camera setup"
               width={1200}
               height={1500}
+              sizes="(max-width: 1024px) 100vw, 48vw"
+              priority
               className="hover-lift image-frame h-full w-full object-cover grayscale transition duration-500 ease-out hover:grayscale-0"
             />
           </div>
@@ -86,9 +88,10 @@ export default function StoryPage() {
             <div className="aspect-[16/10] overflow-hidden rounded-md border border-border">
               <Image
                 src={storyImages[1]}
-                alt="City and travel notes image"
+                alt="Street scene from a travel day in Finland"
                 width={1400}
                 height={880}
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 42vw"
                 className="hover-lift image-frame h-full w-full object-cover grayscale transition duration-500 ease-out hover:grayscale-0"
               />
             </div>
@@ -99,9 +102,10 @@ export default function StoryPage() {
               <div className="aspect-[4/3] overflow-hidden rounded-md border border-border">
                 <Image
                   src={image}
-                  alt={`Story supporting image ${index + 1}`}
+                  alt={`Story gallery photo ${index + 1}`}
                   width={900}
                   height={680}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 48vw, 24vw"
                   className="hover-lift image-frame h-full w-full object-cover grayscale transition duration-500 ease-out hover:grayscale-0"
                 />
               </div>

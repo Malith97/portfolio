@@ -3,10 +3,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { PhotoGrid } from "@/components/photo-grid";
+import { CloudCostOptimizationEditorial } from "@/components/case-studies/cloud-cost-optimization-editorial";
+import { KubernetesRbacOktaEditorial } from "@/components/case-studies/kubernetes-rbac-okta-editorial";
 import { getAllCaseStudies, getCaseStudyBySlug } from "@/lib/content";
 import { formatDate } from "@/lib/format";
 import { getDictionary } from "@/lib/i18n";
 import { getServerLanguage } from "@/lib/i18n-server";
+import { createMetadata } from "@/lib/metadata";
 import { getLocalizedPostSummary, getLocalizedPostTitle } from "@/lib/post-translations";
 
 interface CaseStudyPageProps {
@@ -24,15 +27,18 @@ export async function generateMetadata({ params }: CaseStudyPageProps): Promise<
   const post = await getCaseStudyBySlug(params.slug);
 
   if (!post) {
-    return {
-      title: "Case Study Not Found"
-    };
+    return createMetadata({
+      title: "Case Study Not Found",
+      path: `/case-studies/${params.slug}`
+    });
   }
 
-  return {
-    title: `${post.title} | Malith Ileperuma`,
-    description: post.summary
-  };
+  return createMetadata({
+    title: post.title,
+    description: post.summary,
+    path: `/case-studies/${post.slug}`,
+    image: post.coverImage || post.image
+  });
 }
 
 export default async function CaseStudyDetailPage({ params }: CaseStudyPageProps) {
@@ -41,9 +47,29 @@ export default async function CaseStudyDetailPage({ params }: CaseStudyPageProps
   const fallbackOutcome = language === "fi" ? "Operatiiviset parannukset" : "Operational gains";
 
   const post = await getCaseStudyBySlug(params.slug);
+  const showTopGallery = post?.slug !== "cloud-cost-optimization";
 
   if (!post) {
     notFound();
+  }
+
+  const localizedTitle = getLocalizedPostTitle(post.slug, post.title, language);
+  const localizedSummary = getLocalizedPostSummary(post.slug, post.summary, language);
+
+  if (post.slug === "cloud-cost-optimization") {
+    return (
+      <article>
+        <CloudCostOptimizationEditorial />
+      </article>
+    );
+  }
+
+  if (post.slug === "kubernetes-rbac-okta") {
+    return (
+      <article>
+        <KubernetesRbacOktaEditorial />
+      </article>
+    );
   }
 
   return (
@@ -58,10 +84,10 @@ export default async function CaseStudyDetailPage({ params }: CaseStudyPageProps
             {t.common.caseStudy} · {formatDate(post.date)} · {post.readingTime}
           </p>
           <h1 className="font-serif text-4xl leading-tight text-text sm:text-6xl">
-            {getLocalizedPostTitle(post.slug, post.title, language)}
+            {localizedTitle}
           </h1>
           <p className="max-w-reading text-base leading-relaxed text-muted">
-            {getLocalizedPostSummary(post.slug, post.summary, language)}
+            {localizedSummary}
           </p>
 
           <ul className="flex flex-wrap gap-2 pt-2">
@@ -82,16 +108,18 @@ export default async function CaseStudyDetailPage({ params }: CaseStudyPageProps
         </aside>
       </header>
 
-      <PhotoGrid
-        images={post.images}
-        altBase={getLocalizedPostTitle(post.slug, post.title, language)}
-        aspectClass="aspect-[4/3]"
-        priorityFirst
-      />
+      {showTopGallery ? (
+        <PhotoGrid
+          images={post.images}
+          altBase={localizedTitle}
+          aspectClass="aspect-[4/3]"
+          priorityFirst
+        />
+      ) : null}
 
-      <p className="max-w-reading border-t border-border pt-6 text-sm leading-relaxed text-muted">
-        {t.caseStudyDetail.previewNote}
-      </p>
+      <section className="space-y-4 border-t border-border pt-6 overflow-visible">
+        <div className="content-prose max-w-reading" dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
+      </section>
     </article>
   );
 }

@@ -96,10 +96,9 @@ interface Dictionary {
       all: string;
       running: string;
       cycling: string;
-      swimming: string;
       photography: string;
-      videography: string;
       cooking: string;
+      achievements: string;
       other: string;
     };
   };
@@ -112,6 +111,10 @@ interface Dictionary {
     route: string;
     distance: string;
     duration: string;
+    occasion: string;
+    event: string;
+    result: string;
+    team: string;
     weather: string;
     difficulty: string;
     gear: string;
@@ -187,10 +190,10 @@ const dictionaries: Record<Language, Dictionary> = {
     },
     home: {
       label: "Home",
-      heroTitle: "Senior DevOps Engineer focused on cloud, automation, CI/CD, and reliability.",
+      heroTitle: "DevOps Engineer building resilient cloud systems.",
       heroSummary:
-        "I design and operate dependable delivery platforms that help engineering teams release faster with less operational risk.",
-      heroMeta: "Based in Finland · Open to EU and remote opportunities",
+        "I design, automate, and operate delivery platforms for teams that need speed, reliability, and control.",
+      heroMeta: "Open to EU, Finland, and remote DevOps opportunities",
       ctaViewWork: "View Work",
       ctaDownloadResume: "Contact Me",
       impactLabel: "Impact",
@@ -242,10 +245,9 @@ const dictionaries: Record<Language, Dictionary> = {
         all: "All",
         running: "Running",
         cycling: "Cycling",
-        swimming: "Swimming",
         photography: "Photography",
-        videography: "Videography",
         cooking: "Cooking",
+        achievements: "Achievements",
         other: "Other"
       }
     },
@@ -258,6 +260,10 @@ const dictionaries: Record<Language, Dictionary> = {
       route: "Route",
       distance: "Distance",
       duration: "Duration",
+      occasion: "Occasion",
+      event: "Event",
+      result: "Result",
+      team: "Team",
       weather: "Weather",
       difficulty: "Difficulty",
       gear: "Gear",
@@ -334,10 +340,10 @@ const dictionaries: Record<Language, Dictionary> = {
     },
     home: {
       label: "Etusivu",
-      heroTitle: "Senior DevOps -insinööri, jonka painopisteinä ovat pilvi, automaatio, CI/CD ja luotettavuus.",
+      heroTitle: "DevOps-insinööri, joka rakentaa resilienttejä pilvijärjestelmiä.",
       heroSummary:
-        "Suunnittelen ja operoin luotettavia toimitusalustoja, joiden avulla tiimit julkaisevat nopeammin pienemmällä operatiivisella riskillä.",
-      heroMeta: "Sijainti Suomi · Avoin EU- ja etärooleille",
+        "Suunnittelen, automatisoin ja operoin toimitusalustoja tiimeille, jotka tarvitsevat nopeutta, luotettavuutta ja hallintaa.",
+      heroMeta: "Avoin EU-, Suomi- ja etä-DevOps-mahdollisuuksille",
       ctaViewWork: "Näytä työ",
       ctaDownloadResume: "Ota yhteyttä",
       impactLabel: "Vaikutus",
@@ -389,10 +395,9 @@ const dictionaries: Record<Language, Dictionary> = {
         all: "Kaikki",
         running: "Juoksu",
         cycling: "Pyöräily",
-        swimming: "Uinti",
         photography: "Valokuvaus",
-        videography: "Videokuvaus",
         cooking: "Ruoanlaitto",
+        achievements: "Saavutukset",
         other: "Muu"
       }
     },
@@ -405,6 +410,10 @@ const dictionaries: Record<Language, Dictionary> = {
       route: "Reitti",
       distance: "Matka",
       duration: "Kesto",
+      occasion: "Tilaisuus",
+      event: "Tapahtuma",
+      result: "Tulos",
+      team: "Tiimi",
       weather: "Sää",
       difficulty: "Vaikeus",
       gear: "Varusteet",

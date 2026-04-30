@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 
+import { SafeImage } from "@/components/safe-image";
 import { SectionHeading } from "@/components/section-heading";
 import { getDictionary } from "@/lib/i18n";
 import { getServerLanguage } from "@/lib/i18n-server";
@@ -13,10 +13,9 @@ const filters = [
   { key: "all" },
   { key: "running" },
   { key: "cycling" },
-  { key: "swimming" },
   { key: "photography" },
-  { key: "videography" },
   { key: "cooking" },
+  { key: "achievements" },
   { key: "other" }
 ] as const;
 
@@ -39,10 +38,9 @@ function toFilterKey(category?: string): Exclude<FilterKey, "all"> {
 
   if (normalized.includes("running")) return "running";
   if (normalized.includes("cycling")) return "cycling";
-  if (normalized.includes("swimming")) return "swimming";
   if (normalized.includes("photography")) return "photography";
-  if (normalized.includes("videography")) return "videography";
   if (normalized.includes("cooking")) return "cooking";
+  if (normalized.includes("achievements")) return "achievements";
 
   return "other";
 }
@@ -56,6 +54,10 @@ function buildMetadataLine(
   post: Awaited<ReturnType<typeof getAllBeyondWorkPosts>>[number],
   t: ReturnType<typeof getDictionary>
 ): string {
+  if (post.cardMeta) {
+    return post.cardMeta.toUpperCase();
+  }
+
   if (isCookingCategory(post.category)) {
     const parts: string[] = [t.common.kitchenNotes.toUpperCase()];
     if (post.dishType) parts.push(post.dishType.toUpperCase());
@@ -79,15 +81,9 @@ function buildMetadataLine(
   return parts.join(" · ");
 }
 
-function isRouteActivity(category?: string): boolean {
-  const normalized = category?.toLowerCase() ?? "";
-  return normalized.includes("running") || normalized.includes("cycling");
-}
-
 export const metadata = createMetadata({
   title: "Beyond Work",
-  description:
-    "Journal-style activity stories on running, cycling, swimming, photography, videography, and kitchen notes.",
+  description: "Journal-style activity stories on running, cycling, photography, cooking, achievements, and notes.",
   path: "/beyond-work"
 });
 
@@ -102,6 +98,8 @@ export default async function BeyondWorkPage({ searchParams }: BeyondWorkPagePro
     selectedFilter === "all"
       ? posts
       : posts.filter((post) => toFilterKey(post.category) === selectedFilter);
+  const hasFilteredPosts = filteredPosts.length > 0;
+  const isFinnish = language === "fi";
 
   return (
     <div className="space-y-14">
@@ -126,6 +124,7 @@ export default async function BeyondWorkPage({ searchParams }: BeyondWorkPagePro
                       ? "border-accent text-accent"
                       : "border-border text-muted hover:border-accent hover:text-accent"
                   }`}
+                  aria-current={isActive ? "page" : undefined}
                 >
                   {t.beyondWorkPage.filters[filter.key]}
                 </Link>
@@ -135,79 +134,79 @@ export default async function BeyondWorkPage({ searchParams }: BeyondWorkPagePro
         </ul>
       </nav>
 
-      <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {filteredPosts.map((post) => (
-          <article key={post.slug} className="surface-card overflow-hidden">
-            <Link href={`/beyond-work/${post.slug}`} className="block h-full">
-              <div className="aspect-[16/10] overflow-hidden border-b border-border">
-                <Image
-                  src={post.image}
-                  alt={getLocalizedPostTitle(post.slug, post.title, language)}
-                  width={1200}
-                  height={760}
-                  className="hover-lift image-frame h-full w-full object-cover grayscale transition duration-500 ease-out hover:grayscale-0"
-                />
-              </div>
-
-              <div className="space-y-3 p-4">
-                <p className="font-mono text-xs uppercase tracking-label text-muted">{formatDate(post.date)}</p>
-                <h2 className="font-serif text-2xl leading-tight text-text transition-colors hover:text-accent">
-                  {getLocalizedPostTitle(post.slug, post.title, language)}
-                </h2>
-                <p className="text-sm leading-relaxed text-muted">
-                  {getLocalizedPostSummary(post.slug, post.summary, language)}
-                </p>
-                <p className="font-mono text-xs uppercase tracking-label text-accent">
-                  {buildMetadataLine(post, t)}
-                </p>
-                {isCookingCategory(post.category) ? (
-                  <div className="space-y-2 border-t border-border pt-3">
-                    {post.timeSpent ? (
-                      <p className="text-sm text-muted">
-                        <span className="font-mono text-xs uppercase tracking-label text-text">
-                          {t.beyondWorkDetail.timeSpent}:
-                        </span>{" "}
-                        {post.timeSpent}
-                      </p>
-                    ) : null}
-                    {post.whatITried ? (
-                      <p className="text-sm text-muted">
-                        <span className="font-mono text-xs uppercase tracking-label text-text">
-                          {t.beyondWorkDetail.whatITried}:
-                        </span>{" "}
-                        {post.whatITried}
-                      </p>
-                    ) : null}
-                    {post.whatILearned ? (
-                      <p className="text-sm text-muted">
-                        <span className="font-mono text-xs uppercase tracking-label text-text">
-                          {t.beyondWorkDetail.whatILearned}:
-                        </span>{" "}
-                        {post.whatILearned}
-                      </p>
-                    ) : null}
-                  </div>
-                ) : null}
-              </div>
-
-              {isRouteActivity(post.category) && post.routeImage ? (
-                <div className="space-y-2 border-t border-border px-4 pb-4 pt-3">
-                  <p className="font-mono text-[11px] uppercase tracking-label text-muted">{t.common.routeSnapshot}</p>
-                  <div className="aspect-[16/7] overflow-hidden rounded-md border border-border">
-                    <Image
-                      src={post.routeImage}
-                      alt={`${getLocalizedPostTitle(post.slug, post.title, language)} ${t.common.routeScreenshot.toLowerCase()}`}
-                      width={1200}
-                      height={520}
-                      className="image-frame h-full w-full object-cover"
-                    />
-                  </div>
+      {hasFilteredPosts ? (
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {filteredPosts.map((post) => (
+            <article key={post.slug} className="surface-card overflow-hidden">
+              <Link href={`/beyond-work/${post.slug}`} className="block">
+                <div className="aspect-[16/10] overflow-hidden border-b border-border">
+                  <SafeImage
+                    src={post.image}
+                    alt={`${getLocalizedPostTitle(post.slug, post.title, language)} cover image`}
+                    width={1200}
+                    height={760}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="hover-lift image-frame h-full w-full object-cover grayscale transition duration-500 ease-out hover:grayscale-0"
+                  />
                 </div>
-              ) : null}
-            </Link>
-          </article>
-        ))}
-      </div>
+
+                <div className="space-y-3 p-4">
+                  <p className="font-mono text-xs uppercase tracking-label text-muted">{formatDate(post.date)}</p>
+                  <h2 className="font-serif text-2xl leading-tight text-text transition-colors hover:text-accent">
+                    {getLocalizedPostTitle(post.slug, post.title, language)}
+                  </h2>
+                  <p className="text-sm leading-relaxed text-muted">
+                    {getLocalizedPostSummary(post.slug, post.summary, language)}
+                  </p>
+                  <p className="font-mono text-xs uppercase tracking-label text-accent">
+                    {buildMetadataLine(post, t)}
+                  </p>
+                  {isCookingCategory(post.category) ? (
+                    <div className="space-y-2 border-t border-border pt-3">
+                      {post.timeSpent ? (
+                        <p className="text-sm text-muted">
+                          <span className="font-mono text-xs uppercase tracking-label text-text">
+                            {t.beyondWorkDetail.timeSpent}:
+                          </span>{" "}
+                          {post.timeSpent}
+                        </p>
+                      ) : null}
+                      {post.whatITried ? (
+                        <p className="text-sm text-muted">
+                          <span className="font-mono text-xs uppercase tracking-label text-text">
+                            {t.beyondWorkDetail.whatITried}:
+                          </span>{" "}
+                          {post.whatITried}
+                        </p>
+                      ) : null}
+                      {post.whatILearned ? (
+                        <p className="text-sm text-muted">
+                          <span className="font-mono text-xs uppercase tracking-label text-text">
+                            {t.beyondWorkDetail.whatILearned}:
+                          </span>{" "}
+                          {post.whatILearned}
+                        </p>
+                      ) : null}
+                    </div>
+                  ) : null}
+                </div>
+              </Link>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <section className="surface-card p-6">
+          <h2 className="font-serif text-2xl text-text">{isFinnish ? "Ei tuloksia tällä suodattimella" : "No entries for this filter yet"}</h2>
+          <p className="pt-2 text-sm text-muted">
+            {isFinnish
+              ? "Kokeile toista kategoriaa tai palaa näyttämään kaikki merkinnät."
+              : "Try another category or reset the view to show all entries."}
+          </p>
+          <Link href="/beyond-work" className="quiet-link mt-4 inline-block text-sm text-accent">
+            {isFinnish ? "Näytä kaikki merkinnät" : "Show all entries"}
+          </Link>
+        </section>
+      )}
     </div>
   );
 }
