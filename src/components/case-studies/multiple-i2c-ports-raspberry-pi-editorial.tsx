@@ -241,22 +241,22 @@ while True:
       <Section title="References">
         <ul className="list-disc space-y-2 pl-6">
           <li>
-            <a href="https://github.com/m-rtijn/mpu6050" target="_blank" rel="noreferrer" className="quiet-link text-accent">
+            <a href="https://github.com/m-rtijn/mpu6050" target="_blank" rel="noopener noreferrer" className="quiet-link text-accent">
               https://github.com/m-rtijn/mpu6050
             </a>
           </li>
           <li>
-            <a href="https://forums.raspberrypi.com/viewtopic.php?t=205576" target="_blank" rel="noreferrer" className="quiet-link text-accent">
+            <a href="https://forums.raspberrypi.com/viewtopic.php?t=205576" target="_blank" rel="noopener noreferrer" className="quiet-link text-accent">
               https://forums.raspberrypi.com/viewtopic.php?t=205576
             </a>
           </li>
           <li>
-            <a href="https://forums.raspberrypi.com/viewtopic.php?t=244947" target="_blank" rel="noreferrer" className="quiet-link text-accent">
+            <a href="https://forums.raspberrypi.com/viewtopic.php?t=244947" target="_blank" rel="noopener noreferrer" className="quiet-link text-accent">
               https://forums.raspberrypi.com/viewtopic.php?t=244947
             </a>
           </li>
           <li>
-            <a href="https://forums.raspberrypi.com/viewtopic.php?t=271200" target="_blank" rel="noreferrer" className="quiet-link text-accent">
+            <a href="https://forums.raspberrypi.com/viewtopic.php?t=271200" target="_blank" rel="noopener noreferrer" className="quiet-link text-accent">
               https://forums.raspberrypi.com/viewtopic.php?t=271200
             </a>
           </li>
@@ -268,7 +268,7 @@ while True:
         <a
           href="https://medium.com/@mileperuma/enable-multiple-i2c-ports-on-raspberry-pi-5a8807471737"
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           className="quiet-link mt-2 inline-block text-sm text-accent"
         >
           https://medium.com/@mileperuma/enable-multiple-i2c-ports-on-raspberry-pi-5a8807471737

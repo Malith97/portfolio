@@ -402,7 +402,7 @@ export const selectedCaseStudySlugs = [
 ] as const;
 
 export const selectedBeyondWorkSlugs = [
-  "weekend-sri-lankan-curry",
-  "homemade-pasta-night",
-  "morning-run-by-the-river"
+  "cycling-to-kiiminki-from-oulu",
+  "running-to-vartto",
+  "oyster-hack4health-best-pitch-award"
 ] as const;

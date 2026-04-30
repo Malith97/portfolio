@@ -9,6 +9,7 @@ import { getAllCaseStudies, getCaseStudyBySlug } from "@/lib/content";
 import { formatDate } from "@/lib/format";
 import { getDictionary } from "@/lib/i18n";
 import { getServerLanguage } from "@/lib/i18n-server";
+import { createMetadata } from "@/lib/metadata";
 import { getLocalizedPostSummary, getLocalizedPostTitle } from "@/lib/post-translations";
 
 interface CaseStudyPageProps {
@@ -26,15 +27,18 @@ export async function generateMetadata({ params }: CaseStudyPageProps): Promise<
   const post = await getCaseStudyBySlug(params.slug);
 
   if (!post) {
-    return {
-      title: "Case Study Not Found"
-    };
+    return createMetadata({
+      title: "Case Study Not Found",
+      path: `/case-studies/${params.slug}`
+    });
   }
 
-  return {
-    title: `${post.title} | Malith Ileperuma`,
-    description: post.summary
-  };
+  return createMetadata({
+    title: post.title,
+    description: post.summary,
+    path: `/case-studies/${post.slug}`,
+    image: post.coverImage || post.image
+  });
 }
 
 export default async function CaseStudyDetailPage({ params }: CaseStudyPageProps) {

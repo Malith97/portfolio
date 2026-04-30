@@ -1,6 +1,6 @@
-import Image from "next/image";
 import type { ReactNode } from "react";
 
+import { SafeImage } from "@/components/safe-image";
 import { SectionHeading } from "@/components/section-heading";
 import { TechBadge } from "@/components/tech-badge";
 import { getServerLanguage } from "@/lib/i18n-server";
@@ -141,11 +141,12 @@ export default function WorkEducationPage() {
                         }`}
                       >
                         {companyLogo ? (
-                          <Image
+                          <SafeImage
                             src={companyLogo}
                             alt={`${item.company} logo`}
                             width={64}
                             height={64}
+                            sizes="64px"
                             className={`h-full w-full ${isSyLabs ? "object-contain p-1.5" : "object-cover object-center"}`}
                           />
                         ) : (
@@ -219,7 +220,7 @@ export default function WorkEducationPage() {
                 <a
                   href={item.companyUrl}
                   target="_blank"
-                  rel="noreferrer noopener"
+                  rel="noopener noreferrer"
                   className="text-sm text-muted transition-colors hover:text-accent"
                 >
                   {item.company}

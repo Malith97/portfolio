@@ -13,11 +13,13 @@ import {
   StaggerInView,
   StaggerItem
 } from "@/components/motion/primitives";
+import { SafeImage } from "@/components/safe-image";
 import { TechBadge, TechIcon } from "@/components/tech-badge";
 import { formatDate } from "@/lib/format";
 import { getAllBeyondWorkPosts, getAllCaseStudies } from "@/lib/content";
 import { getDictionary } from "@/lib/i18n";
 import { getServerLanguage } from "@/lib/i18n-server";
+import { createMetadata } from "@/lib/metadata";
 import { getLocalizedPostSummary, getLocalizedPostTitle } from "@/lib/post-translations";
 import {
   type ExperienceItem,
@@ -61,15 +63,21 @@ function localizeBeyondCategory(
   const normalized = category.toLowerCase();
   if (normalized.includes("running")) return t.beyondWorkPage.filters.running;
   if (normalized.includes("cycling")) return t.beyondWorkPage.filters.cycling;
-  if (normalized.includes("swimming")) return t.beyondWorkPage.filters.swimming;
   if (normalized.includes("photography")) return t.beyondWorkPage.filters.photography;
-  if (normalized.includes("videography")) return t.beyondWorkPage.filters.videography;
   if (normalized.includes("cooking")) return t.beyondWorkPage.filters.cooking;
+  if (normalized.includes("achievements")) return t.beyondWorkPage.filters.achievements;
 
   return t.beyondWorkPage.filters.other;
 }
 
 const HERO_PORTRAIT_SRC = "/media/malith-portrait.png";
+
+export const metadata = createMetadata({
+  title: "Home",
+  description: "DevOps portfolio of Malith Ileperuma with selected case studies, experience highlights, and beyond-work stories.",
+  path: "/",
+  image: HERO_PORTRAIT_SRC
+});
 
 const COMPANY_LOGO_FALLBACK_MAP: Array<{ keyword: string; logo: string }> = [
   { keyword: "almosafer", logo: "/logos/almosafer.svg" },
@@ -374,7 +382,7 @@ export default async function HomePage() {
                       <a
                         href={item.companyUrl}
                         target="_blank"
-                        rel="noreferrer noopener"
+                        rel="noopener noreferrer"
                         className="text-sm text-muted transition-colors hover:text-accent"
                       >
                         {item.company}
@@ -436,11 +444,12 @@ export default async function HomePage() {
                 <div className="flex w-full items-center gap-3.5">
                   <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-border/75 bg-[#101010] shadow-[inset_0_0_0_1px_rgba(242,199,91,0.04)] sm:h-14 sm:w-14">
                     {certification.icon ? (
-                      <Image
+                      <SafeImage
                         src={certification.icon}
-                        alt={`${certification.name} badge`}
+                        alt={`${certification.name} certification badge`}
                         width={56}
                         height={56}
+                        sizes="56px"
                         className="h-10 w-10 object-contain sm:h-12 sm:w-12"
                         loading="lazy"
                       />
@@ -505,11 +514,12 @@ export default async function HomePage() {
                       <div className="flex items-start gap-3">
                         <span className="mt-0.5 inline-flex h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-border bg-[#101010] shadow-[inset_0_0_0_1px_rgba(242,199,91,0.06)] sm:h-16 sm:w-16">
                           {companyLogo ? (
-                            <Image
+                            <SafeImage
                               src={companyLogo}
                               alt={`${item.company} logo`}
                               width={64}
                               height={64}
+                              sizes="64px"
                               className="h-full w-full object-cover object-center"
                             />
                           ) : (

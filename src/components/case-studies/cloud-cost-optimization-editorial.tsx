@@ -276,7 +276,7 @@ export function CloudCostOptimizationEditorial() {
         <a
           href="https://medium.com/@mileperuma/optimizing-cloud-spend-with-precision-my-approach-to-cutting-cloud-costs-by-40-d9ba311bc252"
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           className="quiet-link mt-2 inline-block text-sm text-accent"
         >
           View original article on Medium

@@ -38,6 +38,10 @@ export interface PostMeta {
   cardMeta?: string;
   distance?: string;
   duration?: string;
+  occasion?: string;
+  event?: string;
+  result?: string;
+  team?: string;
   weather?: string;
   route?: string;
   routeImage?: string;
@@ -202,6 +206,10 @@ function normalizeMeta(
     cardMeta: typeof data.cardMeta === "string" ? data.cardMeta : undefined,
     distance: typeof data.distance === "string" ? data.distance : undefined,
     duration: typeof data.duration === "string" ? data.duration : undefined,
+    occasion: typeof data.occasion === "string" ? data.occasion : undefined,
+    event: typeof data.event === "string" ? data.event : undefined,
+    result: typeof data.result === "string" ? data.result : undefined,
+    team: typeof data.team === "string" ? data.team : undefined,
     weather: typeof data.weather === "string" ? data.weather : undefined,
     route: typeof data.route === "string" ? data.route : undefined,
     routeImage: typeof data.routeImage === "string" ? data.routeImage : undefined,

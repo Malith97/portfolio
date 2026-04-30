@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-const baseUrl = "https://malithileperuma.dev";
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://malithileperuma.dev";
 
 export const siteDescription =
   "Minimal portfolio for Malith Ileperuma, a DevOps Engineer in Finland focused on reliable cloud systems and practical automation.";
@@ -9,6 +9,7 @@ interface MetadataInput {
   title?: string;
   description?: string;
   path?: string;
+  image?: string;
 }
 
 export function createMetadata(input: MetadataInput = {}): Metadata {
@@ -19,10 +20,13 @@ export function createMetadata(input: MetadataInput = {}): Metadata {
   const description = input.description ?? siteDescription;
   const path = input.path ?? "/";
   const url = `${baseUrl}${path}`;
+  const image = input.image ?? "/media/malith-portrait.png";
+  const imageUrl = image.startsWith("http") ? image : `${baseUrl}${image}`;
 
   return {
     title,
     description,
+    metadataBase: new URL(baseUrl),
     alternates: {
       canonical: url
     },
@@ -30,6 +34,12 @@ export function createMetadata(input: MetadataInput = {}): Metadata {
       title,
       description,
       url,
+      images: [
+        {
+          url: imageUrl,
+          alt: title
+        }
+      ],
       siteName: "Malith Ileperuma",
       locale: "en_US",
       type: "website"
@@ -37,7 +47,8 @@ export function createMetadata(input: MetadataInput = {}): Metadata {
     twitter: {
       card: "summary_large_image",
       title,
-      description
+      description,
+      images: [imageUrl]
     }
   };
 }

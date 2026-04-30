@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 
 interface TechBadgeProps {
@@ -80,13 +81,15 @@ export function TechIcon({ tool, className = "h-4 w-4" }: TechIconProps) {
 
   if (iconPath && !iconLoadFailed) {
     return (
-      <img
+      <Image
         src={`${DEVICON_BASE_URL}/${iconPath}`}
         alt=""
         aria-hidden="true"
+        width={16}
+        height={16}
+        sizes="16px"
         className={`${className} object-contain`}
         loading="lazy"
-        decoding="async"
         onError={() => setIconLoadFailed(true)}
       />
     );

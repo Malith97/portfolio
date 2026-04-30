@@ -246,7 +246,7 @@ kubectl apply -f rolebinding.yaml`}</code>
         <a
           href="https://medium.com/@mileperuma/supercharge-kubernetes-rbac-with-okta-1e0462a04abe"
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           className="quiet-link mt-2 inline-block text-sm text-accent"
         >
           https://medium.com/@mileperuma/supercharge-kubernetes-rbac-with-okta-1e0462a04abe

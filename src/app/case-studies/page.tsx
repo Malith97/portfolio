@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 
+import { SafeImage } from "@/components/safe-image";
 import { SectionHeading } from "@/components/section-heading";
 import { getDictionary } from "@/lib/i18n";
 import { getServerLanguage } from "@/lib/i18n-server";
@@ -38,11 +38,12 @@ export default async function CaseStudiesPage() {
               className="surface-card surface-card-interactive flex h-full min-h-[420px] flex-col overflow-hidden hover:-translate-y-0.5 motion-reduce:hover:translate-y-0"
             >
               <div className="aspect-[16/10] overflow-hidden border-b border-border">
-                <Image
+                <SafeImage
                   src={post.image}
-                  alt={getLocalizedPostTitle(post.slug, post.title, language)}
+                  alt={`${getLocalizedPostTitle(post.slug, post.title, language)} cover image`}
                   width={1200}
                   height={760}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 560px"
                   className="hover-lift image-frame h-full w-full object-cover"
                 />
               </div>

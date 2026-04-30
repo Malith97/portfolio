@@ -96,10 +96,9 @@ interface Dictionary {
       all: string;
       running: string;
       cycling: string;
-      swimming: string;
       photography: string;
-      videography: string;
       cooking: string;
+      achievements: string;
       other: string;
     };
   };
@@ -112,6 +111,10 @@ interface Dictionary {
     route: string;
     distance: string;
     duration: string;
+    occasion: string;
+    event: string;
+    result: string;
+    team: string;
     weather: string;
     difficulty: string;
     gear: string;
@@ -242,10 +245,9 @@ const dictionaries: Record<Language, Dictionary> = {
         all: "All",
         running: "Running",
         cycling: "Cycling",
-        swimming: "Swimming",
         photography: "Photography",
-        videography: "Videography",
         cooking: "Cooking",
+        achievements: "Achievements",
         other: "Other"
       }
     },
@@ -258,6 +260,10 @@ const dictionaries: Record<Language, Dictionary> = {
       route: "Route",
       distance: "Distance",
       duration: "Duration",
+      occasion: "Occasion",
+      event: "Event",
+      result: "Result",
+      team: "Team",
       weather: "Weather",
       difficulty: "Difficulty",
       gear: "Gear",
@@ -389,10 +395,9 @@ const dictionaries: Record<Language, Dictionary> = {
         all: "Kaikki",
         running: "Juoksu",
         cycling: "Pyöräily",
-        swimming: "Uinti",
         photography: "Valokuvaus",
-        videography: "Videokuvaus",
         cooking: "Ruoanlaitto",
+        achievements: "Saavutukset",
         other: "Muu"
       }
     },
@@ -405,6 +410,10 @@ const dictionaries: Record<Language, Dictionary> = {
       route: "Reitti",
       distance: "Matka",
       duration: "Kesto",
+      occasion: "Tilaisuus",
+      event: "Tapahtuma",
+      result: "Tulos",
+      team: "Tiimi",
       weather: "Sää",
       difficulty: "Vaikeus",
       gear: "Varusteet",

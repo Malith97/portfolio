@@ -233,16 +233,17 @@ export function MapRouteClient({ title, mode, points, start, end, routeFile, dis
         isActive = false;
       };
     }
+    const safeRoutePath = routePath;
 
     async function loadRoute() {
       try {
-        const response = await fetch(routePath!, { cache: "force-cache" });
+        const response = await fetch(safeRoutePath, { cache: "force-cache" });
         if (!response.ok) {
           throw new Error(`Route file returned ${response.status}`);
         }
 
         let loadedPoints: LatLngTuple[] = [];
-        const routePathLower = routePath.toLowerCase();
+        const routePathLower = safeRoutePath.toLowerCase();
         const contentType = response.headers.get("content-type")?.toLowerCase() ?? "";
 
         if (routePathLower.endsWith(".gpx") || contentType.includes("xml") || contentType.includes("gpx")) {
