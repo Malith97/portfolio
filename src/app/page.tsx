@@ -20,7 +20,6 @@ import { getAllBeyondWorkPosts, getAllCaseStudies } from "@/lib/content";
 import { getDictionary } from "@/lib/i18n";
 import { getServerLanguage } from "@/lib/i18n-server";
 import { createMetadata } from "@/lib/metadata";
-import { getLocalizedPostSummary, getLocalizedPostTitle } from "@/lib/post-translations";
 import {
   type ExperienceItem,
   certifications,
@@ -28,7 +27,6 @@ import {
   getLocalizedText,
   professionalSummary,
   selectedBeyondWorkSlugs,
-  selectedCaseStudySlugs,
   sortExperienceByMostRecent,
   toolCategories
 } from "@/lib/profile";
@@ -48,10 +46,18 @@ function selectItemsBySlug<T extends { slug: string }>(items: T[], slugs: readon
 }
 
 function localizeBeyondCategory(
+  categoryId: string | undefined,
   category: string | undefined,
   language: "eng" | "fi",
   t: ReturnType<typeof getDictionary>
 ): string {
+  const normalizedId = categoryId?.toLowerCase();
+  if (normalizedId === "running") return t.beyondWorkPage.filters.running;
+  if (normalizedId === "cycling") return t.beyondWorkPage.filters.cycling;
+  if (normalizedId === "cooking") return t.beyondWorkPage.filters.cooking;
+  if (normalizedId === "achievements") return t.beyondWorkPage.filters.achievements;
+  if (normalizedId === "other") return t.beyondWorkPage.filters.other;
+
   if (!category) {
     return t.common.journal;
   }
@@ -63,11 +69,50 @@ function localizeBeyondCategory(
   const normalized = category.toLowerCase();
   if (normalized.includes("running")) return t.beyondWorkPage.filters.running;
   if (normalized.includes("cycling")) return t.beyondWorkPage.filters.cycling;
-  if (normalized.includes("photography")) return t.beyondWorkPage.filters.photography;
   if (normalized.includes("cooking")) return t.beyondWorkPage.filters.cooking;
   if (normalized.includes("achievements")) return t.beyondWorkPage.filters.achievements;
 
   return t.beyondWorkPage.filters.other;
+}
+
+function localizeEducationRole(
+  role: string,
+  language: "eng" | "fi",
+  t: ReturnType<typeof getDictionary>
+): string {
+  if (language !== "fi") {
+    return role;
+  }
+
+  if (role === "Finnish Language Studies (A1–B2)") {
+    return `${t.workEducationPage.roleLabels.finnishLanguageStudies} (A1–B2)`;
+  }
+
+  if (role === "BSc (Hons) Computer Science") {
+    return `${t.workEducationPage.roleLabels.bachelorOfScience} (Hons), Tietojenkäsittelytiede`;
+  }
+
+  if (role === "High School") {
+    return t.workEducationPage.roleLabels.highSchool;
+  }
+
+  return role;
+}
+
+function localizeWorkRole(role: string, language: "eng" | "fi"): string {
+  if (language !== "fi") {
+    return role;
+  }
+
+  if (role === "DevOps Engineer") {
+    return "DevOps-insinööri";
+  }
+
+  if (role === "Software Engineer") {
+    return "Ohjelmistoinsinööri";
+  }
+
+  return role;
 }
 
 const HERO_PORTRAIT_SRC = "/media/malith-portrait.png";
@@ -116,83 +161,6 @@ function getCompanyInitials(company: string): string {
   return `${words[0].charAt(0)}${words[1].charAt(0)}`.toUpperCase();
 }
 
-interface RecentExperiencePreview {
-  role: string;
-  company: string;
-  location: string;
-  period: string;
-  summary: string;
-  impacts: string[];
-  stackPreview: string[];
-}
-
-const RECENT_EXPERIENCE_PREVIEW: RecentExperiencePreview[] = [
-  {
-    role: "DevOps Engineer",
-    company: "London Stock Exchange Group",
-    location: "Finland",
-    period: "2023–2025",
-    summary:
-      "Operating and scaling regulated financial systems where downtime directly impacts trading operations.",
-    impacts: [
-      "Reduced cloud costs by 35% (~$75K/year) through governance across multi-account environments",
-      "Led migration of regulated workloads to cloud with secure architecture",
-      "Introduced Chaos Engineering, reducing downtime by 20%",
-      "Reduced deployment and provisioning time by 40%",
-      "Designed secure Kubernetes architecture (RBAC + segmentation)"
-    ],
-    stackPreview: [
-      "GitLab CI",
-      "Docker",
-      "Kubernetes",
-      "ArgoCD",
-      "Ansible",
-      "Terraform",
-      "AWS",
-      "Azure",
-      "Python",
-      "Go",
-      "Jira",
-      "Confluence",
-      "Prometheus",
-      "Grafana",
-      "Datadog",
-      "PostgreSQL"
-    ]
-  },
-  {
-    role: "DevOps Engineer",
-    company: "Zebra Technologies",
-    location: "Sri Lanka",
-    period: "2022–2023",
-    summary:
-      "Led DevOps transformation across SDK engineering teams, improving delivery speed, reliability, and cloud adoption at scale.",
-    impacts: [
-      "Built CI/CD pipelines from scratch, reducing deployment time by 50%",
-      "Led cloud migration to Azure, improving scalability and security",
-      "Improved engineering productivity by 30%",
-      "Reduced QA effort by 40% through automation",
-      "Reduced operational overhead by 40%"
-    ],
-    stackPreview: [
-      "Jenkins",
-      "Docker",
-      "Kubernetes",
-      "ArgoCD",
-      "GitHub Actions",
-      "Azure",
-      "Python",
-      "Shell",
-      "Jira",
-      "Prometheus",
-      "Grafana",
-      "MongoDB",
-      "PostgreSQL",
-      "Selenium"
-    ]
-  }
-];
-
 const METRIC_HIGHLIGHT_SPLIT_REGEX = /(~?\$\d+(?:[.,]\d+)?(?:K|M|B)?(?:\/[a-zA-Z]+)?|\d+(?:[.,]\d+)?%)/g;
 const METRIC_HIGHLIGHT_MATCH_REGEX = /^(~?\$\d+(?:[.,]\d+)?(?:K|M|B)?(?:\/[a-zA-Z]+)?|\d+(?:[.,]\d+)?%)$/;
 
@@ -234,64 +202,29 @@ export default async function HomePage() {
   const language = getServerLanguage();
   const t = getDictionary(language);
 
-  const caseStudies = await getAllCaseStudies();
-  const beyondWorkPosts = await getAllBeyondWorkPosts();
+  const caseStudies = await getAllCaseStudies(language);
+  const beyondWorkPosts = await getAllBeyondWorkPosts(language);
 
-  const selectedWork = selectItemsBySlug(caseStudies, selectedCaseStudySlugs, 3);
+  const newestCaseStudies = [...caseStudies].sort((a, b) => b.date.localeCompare(a.date));
+  const selectedWork = newestCaseStudies.length > 3 ? newestCaseStudies.slice(0, 3) : newestCaseStudies;
   const selectedBeyondWork = selectItemsBySlug(beyondWorkPosts, selectedBeyondWorkSlugs, 3);
+  const selectedWorkGridClass =
+    selectedWork.length === 2 ? "grid gap-4 md:grid-cols-2" : selectedWork.length >= 3 ? "grid gap-4 md:grid-cols-2 lg:grid-cols-3" : "grid gap-4";
 
   const workExperience = sortExperienceByMostRecent(experienceTimeline.filter((item) => item.kind === "work"));
   const educationItems = sortExperienceByMostRecent(experienceTimeline.filter((item) => item.kind === "education"));
   const homepageCertifications = certifications.slice(0, 5);
-
-  const copy =
-    language === "fi"
-      ? {
-          summaryLabel: "Yhteenveto",
-          summaryTitle: "Ammatillinen yhteenveto",
-          educationLabel: "Koulutus",
-          certificationsLabel: "Sertifikaatit",
-          certificationsDescription: "Ajantasainen näkymä ydinsertifikaateista.",
-          pastCertificationLabel: "Vanhentunut",
-          toolsLabel: "Työkalut ja teknologiat",
-          toolsDescription: "Ryhmät nopeaan arviointiin rekrytoijille ja tiiminvetäjille.",
-          experienceLabel: "Recent Experience",
-          experienceTitle: "Trusted with business-critical cloud systems",
-          experienceDescription:
-            "Designing and operating systems where reliability is not optional.",
-          impactLabel: "Impact",
-          stackPreviewLabel: "Stack preview",
-          viewFullExperience: "Explore full experience →",
-          selectedWorkDescription: "Vain vahvimmat, tulospohjaiset toimitukset.",
-          beyondWorkDescription:
-            "Tavoitteellinen tekeminen työn ulkopuolella: juoksu, pyöräily ja keittiöprojektit, jotka tukevat jatkuvuutta ja luovuutta.",
-          fallbackOutcome: "Operatiiviset parannukset",
-          viewCaseStudy: "View case study →",
-          viewEntry: "Read entry →"
-        }
-      : {
-          summaryLabel: "Summary",
-          summaryTitle: "Professional summary",
-          educationLabel: "Education",
-          certificationsLabel: "Certifications",
-          certificationsDescription: "Compact view of core certifications.",
-          pastCertificationLabel: "Expired",
-          toolsLabel: "Tools & Technologies",
-          toolsDescription: "Organized for quick recruiter and hiring-manager scanning.",
-          experienceLabel: "Recent Experience",
-          experienceTitle: "Trusted with business-critical cloud systems",
-          experienceDescription:
-            "Designing and operating systems where reliability is not optional.",
-          impactLabel: "Impact",
-          stackPreviewLabel: "Stack preview",
-          viewFullExperience: "Explore full experience →",
-          selectedWorkDescription: "Only the strongest outcome-focused deliveries.",
-          beyondWorkDescription:
-            "Personal consistency outside work: running, cycling, and cooking sessions that reinforce discipline and creativity.",
-          fallbackOutcome: "Operational improvements",
-          viewCaseStudy: "View case study →",
-          viewEntry: "Read entry →"
-        };
+  const recentExperiencePreview = workExperience.slice(0, 2).map((item) => ({
+    source: item,
+    role: localizeWorkRole(item.role, language),
+    company: item.company,
+    period: item.period,
+    summary: getLocalizedText(item.summary, language),
+    impacts: [...item.impactBullets, ...(item.additionalImpactBullets ?? [])]
+      .slice(0, 5)
+      .map((impactItem) => getLocalizedText(impactItem, language)),
+    stackPreview: item.tech
+  }));
 
   return (
     <div className="space-y-20">
@@ -311,12 +244,12 @@ export default async function HomePage() {
 
           <p
             className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/90 px-3 py-1 font-mono text-xs text-text shadow-[0_0_14px_rgba(0,0,0,0.35)]"
-            aria-label="Current location: Finland"
+            aria-label={t.common.currentLocationAriaLabel}
           >
             <span className="status-dot" aria-hidden="true">
               <span className="status-dot-pulse" />
             </span>
-            Currently in Finland 🇫🇮
+            {t.common.currentlyInFinland} 🇫🇮
           </p>
 
           <p className="font-mono text-xs uppercase tracking-label text-accent">{t.home.heroMeta}</p>
@@ -361,8 +294,8 @@ export default async function HomePage() {
 
       <section className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
         <FadeInOnView className="space-y-5">
-          <p className="font-mono text-xs uppercase tracking-label text-muted">{copy.summaryLabel}</p>
-          <h2 className="font-serif text-3xl leading-tight text-text sm:text-4xl">{copy.summaryTitle}</h2>
+          <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.summaryLabel}</p>
+          <h2 className="font-serif text-3xl leading-tight text-text sm:text-4xl">{t.home.summaryTitle}</h2>
           <div className="space-y-4 text-sm leading-relaxed text-muted sm:text-base">
             {professionalSummary.map((paragraph) => (
               <p key={paragraph.eng}>{getLocalizedText(paragraph, language)}</p>
@@ -373,11 +306,11 @@ export default async function HomePage() {
         <div className="space-y-4">
           <FadeInOnView delay={0.05}>
             <article className="surface-card h-full space-y-4 p-5">
-              <p className="font-mono text-xs uppercase tracking-label text-muted">{copy.educationLabel}</p>
+              <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.educationLabel}</p>
               <ul className="space-y-3">
                 {educationItems.map((item) => (
                   <li key={`${item.role}-${item.period}`} className="border-l-2 border-border pl-3">
-                    <p className="text-sm font-semibold text-text">{item.role}</p>
+                    <p className="text-sm font-semibold text-text">{localizeEducationRole(item.role, language, t)}</p>
                     {item.companyUrl ? (
                       <a
                         href={item.companyUrl}
@@ -401,8 +334,8 @@ export default async function HomePage() {
 
       <section className="space-y-5">
         <div className="space-y-2">
-          <p className="font-mono text-xs uppercase tracking-label text-muted">{copy.toolsLabel}</p>
-          <p className="text-sm text-muted">{copy.toolsDescription}</p>
+          <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.toolsLabel}</p>
+          <p className="text-sm text-muted">{t.home.toolsDescription}</p>
         </div>
 
         <StaggerInView className="grid items-stretch gap-4 [grid-template-columns:repeat(auto-fit,minmax(220px,1fr))]">
@@ -433,8 +366,8 @@ export default async function HomePage() {
 
       <section id="certifications" className="space-y-5 scroll-mt-24">
         <div className="space-y-2">
-          <p className="font-mono text-xs uppercase tracking-label text-muted">{copy.certificationsLabel}</p>
-          <p className="text-sm text-muted">{copy.certificationsDescription}</p>
+          <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.certificationsLabel}</p>
+          <p className="text-sm text-muted">{t.home.certificationsDescription}</p>
         </div>
 
         <StaggerInView className="grid items-stretch gap-4 [grid-template-columns:repeat(auto-fit,minmax(220px,1fr))]">
@@ -469,9 +402,9 @@ export default async function HomePage() {
                       <span className="rounded-full bg-accent/15 px-2 py-0.5 font-mono text-[10px] uppercase tracking-label text-accent">
                         {certification.issuer}
                       </span>
-                      {certification.status === "expired" ? (
+                          {certification.status === "expired" ? (
                         <span className="font-mono text-[10px] uppercase tracking-label text-muted">
-                          {copy.pastCertificationLabel}
+                          {t.home.pastCertificationLabel}
                         </span>
                       ) : null}
                     </div>
@@ -486,25 +419,21 @@ export default async function HomePage() {
       <section className="space-y-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="space-y-2">
-            <p className="font-mono text-xs uppercase tracking-label text-muted">{copy.experienceLabel}</p>
-            <h2 className="font-serif text-3xl leading-tight text-text sm:text-4xl">{copy.experienceTitle}</h2>
-            <p className="max-w-3xl text-sm leading-relaxed text-muted">{copy.experienceDescription}</p>
+            <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.recentExperienceLabel}</p>
+            <h2 className="font-serif text-3xl leading-tight text-text sm:text-4xl">{t.home.recentExperienceTitle}</h2>
+            <p className="max-w-3xl text-sm leading-relaxed text-muted">{t.home.recentExperienceDescription}</p>
           </div>
           <Link
             href="/work-education"
             className="inline-flex items-center rounded-md border border-accent bg-accent px-4 py-2 text-sm font-medium text-[#0b0b0b] transition-colors hover:bg-[#f1cc74] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/90 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
-            {copy.viewFullExperience}
+            {`${t.common.exploreFullExperience} →`}
           </Link>
         </div>
 
         <StaggerInView className="grid gap-4 md:grid-cols-2">
-          {RECENT_EXPERIENCE_PREVIEW.map((item, index) => {
-            const normalizedCompany = item.company.toLowerCase();
-            const matchingExperience = workExperience.find((workItem) =>
-              workItem.company.toLowerCase().includes(normalizedCompany)
-            );
-            const companyLogo = matchingExperience ? resolveCompanyLogo(matchingExperience) : null;
+          {recentExperiencePreview.map((item, index) => {
+            const companyLogo = resolveCompanyLogo(item.source);
 
             return (
               <StaggerItem key={`${item.company}-${item.period}`} delay={index * 0.05} className="h-full">
@@ -532,9 +461,7 @@ export default async function HomePage() {
                           <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                             <div className="min-w-0">
                               <h3 className="font-serif text-2xl leading-tight text-text">{item.role}</h3>
-                              <p className="text-sm text-muted">
-                                {item.company} · {item.location}
-                              </p>
+                              <p className="text-sm text-muted">{item.company}</p>
                             </div>
                             <p className="font-mono text-[11px] uppercase tracking-label text-muted sm:pt-1 sm:text-right">
                               {item.period}
@@ -547,7 +474,7 @@ export default async function HomePage() {
 
                     <div className="mt-1 space-y-3 border-t border-border/70 pt-4">
                       <div className="space-y-2">
-                        <p className="font-mono text-xs font-semibold uppercase tracking-label text-text">{copy.impactLabel}</p>
+                        <p className="font-mono text-xs font-semibold uppercase tracking-label text-text">{t.home.impactLabel}</p>
                         <ul className="space-y-1.5 text-sm leading-relaxed text-muted">
                           {item.impacts.map((impactText) => (
                             <li key={`${item.company}-${impactText}`} className="flex items-start gap-2 text-text">
@@ -561,7 +488,7 @@ export default async function HomePage() {
                       </div>
 
                       <div className="space-y-2 pt-1">
-                        <p className="font-mono text-xs uppercase tracking-label text-muted">{copy.stackPreviewLabel}</p>
+                        <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.stackPreviewLabel}</p>
                         <ul className="flex flex-wrap gap-2">
                           {item.stackPreview.map((tool) => (
                             <TechBadge key={`${item.company}-${tool}`} tool={tool} />
@@ -582,33 +509,33 @@ export default async function HomePage() {
           <div className="space-y-2">
             <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.selectedWorkLabel}</p>
             <h2 className="font-serif text-3xl leading-tight text-text sm:text-4xl">{t.home.selectedWorkTitle}</h2>
-            <p className="text-sm text-muted">{copy.selectedWorkDescription}</p>
+            <p className="text-sm text-muted">{t.home.selectedWorkDescription}</p>
           </div>
           <Link href="/case-studies" className="quiet-link text-sm text-accent">
             {t.common.viewAll}
           </Link>
         </div>
 
-        <StaggerInView className="grid gap-4 md:grid-cols-3">
+        <StaggerInView className={selectedWorkGridClass}>
           {selectedWork.map((post, index) => (
             <StaggerItem key={post.slug} delay={index * 0.06} className="h-full">
               <HoverLift className="h-full" glow>
                 <article className="surface-card surface-card-interactive flex h-full min-h-[320px] flex-col p-5">
-                  <p className="font-mono text-xs uppercase tracking-label text-muted">{formatDate(post.date)}</p>
+                  <p className="font-mono text-xs uppercase tracking-label text-muted">{formatDate(post.date, language)}</p>
                   <h3 className="pt-2 font-serif text-2xl leading-tight text-text">
-                    {getLocalizedPostTitle(post.slug, post.title, language)}
+                    {post.title}
                   </h3>
                   <p className="pt-2 text-sm leading-relaxed text-muted">
-                    {toConciseSummary(getLocalizedPostSummary(post.slug, post.summary, language))}
+                    {toConciseSummary(post.summary)}
                   </p>
                   <p className="pt-4 font-mono text-xs uppercase tracking-label text-accent">
-                    {t.common.result}: {post.impact ?? copy.fallbackOutcome}
+                    {t.common.result}: {post.impact ?? t.caseStudiesPage.fallbackOutcome}
                   </p>
                   <Link
                     href={`/case-studies/${post.slug}`}
                     className="mt-auto pt-5 text-sm font-medium text-accent transition-colors hover:text-[#f1cc74]"
                   >
-                    {copy.viewCaseStudy}
+                    {`${t.common.viewCaseStudy} →`}
                   </Link>
                 </article>
               </HoverLift>
@@ -622,32 +549,35 @@ export default async function HomePage() {
           <div className="space-y-2">
             <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.photoNotesLabel}</p>
             <h2 className="font-serif text-3xl leading-tight text-text sm:text-4xl">{t.home.photoNotesTitle}</h2>
-            <p className="max-w-3xl text-sm leading-relaxed text-muted">{copy.beyondWorkDescription}</p>
+            <p className="max-w-3xl text-sm leading-relaxed text-muted">{t.home.beyondWorkDescription}</p>
           </div>
           <Link href="/beyond-work" className="quiet-link text-sm text-accent">
             {t.common.viewJournal}
           </Link>
         </div>
 
-        <StaggerInView className="grid gap-4 md:grid-cols-3">
+        <StaggerInView className="grid items-stretch gap-4 md:grid-cols-3">
           {selectedBeyondWork.map((post, index) => (
-            <StaggerItem key={post.slug} delay={index * 0.06}>
-              <HoverLift glow>
-                <article className="surface-card flex h-full flex-col p-5">
-                  <p className="font-mono text-xs uppercase tracking-label text-muted">
-                    {localizeBeyondCategory(post.category, language, t).toUpperCase()} · {formatDate(post.date)}
-                  </p>
-                  <h3 className="pt-2 font-serif text-2xl leading-tight text-text">
-                    {getLocalizedPostTitle(post.slug, post.title, language)}
-                  </h3>
-                  <p className="pt-2 text-sm leading-relaxed text-muted">
-                    {getLocalizedPostSummary(post.slug, post.summary, language)}
-                  </p>
+            <StaggerItem key={post.slug} delay={index * 0.06} className="h-full">
+              <HoverLift glow className="h-full">
+                <article className="surface-card flex h-full min-h-[250px] flex-col justify-between p-5">
+                  <div>
+                    <p className="font-mono text-xs uppercase tracking-label text-muted">
+                      {localizeBeyondCategory(post.categoryId, post.category, language, t).toUpperCase()} ·{" "}
+                      {formatDate(post.date, language)}
+                    </p>
+                    <h3 className="pt-2 font-serif text-2xl leading-tight text-text">
+                      {post.title}
+                    </h3>
+                    <p className="pt-2 text-sm leading-relaxed text-muted">
+                      {post.summary}
+                    </p>
+                  </div>
                   <Link
                     href={`/beyond-work/${post.slug}`}
-                    className="mt-auto pt-5 text-sm font-medium text-accent transition-colors hover:text-[#f1cc74]"
+                    className="pt-5 text-sm font-medium text-accent transition-colors hover:text-[#f1cc74]"
                   >
-                    {copy.viewEntry}
+                    {`${t.common.readEntry} →`}
                   </Link>
                 </article>
               </HoverLift>

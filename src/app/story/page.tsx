@@ -23,28 +23,6 @@ export const metadata = createMetadata({
 export default function StoryPage() {
   const language = getServerLanguage();
   const t = getDictionary(language);
-  const copy =
-    language === "fi"
-      ? {
-          firstBlock: [
-            "Aloitin urani Sri Lankassa ohjelmistoinsinöörinä. Varhaisessa vaiheessa opin, miten toimituspaine voi tehdä järjestelmistä hauraita, vaikka ominaisuuksia rakennetaan nopeasti.",
-            "Vuosien aikana siirryin syvemmälle DevOps-rooleihin: automaatio, luotettavuus, pilvi-infrastruktuuri ja jatkuva parantaminen. Nautin siitä, että teen monimutkaisista työnkuluista selkeämpiä ja mitattavia."
-          ],
-          secondBlock: [
-            "Muutto Suomeen toi uuden vaiheen: kulttuuriin sopeutuminen, suomen kielen opiskelu ja teknisen osaamisen kehittäminen käytännön yhteistyötä unohtamatta.",
-            "Työn ulkopuolella juoksu, pyöräily, uinti, valokuvaus ja videokuvaus pitävät arjen tasapainossa. Kestävyysrutiinit ja luova työ näkyvät myös tavassani ratkaista teknisiä ongelmia."
-          ]
-        }
-      : {
-          firstBlock: [
-            "I started my career in Sri Lanka as a Software Engineer, learning how delivery pressure can quietly create fragile systems even when features move fast.",
-            "Over time, I moved deeper into DevOps engineering with a focus on automation, reliability, cloud infrastructure, and continuous improvement. I enjoy making complex workflows clear and measurable."
-          ],
-          secondBlock: [
-            "Relocating to Finland added a new chapter: adapting to a new culture, investing in Finnish language studies, and continuing to build technical depth through practical collaboration.",
-            "Outside work, running, cycling, swimming, photography, and videography keep me balanced. Endurance habits and creative practice both influence how I approach engineering challenges."
-          ]
-        };
 
   return (
     <div className="space-y-14">
@@ -59,7 +37,7 @@ export default function StoryPage() {
           <div className="aspect-[4/5] overflow-hidden rounded-md border border-border">
             <Image
               src={storyImages[0]}
-              alt="Portrait with notebook and camera setup"
+              alt={t.storyPage.imageAltPrimary}
               width={1200}
               height={1500}
               sizes="(max-width: 1024px) 100vw, 48vw"
@@ -70,7 +48,7 @@ export default function StoryPage() {
         </figure>
 
         <div className="space-y-6 text-base leading-relaxed text-text">
-          {copy.firstBlock.map((paragraph) => (
+          {t.storyPage.firstBlock.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
         </div>
@@ -78,7 +56,7 @@ export default function StoryPage() {
 
       <section className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
         <div className="space-y-6 text-base leading-relaxed text-text">
-          {copy.secondBlock.map((paragraph) => (
+          {t.storyPage.secondBlock.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
         </div>
@@ -88,7 +66,7 @@ export default function StoryPage() {
             <div className="aspect-[16/10] overflow-hidden rounded-md border border-border">
               <Image
                 src={storyImages[1]}
-                alt="Street scene from a travel day in Finland"
+                alt={t.storyPage.imageAltSecondary}
                 width={1400}
                 height={880}
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 42vw"
@@ -102,7 +80,7 @@ export default function StoryPage() {
               <div className="aspect-[4/3] overflow-hidden rounded-md border border-border">
                 <Image
                   src={image}
-                  alt={`Story gallery photo ${index + 1}`}
+                  alt={`${t.storyPage.imageAltGalleryBase} ${index + 1}`}
                   width={900}
                   height={680}
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 48vw, 24vw"

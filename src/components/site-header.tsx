@@ -80,7 +80,7 @@ export function SiteHeader({ initialLanguage }: SiteHeaderProps) {
           <span className="inline-flex h-8 w-8 overflow-hidden rounded-full border border-border bg-surface shadow-[inset_0_0_0_1px_rgba(242,199,91,0.08)]">
             <Image
               src="/media/malith-avatar.png"
-              alt="Malith avatar"
+              alt={language === "fi" ? "Malithin profiilikuva" : "Malith avatar"}
               width={32}
               height={32}
               className="h-full w-full object-cover"
@@ -90,7 +90,7 @@ export function SiteHeader({ initialLanguage }: SiteHeaderProps) {
         </Link>
 
         <div className="flex flex-wrap items-center gap-4 md:justify-end">
-          <nav aria-label="Primary">
+          <nav aria-label={t.common.primaryNavigation}>
             <ul className="flex flex-wrap items-center justify-end gap-x-1 gap-y-2 text-sm">
               {navigation.map((item) => {
                 const isActive = isActiveLink(item.href);

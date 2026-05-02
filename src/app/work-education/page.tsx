@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { SafeImage } from "@/components/safe-image";
 import { SectionHeading } from "@/components/section-heading";
 import { TechBadge } from "@/components/tech-badge";
+import { getDictionary } from "@/lib/i18n";
 import { getServerLanguage } from "@/lib/i18n-server";
 import { createMetadata } from "@/lib/metadata";
 import { type ExperienceItem, experienceTimeline, getLocalizedText, sortExperienceByMostRecent } from "@/lib/profile";
@@ -65,6 +66,46 @@ function renderImpactText(text: string): ReactNode {
   });
 }
 
+function localizeEducationRole(
+  role: string,
+  language: "eng" | "fi",
+  t: ReturnType<typeof getDictionary>
+): string {
+  if (language !== "fi") {
+    return role;
+  }
+
+  if (role === "Finnish Language Studies (A1–B2)") {
+    return `${t.workEducationPage.roleLabels.finnishLanguageStudies} (A1–B2)`;
+  }
+
+  if (role === "BSc (Hons) Computer Science") {
+    return `${t.workEducationPage.roleLabels.bachelorOfScience} (Hons), Tietojenkäsittelytiede`;
+  }
+
+  if (role === "High School") {
+    return t.workEducationPage.roleLabels.highSchool;
+  }
+
+  return role;
+}
+
+function localizeWorkRole(role: string, language: "eng" | "fi"): string {
+  if (language !== "fi") {
+    return role;
+  }
+
+  if (role === "DevOps Engineer") {
+    return "DevOps-insinööri";
+  }
+
+  if (role === "Software Engineer") {
+    return "Ohjelmistoinsinööri";
+  }
+
+  return role;
+}
+
 export const metadata = createMetadata({
   title: "Work & Education",
   description: "Work experience timeline and education highlights for Malith Ileperuma.",
@@ -73,46 +114,26 @@ export const metadata = createMetadata({
 
 export default function WorkEducationPage() {
   const language = getServerLanguage();
+  const t = getDictionary(language);
   const workExperience = sortExperienceByMostRecent(experienceTimeline.filter((item) => item.kind === "work"));
   const educationItems = sortExperienceByMostRecent(experienceTimeline.filter((item) => item.kind === "education"));
-
-  const copy =
-    language === "fi"
-      ? {
-          title: "Työ ja koulutus",
-          description: "Rakennan ja operoin resilienttejä pilvijärjestelmiä korkean skaalan, liiketoimintakriittisiin ympäristöihin.",
-          workSection: "Työkokemus",
-          educationSection: "Koulutus",
-          work: "Työ",
-          impact: "Keskeinen vaikutus",
-          stack: "Tekninen pino"
-        }
-      : {
-          title: "Work & Education",
-          description: "Building and operating resilient cloud systems for high-scale, business-critical environments.",
-          workSection: "Work Experience",
-          educationSection: "Education",
-          work: "Work",
-          impact: "Key impact",
-          stack: "Tech stack"
-        };
 
   return (
     <div className="space-y-16">
       <SectionHeading
-        label={copy.title}
-        title={copy.title}
-        description={copy.description}
+        label={t.workEducationPage.label}
+        title={t.workEducationPage.title}
+        description={t.workEducationPage.description}
       />
 
       <section className="space-y-5">
         <div className="space-y-2">
-          <p className="font-mono text-xs uppercase tracking-label text-muted">{copy.workSection}</p>
+          <p className="font-mono text-xs uppercase tracking-label text-muted">{t.workEducationPage.workSection}</p>
         </div>
 
         <div className="relative space-y-4">
           <span
-            className="absolute bottom-0 left-4 top-0 w-[1.5px] bg-border/90 md:left-1/2 md:-translate-x-1/2"
+            className="absolute bottom-0 left-4 top-0 w-px bg-border/90 md:left-1/2 md:-translate-x-1/2"
             aria-hidden="true"
           />
 
@@ -124,9 +145,11 @@ export default function WorkEducationPage() {
             return (
               <div key={`${item.role}-${item.period}`} className="relative">
                 <span
-                  className="absolute left-4 top-8 h-4 w-4 -translate-x-1/2 rounded-full border border-accent/90 bg-background shadow-[0_0_0_1px_rgba(242,199,91,0.2),0_0_10px_rgba(242,199,91,0.18)] md:left-1/2 md:-translate-x-1/2"
+                  className="status-dot-yellow absolute left-4 top-8 flex-none -translate-x-1/2 md:left-1/2 md:-translate-x-1/2"
                   aria-hidden="true"
-                />
+                >
+                  <span className="status-dot-yellow-pulse" />
+                </span>
 
                 <article
                   className={`surface-card surface-card-interactive relative ml-9 flex min-h-[360px] flex-col p-5 hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 md:ml-0 md:w-[calc(50%-1.5rem)] ${
@@ -158,7 +181,7 @@ export default function WorkEducationPage() {
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-col gap-1 md:flex-row md:items-start md:justify-between md:gap-4">
                           <div className="min-w-0">
-                            <h2 className="font-serif text-2xl leading-tight text-text">{item.role}</h2>
+                            <h2 className="font-serif text-2xl leading-tight text-text">{localizeWorkRole(item.role, language)}</h2>
                             <p className="text-sm text-muted">{item.company}</p>
                           </div>
                           <p className="font-mono text-[11px] uppercase tracking-label text-muted md:pt-1 md:text-right">
@@ -168,7 +191,7 @@ export default function WorkEducationPage() {
                       </div>
                     </div>
 
-                    <p className="font-mono text-[11px] uppercase tracking-label text-accent">{copy.work}</p>
+                    <p className="font-mono text-[11px] uppercase tracking-label text-accent">{t.workEducationPage.workTag}</p>
                     <p className="pt-1 text-sm leading-relaxed text-text">
                       {getLocalizedText(item.summary, language)}
                     </p>
@@ -176,7 +199,7 @@ export default function WorkEducationPage() {
 
                   <div className="flex flex-1 flex-col justify-between gap-4 pt-4">
                     <div className="space-y-2">
-                      <p className="font-mono text-xs uppercase tracking-label text-muted">{copy.impact}</p>
+                      <p className="font-mono text-xs uppercase tracking-label text-muted">{t.workEducationPage.impactLabel}</p>
                       <ul className="space-y-2 text-sm leading-relaxed text-text">
                         {impactBullets.map((bullet) => (
                           <li key={bullet.eng}>• {renderImpactText(getLocalizedText(bullet, language))}</li>
@@ -185,7 +208,7 @@ export default function WorkEducationPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <p className="font-mono text-xs uppercase tracking-label text-muted">{copy.stack}</p>
+                      <p className="font-mono text-xs uppercase tracking-label text-muted">{t.workEducationPage.stackLabel}</p>
                       <ul className="flex flex-wrap gap-2">
                         {item.tech.map((tool) => (
                           <TechBadge key={tool} tool={tool} />
@@ -202,7 +225,7 @@ export default function WorkEducationPage() {
 
       <section className="space-y-5 border-t border-border pt-10">
         <div className="space-y-2">
-          <p className="font-mono text-xs uppercase tracking-label text-muted">{copy.educationSection}</p>
+          <p className="font-mono text-xs uppercase tracking-label text-muted">{t.workEducationPage.educationSection}</p>
         </div>
 
         <div className="space-y-3">
@@ -213,7 +236,9 @@ export default function WorkEducationPage() {
                 className="absolute -left-[4px] top-[10px] h-2 w-2 rounded-full bg-accent/70 shadow-[0_0_8px_rgba(242,199,91,0.35)]"
               />
               <div className="flex flex-col gap-0.5 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-                <h2 className="font-serif text-lg leading-tight text-text">{item.role}</h2>
+                <h2 className="font-serif text-lg leading-tight text-text">
+                  {localizeEducationRole(item.role, language, t)}
+                </h2>
                 <p className="font-mono text-[11px] uppercase tracking-label text-muted sm:pt-1">{item.period}</p>
               </div>
               {item.companyUrl ? (

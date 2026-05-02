@@ -6,6 +6,16 @@ import { CircleMarker, MapContainer, Polyline, TileLayer, Tooltip, useMap } from
 
 export type MapRouteMode = "bike" | "run";
 
+export interface MapRouteLabels {
+  routeMap: string;
+  loading: string;
+  mapDataUnavailable: string;
+  runningMode: string;
+  cyclingMode: string;
+  start: string;
+  end: string;
+}
+
 export interface MapRouteProps {
   title: string;
   mode: MapRouteMode;
@@ -14,6 +24,7 @@ export interface MapRouteProps {
   end?: [number, number];
   routeFile?: string;
   distanceLabel?: string;
+  labels?: Partial<MapRouteLabels>;
 }
 
 function normalizeLatLng(coordinate?: [number, number]): LatLngTuple | undefined {
@@ -177,8 +188,8 @@ function formatDistance(distanceKm?: number): string | null {
   return `${distanceKm.toFixed(1)} km`;
 }
 
-function getModeLabel(mode: MapRouteMode): string {
-  return mode === "bike" ? "Cycling" : "Running";
+function getModeLabel(mode: MapRouteMode, labels: MapRouteLabels): string {
+  return mode === "bike" ? labels.cyclingMode : labels.runningMode;
 }
 
 function AutoFitBounds({ points }: { points: LatLngTuple[] }) {
@@ -203,9 +214,18 @@ function AutoFitBounds({ points }: { points: LatLngTuple[] }) {
   return null;
 }
 
-export function MapRouteClient({ title, mode, points, start, end, routeFile, distanceLabel }: MapRouteProps) {
+export function MapRouteClient({ title, mode, points, start, end, routeFile, distanceLabel, labels }: MapRouteProps) {
   const [routePoints, setRoutePoints] = useState<LatLngTuple[] | null>(null);
   const [routeFileError, setRouteFileError] = useState<string | null>(null);
+  const resolvedLabels: MapRouteLabels = {
+    routeMap: labels?.routeMap ?? "Route map",
+    loading: labels?.loading ?? "Loading",
+    mapDataUnavailable: labels?.mapDataUnavailable ?? "Map data is unavailable for this entry.",
+    runningMode: labels?.runningMode ?? "Running",
+    cyclingMode: labels?.cyclingMode ?? "Cycling",
+    start: labels?.start ?? "Start",
+    end: labels?.end ?? "End"
+  };
 
   const normalizedPoints = useMemo(
     () => (points ?? []).map((point) => normalizeLatLng(point)).filter((point): point is LatLngTuple => Boolean(point)),
@@ -265,7 +285,7 @@ export function MapRouteClient({ title, mode, points, start, end, routeFile, dis
       } catch {
         if (isActive) {
           setRoutePoints(null);
-          setRouteFileError("Route file could not be loaded.");
+          setRouteFileError(resolvedLabels.mapDataUnavailable);
         }
       }
     }
@@ -275,7 +295,7 @@ export function MapRouteClient({ title, mode, points, start, end, routeFile, dis
     return () => {
       isActive = false;
     };
-  }, [normalizedPoints, routeFile]);
+  }, [normalizedPoints, resolvedLabels.mapDataUnavailable, routeFile]);
 
   const fallbackLine = useMemo(() => {
     if (!normalizedStart || !normalizedEnd) {
@@ -338,7 +358,7 @@ export function MapRouteClient({ title, mode, points, start, end, routeFile, dis
     typeof distanceLabel === "string" && distanceLabel.trim().length > 0
       ? distanceLabel
       : formatDistance(calculatedDistance);
-  const modeLabel = getModeLabel(mode);
+  const modeLabel = getModeLabel(mode, resolvedLabels);
   const canRenderMap = pointsToFit.length > 0;
 
   return (
@@ -394,7 +414,7 @@ export function MapRouteClient({ title, mode, points, start, end, routeFile, dis
                   }}
                 >
                   <Tooltip direction="top" offset={[0, -6]} opacity={0.95}>
-                    Start
+                    {resolvedLabels.start}
                   </Tooltip>
                 </CircleMarker>
               ) : null}
@@ -410,14 +430,14 @@ export function MapRouteClient({ title, mode, points, start, end, routeFile, dis
                   }}
                 >
                   <Tooltip direction="top" offset={[0, -6]} opacity={0.95}>
-                    End
+                    {resolvedLabels.end}
                   </Tooltip>
                 </CircleMarker>
               ) : null}
             </MapContainer>
           ) : (
             <div className="flex h-full items-center justify-center px-4 text-center text-sm text-muted">
-              {routeFileError ?? "Map data is unavailable for this entry."}
+              {routeFileError ?? resolvedLabels.mapDataUnavailable}
             </div>
           )}
         </div>

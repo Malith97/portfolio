@@ -27,6 +27,11 @@ export function createMetadata(input: MetadataInput = {}): Metadata {
     title,
     description,
     metadataBase: new URL(baseUrl),
+    icons: {
+      icon: [{ url: "/media/malith-avatar.png", type: "image/png" }],
+      shortcut: [{ url: "/media/malith-avatar.png", type: "image/png" }],
+      apple: [{ url: "/media/malith-avatar.png", type: "image/png" }]
+    },
     alternates: {
       canonical: url
     },

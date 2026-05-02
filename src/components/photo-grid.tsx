@@ -12,6 +12,13 @@ interface PhotoGridProps {
   aspectClass?: string;
   priorityFirst?: boolean;
   enableLightbox?: boolean;
+  labels?: {
+    openImage: string;
+    closeImageViewer: string;
+    previousImage: string;
+    nextImage: string;
+    imageViewer: string;
+  };
 }
 
 export function PhotoGrid({
@@ -21,7 +28,8 @@ export function PhotoGrid({
   maxItems,
   aspectClass = "aspect-[4/3]",
   priorityFirst = false,
-  enableLightbox = false
+  enableLightbox = false,
+  labels
 }: PhotoGridProps) {
   const items = maxItems ? images.slice(0, maxItems) : images;
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -37,6 +45,13 @@ export function PhotoGrid({
     items.length === 1
       ? "(max-width: 768px) 100vw, 880px"
       : "(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 380px";
+  const resolvedLabels = {
+    openImage: labels?.openImage ?? "Open image",
+    closeImageViewer: labels?.closeImageViewer ?? "Close image viewer",
+    previousImage: labels?.previousImage ?? "Previous image",
+    nextImage: labels?.nextImage ?? "Next image",
+    imageViewer: labels?.imageViewer ?? "image viewer"
+  };
 
   const closeLightbox = useCallback(() => {
     setActiveIndex(null);
@@ -130,7 +145,7 @@ export function PhotoGrid({
       <ul className={`grid ${gridColsClass} gap-3 ${className}`}>
         {items.map((image, index) => {
           const isPriority = priorityFirst && index === 0;
-          const alt = `${altBase} image ${index + 1}`;
+          const alt = `${altBase} ${index + 1}`;
           const loading = isPriority ? undefined : "lazy";
           const imageElement = (
             <SafeImage
@@ -155,7 +170,7 @@ export function PhotoGrid({
                     lastTriggerRef.current = event.currentTarget;
                     setActiveIndex(index);
                   }}
-                  aria-label={`Open ${alt}`}
+                  aria-label={`${resolvedLabels.openImage}: ${alt}`}
                 >
                   {imageElement}
                 </button>
@@ -172,7 +187,7 @@ export function PhotoGrid({
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/92 p-4 backdrop-blur-[2px] transition-opacity duration-200 sm:p-8"
           role="dialog"
           aria-modal="true"
-          aria-label={`${altBase} image viewer`}
+          aria-label={`${altBase} ${resolvedLabels.imageViewer}`}
           onClick={closeLightbox}
         >
           <div className="relative w-full max-w-[90vw] transition-transform duration-200" onClick={(event) => event.stopPropagation()}>
@@ -180,9 +195,9 @@ export function PhotoGrid({
               type="button"
               onClick={closeLightbox}
               className="absolute right-3 top-3 z-30 rounded-md border border-border bg-[#0d0d0d]/95 px-3 py-1.5 font-mono text-xs uppercase tracking-label text-text shadow-md transition-colors duration-150 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0b0b]"
-              aria-label="Close image viewer"
+              aria-label={resolvedLabels.closeImageViewer}
             >
-              Close
+              {resolvedLabels.closeImageViewer}
             </button>
 
             {hasMultiple ? (
@@ -191,17 +206,17 @@ export function PhotoGrid({
                   type="button"
                   onClick={goPrevious}
                   className="absolute left-2 top-1/2 z-30 -translate-y-1/2 rounded-md border border-border bg-[#0d0d0d]/95 px-3 py-2 font-mono text-xs uppercase tracking-label text-text shadow-md transition-colors duration-150 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0b0b] sm:left-3"
-                  aria-label="Previous image"
+                  aria-label={resolvedLabels.previousImage}
                 >
-                  Prev
+                  {resolvedLabels.previousImage}
                 </button>
                 <button
                   type="button"
                   onClick={goNext}
                   className="absolute right-2 top-1/2 z-30 -translate-y-1/2 rounded-md border border-border bg-[#0d0d0d]/95 px-3 py-2 font-mono text-xs uppercase tracking-label text-text shadow-md transition-colors duration-150 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0b0b] sm:right-3"
-                  aria-label="Next image"
+                  aria-label={resolvedLabels.nextImage}
                 >
-                  Next
+                  {resolvedLabels.nextImage}
                 </button>
               </>
             ) : null}
@@ -209,7 +224,7 @@ export function PhotoGrid({
             <div className="relative h-[85vh] w-[90vw] overflow-hidden rounded-md border border-border bg-[#0b0b0b]">
               <SafeImage
                 src={activeImage}
-                alt={`${altBase} image ${activeIndex + 1}`}
+                alt={`${altBase} ${activeIndex + 1}`}
                 fill
                 sizes="90vw"
                 className="object-contain transition-opacity duration-200"

@@ -7,10 +7,9 @@ import { CloudCostOptimizationEditorial } from "@/components/case-studies/cloud-
 import { KubernetesRbacOktaEditorial } from "@/components/case-studies/kubernetes-rbac-okta-editorial";
 import { getAllCaseStudies, getCaseStudyBySlug } from "@/lib/content";
 import { formatDate } from "@/lib/format";
-import { getDictionary } from "@/lib/i18n";
+import { DEFAULT_LANGUAGE, getDictionary } from "@/lib/i18n";
 import { getServerLanguage } from "@/lib/i18n-server";
 import { createMetadata } from "@/lib/metadata";
-import { getLocalizedPostSummary, getLocalizedPostTitle } from "@/lib/post-translations";
 
 interface CaseStudyPageProps {
   params: {
@@ -19,16 +18,18 @@ interface CaseStudyPageProps {
 }
 
 export async function generateStaticParams() {
-  const posts = await getAllCaseStudies();
+  const posts = await getAllCaseStudies(DEFAULT_LANGUAGE);
   return posts.map((post) => ({ slug: post.slug }));
 }
 
 export async function generateMetadata({ params }: CaseStudyPageProps): Promise<Metadata> {
-  const post = await getCaseStudyBySlug(params.slug);
+  const language = getServerLanguage();
+  const t = getDictionary(language);
+  const post = await getCaseStudyBySlug(params.slug, language);
 
   if (!post) {
     return createMetadata({
-      title: "Case Study Not Found",
+      title: t.caseStudyDetail.notFoundTitle,
       path: `/case-studies/${params.slug}`
     });
   }
@@ -44,19 +45,19 @@ export async function generateMetadata({ params }: CaseStudyPageProps): Promise<
 export default async function CaseStudyDetailPage({ params }: CaseStudyPageProps) {
   const language = getServerLanguage();
   const t = getDictionary(language);
-  const fallbackOutcome = language === "fi" ? "Operatiiviset parannukset" : "Operational gains";
+  const fallbackOutcome = t.caseStudyDetail.fallbackOutcome;
 
-  const post = await getCaseStudyBySlug(params.slug);
+  const post = await getCaseStudyBySlug(params.slug, language);
   const showTopGallery = post?.slug !== "cloud-cost-optimization";
 
   if (!post) {
     notFound();
   }
 
-  const localizedTitle = getLocalizedPostTitle(post.slug, post.title, language);
-  const localizedSummary = getLocalizedPostSummary(post.slug, post.summary, language);
+  const localizedTitle = post.title;
+  const localizedSummary = post.summary;
 
-  if (post.slug === "cloud-cost-optimization") {
+  if (language === "eng" && post.slug === "cloud-cost-optimization") {
     return (
       <article>
         <CloudCostOptimizationEditorial />
@@ -64,7 +65,7 @@ export default async function CaseStudyDetailPage({ params }: CaseStudyPageProps
     );
   }
 
-  if (post.slug === "kubernetes-rbac-okta") {
+  if (language === "eng" && post.slug === "kubernetes-rbac-okta") {
     return (
       <article>
         <KubernetesRbacOktaEditorial />
@@ -81,7 +82,7 @@ export default async function CaseStudyDetailPage({ params }: CaseStudyPageProps
       <header className="grid gap-8 border-b border-border pb-8 md:grid-cols-[1fr_240px] md:items-end">
         <div className="space-y-4">
           <p className="font-mono text-xs uppercase tracking-label text-muted">
-            {t.common.caseStudy} · {formatDate(post.date)} · {post.readingTime}
+            {t.common.caseStudy} · {formatDate(post.date, language)} · {post.readingTime}
           </p>
           <h1 className="font-serif text-4xl leading-tight text-text sm:text-6xl">
             {localizedTitle}

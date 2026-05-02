@@ -1,6 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { getDictionary } from "@/lib/i18n";
+import { getServerLanguage } from "@/lib/i18n-server";
+import { getLocalizedPostSummary, getLocalizedPostTitle } from "@/lib/post-translations";
 
 function Callout({ title, body }: { title: string; body: string }) {
   return (
@@ -53,15 +56,21 @@ function ArticleImage({
 }
 
 export function CloudCostOptimizationEditorial() {
+  const language = getServerLanguage();
+  const t = getDictionary(language);
+  const title = getLocalizedPostTitle("cloud-cost-optimization", "Cloud Cost Optimization", language);
+  const summary = getLocalizedPostSummary(
+    "cloud-cost-optimization",
+    "How I reduced cloud spend by 35% (~$75K/year) through visibility, governance, automation, and continuous monitoring.",
+    language
+  );
+
   return (
     <div className="mx-auto w-full max-w-[720px] space-y-14 sm:space-y-16">
       <header className="mx-auto w-full max-w-[720px] space-y-6">
-        <p className="font-mono text-[11px] uppercase tracking-label text-muted">CASE STUDY</p>
-        <h1 className="font-serif text-4xl leading-tight text-text sm:text-6xl">Cloud Cost Optimization</h1>
-        <p className="text-base leading-7 text-muted">
-          How I reduced cloud spend by <span className="text-accent">35%</span> (<span className="text-accent">~$75K/year</span>) through
-          visibility, governance, automation, and continuous monitoring.
-        </p>
+        <p className="font-mono text-[11px] uppercase tracking-label text-muted">{t.common.caseStudy.toUpperCase()}</p>
+        <h1 className="font-serif text-4xl leading-tight text-text sm:text-6xl">{title}</h1>
+        <p className="text-base leading-7 text-muted">{summary}</p>
         <p className="font-mono text-xs tracking-label text-muted">
           FinOps · Cloud Governance · AWS · Kubernetes · Monitoring
         </p>
@@ -272,18 +281,18 @@ export function CloudCostOptimizationEditorial() {
       </Section>
 
       <footer className="mx-auto w-full max-w-[720px] border-t border-border pt-6">
-        <p className="font-mono text-[11px] tracking-label text-muted">Originally published on Medium</p>
+        <p className="font-mono text-[11px] tracking-label text-muted">{t.common.originallyPublishedOnMedium}</p>
         <a
           href="https://medium.com/@mileperuma/optimizing-cloud-spend-with-precision-my-approach-to-cutting-cloud-costs-by-40-d9ba311bc252"
           target="_blank"
           rel="noopener noreferrer"
           className="quiet-link mt-2 inline-block text-sm text-accent"
         >
-          View original article on Medium
+          {t.common.viewOriginalArticleOnMedium}
         </a>
         <div className="pt-4">
           <Link href="/case-studies" className="quiet-link text-sm text-muted">
-            Back to case studies
+            {t.common.backToCaseStudies}
           </Link>
         </div>
       </footer>

@@ -8,9 +8,8 @@ import { SafeImage } from "@/components/safe-image";
 import { getAllBeyondWorkPosts, getBeyondWorkPostBySlug, type Post } from "@/lib/content";
 import { createMetadata } from "@/lib/metadata";
 import { formatDate } from "@/lib/format";
-import { getDictionary } from "@/lib/i18n";
+import { DEFAULT_LANGUAGE, getDictionary } from "@/lib/i18n";
 import { getServerLanguage } from "@/lib/i18n-server";
-import { getLocalizedPostSummary, getLocalizedPostTitle } from "@/lib/post-translations";
 
 interface BeyondWorkPageProps {
   params: {
@@ -23,7 +22,13 @@ interface MetaItem {
   value: string;
 }
 
-function categoryType(category?: string): "run_ride" | "visual" | "cooking" | "achievements" | "other" {
+function categoryType(categoryId?: string, category?: string): "run_ride" | "visual" | "cooking" | "achievements" | "other" {
+  const normalizedId = categoryId?.toLowerCase() ?? "";
+  if (normalizedId === "running" || normalizedId === "cycling") return "run_ride";
+  if (normalizedId === "cooking") return "cooking";
+  if (normalizedId === "achievements") return "achievements";
+  if (normalizedId === "other") return "other";
+
   const normalized = category?.toLowerCase() ?? "";
 
   if (normalized.includes("running") || normalized.includes("cycling")) return "run_ride";
@@ -34,28 +39,33 @@ function categoryType(category?: string): "run_ride" | "visual" | "cooking" | "a
   return "other";
 }
 
-function localizedCategory(category: string | undefined, t: ReturnType<typeof getDictionary>): string {
-  const type = categoryType(category);
+function localizedCategory(categoryId: string | undefined, category: string | undefined, t: ReturnType<typeof getDictionary>): string {
+  const type = categoryType(categoryId, category);
+  const normalizedId = categoryId?.toLowerCase() ?? "";
 
   if (type === "run_ride") {
+    if (normalizedId === "running") return t.beyondWorkPage.filters.running;
+    if (normalizedId === "cycling") return t.beyondWorkPage.filters.cycling;
     const normalized = category?.toLowerCase() ?? "";
     if (normalized.includes("running")) return t.beyondWorkPage.filters.running;
     return t.beyondWorkPage.filters.cycling;
   }
   if (type === "visual") {
-    return t.beyondWorkPage.filters.photography;
+    return t.beyondWorkPage.filters.other;
   }
   if (type === "cooking") return t.beyondWorkPage.filters.cooking;
   if (type === "achievements") return t.beyondWorkPage.filters.achievements;
   return t.beyondWorkPage.filters.other;
 }
 
-function buildMetaItems(post: Post, t: ReturnType<typeof getDictionary>): MetaItem[] {
-  const type = categoryType(post.category);
+function buildMetaItems(post: Post, t: ReturnType<typeof getDictionary>, language: "eng" | "fi"): MetaItem[] {
+  const type = categoryType(post.categoryId, post.category);
   const items: MetaItem[] = [];
 
-  if (post.category) items.push({ label: t.beyondWorkDetail.category, value: localizedCategory(post.category, t) });
-  items.push({ label: t.beyondWorkDetail.date, value: formatDate(post.date) });
+  if (post.category || post.categoryId) {
+    items.push({ label: t.beyondWorkDetail.category, value: localizedCategory(post.categoryId, post.category, t) });
+  }
+  items.push({ label: t.beyondWorkDetail.date, value: formatDate(post.date, language) });
   if (post.location) items.push({ label: t.beyondWorkDetail.location, value: post.location });
 
   if (type === "run_ride") {
@@ -80,6 +90,7 @@ function buildMetaItems(post: Post, t: ReturnType<typeof getDictionary>): MetaIt
     if (post.difficulty) items.push({ label: t.beyondWorkDetail.difficulty, value: post.difficulty });
     if (post.whatITried) items.push({ label: t.beyondWorkDetail.whatITried, value: post.whatITried });
     if (post.whatILearned) items.push({ label: t.beyondWorkDetail.whatILearned, value: post.whatILearned });
+    if (post.sharedWith) items.push({ label: t.beyondWorkDetail.sharedWith, value: post.sharedWith });
   } else if (type === "achievements") {
     if (post.event) items.push({ label: t.beyondWorkDetail.event, value: post.event });
     if (post.duration) items.push({ label: t.beyondWorkDetail.duration, value: post.duration });
@@ -88,6 +99,8 @@ function buildMetaItems(post: Post, t: ReturnType<typeof getDictionary>): MetaIt
   } else {
     if (post.occasion) {
       items.push({ label: t.beyondWorkDetail.occasion, value: post.occasion });
+      if (post.temperature) items.push({ label: t.beyondWorkDetail.temperature, value: post.temperature });
+      if (post.distanceWalked) items.push({ label: t.beyondWorkDetail.distanceWalked, value: post.distanceWalked });
     } else {
       if (post.route) items.push({ label: t.beyondWorkDetail.route, value: post.route });
       if (post.weather) items.push({ label: t.beyondWorkDetail.weather, value: post.weather });
@@ -99,16 +112,18 @@ function buildMetaItems(post: Post, t: ReturnType<typeof getDictionary>): MetaIt
 }
 
 export async function generateStaticParams() {
-  const posts = await getAllBeyondWorkPosts();
+  const posts = await getAllBeyondWorkPosts(DEFAULT_LANGUAGE);
   return posts.map((post) => ({ slug: post.slug }));
 }
 
 export async function generateMetadata({ params }: BeyondWorkPageProps): Promise<Metadata> {
-  const post = await getBeyondWorkPostBySlug(params.slug);
+  const language = getServerLanguage();
+  const t = getDictionary(language);
+  const post = await getBeyondWorkPostBySlug(params.slug, language);
 
   if (!post) {
     return createMetadata({
-      title: "Journal Entry Not Found",
+      title: t.notFoundPage.label,
       path: `/beyond-work/${params.slug}`
     });
   }
@@ -125,8 +140,8 @@ export default async function BeyondWorkDetailPage({ params }: BeyondWorkPagePro
   const language = getServerLanguage();
   const t = getDictionary(language);
 
-  const post = await getBeyondWorkPostBySlug(params.slug);
-  const posts = await getAllBeyondWorkPosts();
+  const post = await getBeyondWorkPostBySlug(params.slug, language);
+  const posts = await getAllBeyondWorkPosts(language);
 
   if (!post) {
     notFound();
@@ -135,28 +150,68 @@ export default async function BeyondWorkDetailPage({ params }: BeyondWorkPagePro
   const currentIndex = posts.findIndex((entry) => entry.slug === post.slug);
   const previousPost = currentIndex > 0 ? posts[currentIndex - 1] : null;
   const nextPost = currentIndex >= 0 && currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
-  const metaItems = buildMetaItems(post, t);
+  const metaItems = buildMetaItems(post, t, language);
   const highlights = post.highlights.length > 0 ? post.highlights : post.tags;
-  const type = categoryType(post.category);
+  const type = categoryType(post.categoryId, post.category);
   const kitchenLabel = type === "cooking" ? `${t.common.kitchenNotes} · ` : "";
-  const localizedTitle = getLocalizedPostTitle(post.slug, post.title, language);
-  const localizedSummary = getLocalizedPostSummary(post.slug, post.summary, language);
-  const localizedCategoryLabel = post.category ? localizedCategory(post.category, t) : t.common.journal;
-  const showEnglishBody = language !== "fi";
+  const localizedTitle = post.title;
+  const localizedSummary = post.summary;
+  const localizedCategoryLabel = post.category || post.categoryId
+    ? localizedCategory(post.categoryId, post.category, t)
+    : t.common.journal;
   const isCyclingToHailuoto = post.slug === "cycling-to-hailuoto";
   const isLumoLightFestival = post.slug === "lumo-light-festival-oulu";
+  const isWeekendCookieBake = post.slug === "weekend-cookie-bake";
+  const isSailorsHomeMuseum = post.slug === "sailors-home-museum-oulu";
   const shouldShowRouteSnapshot = type === "run_ride" && !isCyclingToHailuoto && !isLumoLightFestival;
-  const shouldShowHighlights = highlights.length > 0 && !isCyclingToHailuoto && !isLumoLightFestival;
+  const shouldShowHighlights =
+    highlights.length > 0 &&
+    !isCyclingToHailuoto &&
+    !isLumoLightFestival &&
+    !isWeekendCookieBake &&
+    !isSailorsHomeMuseum;
+  const shouldShowStorySection = true;
   const galleryImages =
     (isCyclingToHailuoto || isLumoLightFestival) && post.coverImage
       ? post.photos.filter((image) => image !== post.coverImage)
       : post.photos;
   const storyLabel =
     post.slug === "cycling-to-kiiminki-from-oulu"
-      ? "Ride story"
+      ? t.beyondWorkDetail.rideStory
       : post.slug === "running-to-vartto"
-        ? "Run story"
+        ? t.beyondWorkDetail.runStory
         : t.common.story;
+  const ingredientGroups =
+    post.slug === "coffee-cake-weekend-bake"
+      ? [
+          {
+            label: t.beyondWorkDetail.ingredientGroups.base,
+            items: [
+              t.beyondWorkDetail.ingredientGroups.flour,
+              t.beyondWorkDetail.ingredientGroups.bakingPowder,
+              t.beyondWorkDetail.ingredientGroups.salt,
+              t.beyondWorkDetail.ingredientGroups.eggs,
+              t.beyondWorkDetail.ingredientGroups.milk,
+              t.beyondWorkDetail.ingredientGroups.butter
+            ]
+          },
+          {
+            label: t.beyondWorkDetail.ingredientGroups.flavor,
+            items: [
+              t.beyondWorkDetail.ingredientGroups.coffee,
+              t.beyondWorkDetail.ingredientGroups.brownSugar,
+              t.beyondWorkDetail.ingredientGroups.vanilla
+            ]
+          },
+          {
+            label: t.beyondWorkDetail.ingredientGroups.finish,
+            items: [
+              t.beyondWorkDetail.ingredientGroups.heavyCream,
+              t.beyondWorkDetail.ingredientGroups.roastedCashews
+            ]
+          }
+        ]
+      : [];
 
   return (
     <article className="space-y-12">
@@ -168,7 +223,7 @@ export default async function BeyondWorkDetailPage({ params }: BeyondWorkPagePro
         <div className="aspect-[16/9] overflow-hidden rounded-md border border-border">
           <SafeImage
             src={post.image}
-            alt={`${localizedTitle} cover image`}
+            alt={localizedTitle}
             width={1600}
             height={900}
             sizes="(max-width: 768px) 100vw, 1200px"
@@ -180,7 +235,7 @@ export default async function BeyondWorkDetailPage({ params }: BeyondWorkPagePro
         <header className="space-y-4 border-b border-border pb-8">
           <p className="font-mono text-xs uppercase tracking-label text-muted">
             {kitchenLabel}
-            {localizedCategoryLabel} · {formatDate(post.date)}
+            {localizedCategoryLabel} · {formatDate(post.date, language)}
           </p>
           <h1 className="max-w-4xl font-serif text-4xl leading-tight text-text sm:text-6xl">{localizedTitle}</h1>
           <p className="max-w-reading text-base leading-relaxed text-muted">{localizedSummary}</p>
@@ -201,6 +256,7 @@ export default async function BeyondWorkDetailPage({ params }: BeyondWorkPagePro
 
       {shouldShowRouteSnapshot ? (
         <BeyondWorkMap
+          categoryId={post.categoryId}
           category={post.category}
           map={post.map}
           postTitle={localizedTitle}
@@ -211,7 +267,7 @@ export default async function BeyondWorkDetailPage({ params }: BeyondWorkPagePro
       ) : null}
 
       {type === "cooking" ? (
-        <section className="space-y-10">
+        <section className="space-y-6">
           {post.personalNote ? (
             <div className="max-w-reading space-y-2">
               <p className="font-mono text-xs uppercase tracking-label text-muted">{t.beyondWorkDetail.personalNote}</p>
@@ -220,15 +276,32 @@ export default async function BeyondWorkDetailPage({ params }: BeyondWorkPagePro
           ) : null}
 
           {post.ingredients.length > 0 ? (
-            <div className="max-w-reading space-y-3">
-              <p className="font-mono text-xs uppercase tracking-label text-muted">{t.beyondWorkDetail.ingredients}</p>
-              <ul className="grid gap-2">
-                {post.ingredients.map((ingredient) => (
-                  <li key={ingredient} className="rounded-md border border-border px-3 py-2 text-sm text-text">
-                    {ingredient}
-                  </li>
-                ))}
-              </ul>
+            <div className="space-y-3">
+              <p className="font-mono text-xs uppercase tracking-label text-muted">{t.beyondWorkDetail.ingredientsUsed}</p>
+              {ingredientGroups.length > 0 ? (
+                <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                  {ingredientGroups.map((group) => (
+                    <div key={group.label} className="space-y-2 rounded-md border border-border p-3">
+                      <p className="font-mono text-[11px] uppercase tracking-label text-muted">{group.label}</p>
+                      <ul className="flex flex-wrap gap-2">
+                        {group.items.map((ingredient) => (
+                          <li key={`${group.label}-${ingredient}`} className="rounded-md border border-border px-2.5 py-1 text-sm text-text">
+                            {ingredient}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <ul className="flex flex-wrap gap-2">
+                  {post.ingredients.map((ingredient) => (
+                    <li key={ingredient} className="rounded-md border border-border px-2.5 py-1 text-sm text-text">
+                      {ingredient}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           ) : null}
 
@@ -261,16 +334,15 @@ export default async function BeyondWorkDetailPage({ params }: BeyondWorkPagePro
         </section>
       ) : null}
 
-      <section className="space-y-4">
-        <p className="font-mono text-xs uppercase tracking-label text-muted">{storyLabel}</p>
-        {showEnglishBody ? (
-          <div className="content-prose max-w-reading" dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
-        ) : (
-          <p className="max-w-reading text-sm leading-relaxed text-muted">
-            Tämän päiväkirjamerkinnän pitkä teksti on toistaiseksi saatavilla englanniksi.
-          </p>
-        )}
-      </section>
+      {shouldShowStorySection ? (
+        <section className="space-y-4">
+          <p className="font-mono text-xs uppercase tracking-label text-muted">{storyLabel}</p>
+          <div
+            className={isWeekendCookieBake ? "content-prose max-w-none" : "content-prose max-w-reading"}
+            dangerouslySetInnerHTML={{ __html: post.contentHtml }}
+          />
+        </section>
+      ) : null}
 
       <section className="space-y-4 border-t border-border pt-8">
         <p className="font-mono text-xs uppercase tracking-label text-muted">{t.common.gallery}</p>
@@ -278,13 +350,23 @@ export default async function BeyondWorkDetailPage({ params }: BeyondWorkPagePro
           images={galleryImages}
           altBase={localizedTitle}
           aspectClass="aspect-[4/3]"
+          labels={{
+            openImage: t.common.openImage,
+            closeImageViewer: t.common.closeImageViewer,
+            previousImage: t.common.previousImage,
+            nextImage: t.common.nextImage,
+            imageViewer: t.common.imageViewer
+          }}
           enableLightbox={
             post.slug === "cycling-to-kiiminki-from-oulu" ||
             post.slug === "cycling-to-hailuoto" ||
             post.slug === "running-to-vartto" ||
             post.slug === "oyster-hack4health-best-pitch-award" ||
             post.slug === "juhannus-oul" ||
-            post.slug === "lumo-light-festival-oulu"
+            post.slug === "lumo-light-festival-oulu" ||
+            post.slug === "coffee-cake-weekend-bake" ||
+            post.slug === "frozen-sea-walk-nallikari" ||
+            post.slug === "northern-lights-oulu"
           }
         />
       </section>
@@ -304,12 +386,12 @@ export default async function BeyondWorkDetailPage({ params }: BeyondWorkPagePro
         </section>
       ) : null}
 
-      <nav className="grid gap-3 border-t border-border pt-8 sm:grid-cols-2" aria-label="Journal navigation">
+      <nav className="grid gap-3 border-t border-border pt-8 sm:grid-cols-2" aria-label={t.beyondWorkDetail.journalNavigation}>
         {previousPost ? (
           <Link href={`/beyond-work/${previousPost.slug}`} className="surface-card block p-4">
             <p className="font-mono text-xs uppercase tracking-label text-muted">{t.common.previous}</p>
             <p className="pt-1 font-serif text-xl text-text">
-              {getLocalizedPostTitle(previousPost.slug, previousPost.title, language)}
+              {previousPost.title}
             </p>
           </Link>
         ) : (
@@ -320,7 +402,7 @@ export default async function BeyondWorkDetailPage({ params }: BeyondWorkPagePro
           <Link href={`/beyond-work/${nextPost.slug}`} className="surface-card block p-4 sm:text-right">
             <p className="font-mono text-xs uppercase tracking-label text-muted">{t.common.next}</p>
             <p className="pt-1 font-serif text-xl text-text">
-              {getLocalizedPostTitle(nextPost.slug, nextPost.title, language)}
+              {nextPost.title}
             </p>
           </Link>
         ) : (

@@ -1,185 +1,139 @@
-import Image from "next/image";
 import Link from "next/link";
 
-import { SectionHeading } from "@/components/section-heading";
+import { SocialLinkIcon } from "@/components/social-link-icon";
 import { getDictionary } from "@/lib/i18n";
 import { getServerLanguage } from "@/lib/i18n-server";
 import { createMetadata } from "@/lib/metadata";
 
-interface ContactLink {
-  id: "email" | "linkedin" | "medium" | "stackoverflow" | "youtube" | "dribbble";
+interface SocialLink {
+  id: "linkedin" | "github" | "medium" | "stackoverflow";
   href: string;
-  icon: "mail" | "linkedin" | "medium" | "stackoverflow" | "youtube" | "dribbble";
+  icon: "linkedin" | "github" | "medium" | "stackoverflow";
 }
 
-const links: ContactLink[] = [
-  { id: "email", href: "mailto:malith.ileperuma@example.com", icon: "mail" },
-  { id: "linkedin", href: "https://www.linkedin.com/in/malith-ileperuma", icon: "linkedin" },
-  { id: "medium", href: "https://medium.com/@malithileperuma", icon: "medium" },
-  { id: "stackoverflow", href: "https://stackoverflow.com/users/0000000/malith-ileperuma", icon: "stackoverflow" },
-  { id: "youtube", href: "https://www.youtube.com/@malithileperuma", icon: "youtube" },
-  { id: "dribbble", href: "https://dribbble.com/malithileperuma", icon: "dribbble" }
+const socialLinks: SocialLink[] = [
+  { id: "linkedin", href: "https://www.linkedin.com/in/malith-ileperuma-8a6a97167", icon: "linkedin" },
+  { id: "github", href: "https://github.com/Malith97", icon: "github" },
+  { id: "medium", href: "https://medium.com/@mileperuma", icon: "medium" },
+  { id: "stackoverflow", href: "https://stackoverflow.com/users/10895727/malith-ileperuma", icon: "stackoverflow" }
 ];
-
-function LinkIcon({ kind }: { kind: ContactLink["icon"] }) {
-  if (kind === "mail") {
-    return (
-      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
-        <rect x="3" y="5" width="18" height="14" rx="2" />
-        <path d="m4 7 8 6 8-6" />
-      </svg>
-    );
-  }
-
-  if (kind === "linkedin") {
-    return (
-      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
-        <rect x="3" y="3" width="18" height="18" rx="2" />
-        <path d="M8 10v7" />
-        <path d="M8 7h.01" />
-        <path d="M12 17v-4a2 2 0 1 1 4 0v4" />
-      </svg>
-    );
-  }
-
-  if (kind === "medium") {
-    return (
-      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
-        <circle cx="8" cy="12" r="4" />
-        <ellipse cx="16.5" cy="12" rx="2.5" ry="4" />
-        <path d="M21 8v8" />
-      </svg>
-    );
-  }
-
-  if (kind === "stackoverflow") {
-    return (
-      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
-        <path d="M7 17h10" />
-        <path d="M8 14h8" />
-        <path d="M9 11h6" />
-        <path d="m10 8 4 2" />
-        <path d="m12 5 2 3" />
-        <path d="M6 19h12v-4" />
-      </svg>
-    );
-  }
-
-  if (kind === "youtube") {
-    return (
-      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
-        <rect x="2.5" y="6" width="19" height="12" rx="3" />
-        <path d="m10 9 5 3-5 3V9Z" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <circle cx="12" cy="12" r="9" />
-      <path d="M5 9h14" />
-      <path d="M7 18c2-4 8-5 10-5" />
-      <path d="M9 4c3 3 6 9 7 15" />
-    </svg>
-  );
-}
 
 export const metadata = createMetadata({
   title: "Contact",
-  description: "Contact details and social links for Malith Ileperuma.",
+  description: "Recruiter-friendly contact details for DevOps, platform engineering, and cloud reliability roles.",
   path: "/contact"
 });
 
 export default function ContactPage() {
   const language = getServerLanguage();
   const t = getDictionary(language);
-  const contactLabels =
-    language === "fi"
-      ? {
-          email: "Sähköposti",
-          linkedin: "LinkedIn",
-          medium: "Medium",
-          stackoverflow: "Stack Overflow",
-          youtube: "YouTube",
-          dribbble: "Dribbble"
-        }
-      : {
-          email: "Email",
-          linkedin: "LinkedIn",
-          medium: "Medium",
-          stackoverflow: "Stack Overflow",
-          youtube: "YouTube",
-          dribbble: "Dribbble"
-        };
+
+  const socialLabels = {
+    linkedin: "LinkedIn",
+    github: "GitHub",
+    medium: "Medium",
+    stackoverflow: "Stack Overflow"
+  };
 
   return (
-    <div className="space-y-14">
-      <SectionHeading
-        label={t.contactPage.label}
-        title={t.contactPage.title}
-        description={t.contactPage.description}
-      />
+    <div className="space-y-12">
+      <header className="mb-12 space-y-4 border-b border-border pb-8">
+        <p className="font-mono text-xs uppercase tracking-label text-muted">{t.contactPage.label}</p>
+        <h1 className="max-w-4xl font-serif text-4xl leading-tight text-text sm:text-5xl">{t.contactPage.title}</h1>
+        <p className="max-w-reading text-base leading-relaxed text-text">{t.contactPage.hook}</p>
+        <p className="max-w-reading text-base leading-relaxed text-muted">{t.contactPage.description}</p>
+      </header>
 
-      <section className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
-        <div className="surface-card space-y-7 p-5 sm:p-6">
+      <section className="grid gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-start">
+        <article className="surface-card space-y-6 p-6 sm:p-7">
           <div className="space-y-3">
-            <p className="font-serif text-3xl leading-tight text-text">{t.contactPage.introTitle}</p>
-            <p className="max-w-reading text-sm leading-relaxed text-muted">{t.contactPage.introBody}</p>
-            <p className="font-mono text-xs uppercase tracking-label text-accent">
-              {t.common.availability}: {t.contactPage.availabilityValue}
-            </p>
+            <h2 className="font-serif text-3xl leading-tight text-text">{t.contactPage.startConversation}</h2>
+            <p className="max-w-reading text-sm leading-relaxed text-muted">{t.contactPage.intro}</p>
           </div>
 
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-3 border-y border-border py-4">
             <Link
-              href="mailto:malith.ileperuma@example.com"
-              className="inline-flex border border-border px-4 py-2 text-sm text-text transition-colors hover:border-accent hover:text-accent"
-              aria-label="Send email to Malith Ileperuma"
+              href="mailto:mileperuma@gmail.com"
+              className="inline-flex items-center justify-center rounded-md border border-accent bg-accent px-4 py-2 text-sm font-medium text-[#0b0b0b] transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0b0b]"
+              aria-label={t.contactPage.emailCta}
             >
               {t.contactPage.emailCta}
             </Link>
             <Link
-              href="/Malith-Ileperuma-Resume.txt"
-              className="inline-flex border border-border px-4 py-2 text-sm text-text transition-colors hover:border-accent hover:text-accent"
-              aria-label="Download resume"
+              href="/resume/Malith-Ileperuma-Resume.pdf"
+              className="inline-flex items-center justify-center rounded-md border border-border px-4 py-2 text-sm text-text transition-colors hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0b0b]"
+              aria-label={t.contactPage.resumeCta}
             >
               {t.contactPage.resumeCta}
             </Link>
           </div>
 
-          <ul className="grid gap-2 sm:grid-cols-2">
-            {links.map((item) => (
-              <li key={item.id}>
-                <Link
-                  href={item.href}
-                  className="group inline-flex items-center gap-2 text-sm text-text transition-colors hover:text-accent"
-                  target={item.href.startsWith("http") ? "_blank" : undefined}
-                  rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  aria-label={contactLabels[item.id]}
-                >
-                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-border text-muted transition-colors group-hover:border-accent group-hover:text-accent">
-                    <LinkIcon kind={item.icon} />
-                  </span>
-                  <span className="quiet-link">{contactLabels[item.id]}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <figure className="surface-card overflow-hidden p-3">
-          <div className="aspect-[4/5] overflow-hidden rounded-md border border-border">
-            <Image
-              src="/media/photo-23.webp"
-              alt="Malith working with notes and camera gear"
-              width={1200}
-              height={1500}
-              sizes="(max-width: 1024px) 100vw, 38vw"
-              loading="lazy"
-              className="hover-lift image-frame h-full w-full object-cover grayscale transition duration-500 ease-out hover:grayscale-0"
-            />
+          <div className="space-y-2">
+            <p className="font-mono text-xs uppercase tracking-label text-muted">{t.contactPage.responseTime}</p>
+            <p className="text-sm text-muted">
+              <a
+                href="https://www.linkedin.com/in/malith-ileperuma-8a6a97167"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="quiet-link text-accent"
+              >
+                {t.contactPage.quickIntro}
+              </a>
+            </p>
           </div>
-        </figure>
+
+          <dl className="grid gap-3 border-t border-border pt-4 sm:grid-cols-3">
+            <div className="rounded-md border border-border px-3 py-3">
+              <dt className="font-mono text-[11px] uppercase tracking-label text-muted">{t.contactPage.locationLabel}</dt>
+              <dd className="pt-1 text-sm text-text">{t.contactPage.locationValue}</dd>
+            </div>
+            <div className="rounded-md border border-border px-3 py-3">
+              <dt className="font-mono text-[11px] uppercase tracking-label text-muted">{t.contactPage.availabilityLabel}</dt>
+              <dd className="pt-1 text-sm text-text">{t.contactPage.availabilityValue}</dd>
+            </div>
+            <div className="rounded-md border border-border px-3 py-3">
+              <dt className="font-mono text-[11px] uppercase tracking-label text-muted">{t.contactPage.preferenceLabel}</dt>
+              <dd className="pt-1 text-sm text-text">{t.contactPage.preferenceValue}</dd>
+            </div>
+          </dl>
+
+        </article>
+
+        <div className="space-y-6">
+          <article className="surface-card space-y-4 p-5 sm:p-6">
+            <h3 className="font-serif text-2xl text-text">{t.contactPage.openToTitle}</h3>
+            <ul className="grid gap-2 text-sm leading-relaxed text-text">
+              {t.contactPage.openToItems.map((item) => (
+                <li key={item} className="flex items-start gap-2">
+                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-white" aria-hidden="true" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </article>
+
+          <article className="surface-card space-y-4 p-5 sm:p-6">
+            <h3 className="font-serif text-2xl text-text">{t.contactPage.profilesTitle}</h3>
+            <ul className="grid gap-2">
+              {socialLinks.map((item) => (
+                <li key={item.id}>
+                  <Link
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex w-full items-center gap-2 rounded-md border border-border px-3 py-2 text-sm text-text transition-colors hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0b0b]"
+                    aria-label={`${socialLabels[item.id]} · ${t.common.openProfileInNewTab}`}
+                  >
+                    <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-border text-muted transition-colors group-hover:border-accent group-hover:text-accent">
+                      <SocialLinkIcon platform={item.icon} />
+                    </span>
+                    <span>{socialLabels[item.id]}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </article>
+        </div>
       </section>
     </div>
   );
