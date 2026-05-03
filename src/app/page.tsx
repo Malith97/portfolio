@@ -91,9 +91,8 @@ function localizeBeyondCategory(
 const HERO_PORTRAIT_SRC = "/media/malith-portrait.png";
 
 export const metadata = createMetadata({
-  title: "Home",
   description:
-    "DevOps portfolio of Malith Ileperuma with selected case studies, experience highlights, and beyond-work stories.",
+    "Official portfolio of Malith Ileperuma, DevOps Engineer focused on cloud infrastructure, CI/CD, Kubernetes, Terraform, automation, and reliability engineering.",
   path: "/",
   image: HERO_PORTRAIT_SRC,
 });
@@ -193,6 +192,9 @@ export default async function HomePage() {
         <HeroStagger className="relative z-10 max-w-3xl space-y-6">
           <p className="font-mono text-xs uppercase tracking-label text-muted">
             {t.home.label}
+          </p>
+          <p className="text-sm font-medium text-text/90">
+            Malith Ileperuma · DevOps Engineer
           </p>
 
           <HeroTitleReveal className="max-w-[16ch] font-serif text-4xl leading-[1.06] text-text sm:max-w-[18ch] sm:text-5xl lg:max-w-[20ch] lg:text-6xl">

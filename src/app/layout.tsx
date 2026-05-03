@@ -5,7 +5,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { getServerLanguage } from "@/lib/i18n-server";
 import { getDictionary } from "@/lib/i18n";
-import { createMetadata, siteUrl } from "@/lib/metadata";
+import { createMetadata, siteDescription, siteUrl } from "@/lib/metadata";
 
 import "./globals.css";
 import "leaflet/dist/leaflet.css";
@@ -32,19 +32,46 @@ const labelFont = IBM_Plex_Mono({
 
 export const metadata: Metadata = createMetadata();
 
+const normalizedSiteUrl = siteUrl.endsWith("/") ? siteUrl.slice(0, -1) : siteUrl;
+
 const personSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
+  "@id": `${normalizedSiteUrl}#person`,
   name: "Malith Ileperuma",
-  url: siteUrl,
+  givenName: "Malith",
+  familyName: "Ileperuma",
+  url: normalizedSiteUrl,
   jobTitle: "DevOps Engineer",
-  image: `${siteUrl}/media/malith-portrait.jpg`,
+  image: `${normalizedSiteUrl}/media/malith-portrait.jpg`,
+  description: siteDescription,
+  knowsAbout: [
+    "Cloud Infrastructure",
+    "CI/CD",
+    "Kubernetes",
+    "Terraform",
+    "Automation",
+    "Reliability Engineering",
+  ],
   sameAs: [
     "https://www.linkedin.com/in/malith-ileperuma-8a6a97167",
     "https://github.com/Malith97",
     "https://medium.com/@mileperuma",
     "https://stackoverflow.com/users/10895727/malith-ileperuma",
   ],
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${normalizedSiteUrl}#website`,
+  url: normalizedSiteUrl,
+  name: "Malith Ileperuma | DevOps Engineer",
+  description: siteDescription,
+  inLanguage: "en",
+  publisher: {
+    "@id": `${normalizedSiteUrl}#person`,
+  },
 };
 
 export default async function RootLayout({
@@ -80,7 +107,7 @@ export default async function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(personSchema),
+            __html: JSON.stringify([personSchema, websiteSchema]),
           }}
         />
       </body>

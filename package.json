@@ -23,6 +23,7 @@
     "audit:secrets": "node scripts/secret-scan.mjs",
     "audit:deps:usage": "node scripts/dependency-usage-audit.mjs",
     "audit:deps:vuln": "npm audit --audit-level=high",
+    "verify:seo-static": "node scripts/verify-static-seo.mjs",
     "audit:baseline": "npm run lint && npm run typecheck && npm run validate:content && npm run build && npm run audit:bundle && npm run audit:images && npm run audit:cwv && npm run audit:links && npm run audit:deps:usage",
     "validate:content": "tsx scripts/validate-content.ts",
     "check": "npm run lint && npm run typecheck && npm run validate:content && npm run build"
