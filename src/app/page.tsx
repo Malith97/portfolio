@@ -15,6 +15,7 @@ import {
 } from "@/components/motion/primitives";
 import { SafeImage } from "@/components/safe-image";
 import { TechBadge, TechIcon } from "@/components/tech-badge";
+import { HomeHeroTitleText } from "@/components/home-hero-title-text";
 import { formatDate } from "@/lib/format";
 import { getAllBeyondWorkPosts, getAllCaseStudies } from "@/lib/content";
 import {
@@ -140,6 +141,8 @@ function toConciseSummary(text: string): string {
 export default async function HomePage() {
   const language = await getServerLanguage();
   const t = getDictionary(language);
+  const englishDictionary = getDictionary("eng");
+  const finnishDictionary = getDictionary("fi");
 
   const caseStudies = await getAllCaseStudies(language);
   const beyondWorkPosts = await getAllBeyondWorkPosts(language);
@@ -193,7 +196,11 @@ export default async function HomePage() {
           </p>
 
           <HeroTitleReveal className="max-w-[16ch] font-serif text-4xl leading-[1.06] text-text sm:max-w-[18ch] sm:text-5xl lg:max-w-[20ch] lg:text-6xl">
-            {t.home.heroTitle}
+            <HomeHeroTitleText
+              fallbackLanguage={language}
+              eng={englishDictionary.home.heroTitle}
+              fi={finnishDictionary.home.heroTitle}
+            />
           </HeroTitleReveal>
 
           <HeroStaggerItem delay={0.56}>

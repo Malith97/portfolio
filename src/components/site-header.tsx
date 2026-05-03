@@ -8,11 +8,14 @@ import { motion, useReducedMotion } from "framer-motion";
 
 import {
   getDictionary,
-  LANGUAGE_COOKIE_KEY,
-  LANGUAGE_STORAGE_KEY,
   Language,
-  normalizeLanguage
+  normalizeLanguage,
 } from "@/lib/i18n";
+import {
+  getPreferredLanguage,
+  notifyLanguageChange,
+  persistLanguagePreference,
+} from "@/lib/i18n-client";
 
 interface SiteHeaderProps {
   initialLanguage: Language;
@@ -24,30 +27,11 @@ export function SiteHeader({ initialLanguage }: SiteHeaderProps) {
   const [language, setLanguage] = useState<Language>(initialLanguage);
   const t = useMemo(() => getDictionary(language), [language]);
 
-  const persistLanguage = (nextLanguage: Language) => {
-    window.localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLanguage);
-    document.cookie = `${LANGUAGE_COOKIE_KEY}=${nextLanguage}; Path=/; Max-Age=31536000; SameSite=Lax`;
-  };
-
   useEffect(() => {
-    const stored = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
-    const storedLanguage = stored ? normalizeLanguage(stored) : null;
-
-    if (!storedLanguage) {
-      persistLanguage(initialLanguage);
-      setLanguage(initialLanguage);
-      return;
-    }
-
-    if (storedLanguage !== initialLanguage) {
-      persistLanguage(storedLanguage);
-      setLanguage(storedLanguage);
-      window.location.replace(pathname || "/");
-      return;
-    }
-
-    setLanguage(initialLanguage);
-  }, [initialLanguage, pathname]);
+    const preferredLanguage = getPreferredLanguage(initialLanguage);
+    persistLanguagePreference(preferredLanguage);
+    setLanguage(preferredLanguage);
+  }, [initialLanguage]);
 
   const navigation = [
     { href: "/", label: t.nav.home },
@@ -64,8 +48,8 @@ export function SiteHeader({ initialLanguage }: SiteHeaderProps) {
     }
 
     setLanguage(normalizedNext);
-    persistLanguage(normalizedNext);
-    window.location.replace(pathname || "/");
+    persistLanguagePreference(normalizedNext);
+    notifyLanguageChange(normalizedNext);
   };
 
   const isActiveLink = (href: string): boolean => {

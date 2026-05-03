@@ -1,60 +1,52 @@
-# Testing Report
+# Testing Report (Production Fix Pass)
 
 ## Scope
-This report reflects verified test outputs from the current repository state.
+This report captures validated test and build outputs after fixing:
+- beyond-work category filtering
+- case studies hero copy
+- language toggle refresh-loop behavior
+- failing language toggle smoke test
 
-## Completed Test Setup
-### Unit/integration tests present
-- `src/lib/i18n.test.ts`
-- `src/lib/format.test.ts`
-- `src/lib/metadata.test.ts`
-- `src/lib/content.test.ts`
-- `src/components/section-heading.test.tsx`
-- `src/components/site-footer.test.tsx`
-
-### E2E tests present
-- `e2e/smoke.spec.ts`
-  - homepage core hero content
-  - navigation to case studies
-  - Finnish locale rendering via cookie
-
-### Tooling in use
-- Vitest + jsdom + Testing Library
-- Playwright (Chromium)
-- V8 coverage reports
-
-## Measured Results (Verified)
-### `npm test`
+## Test and Build Results
+### `npm run lint`
 - Status: pass
-- Test files: 6 passed
-- Tests: 14 passed
+- Notes: no ESLint warnings or errors.
+
+### `npm run format:check`
+- Status: pass
+- Notes: all checked files match Prettier style.
+
+### `npm run typecheck`
+- Status: pass
+- Notes: TypeScript completed with no errors.
 
 ### `npm run test:unit`
 - Status: pass
-- Test files: 6 passed
-- Tests: 14 passed
-- Coverage:
-  - Lines: 16.99%
-  - Statements: 16.99%
-  - Branches: 74.31%
-  - Functions: 91.89%
+- Files: 7 passed
+- Tests: 17 passed
+- Includes new `src/app/beyond-work/filtering.test.ts` coverage.
 
 ### `npm run test:coverage`
-- Not rerun in this verification pass.
-- Assumption: expected to match `test:unit` because both run `vitest run --coverage`.
+- Status: pass
+- Files: 7 passed
+- Tests: 17 passed
+
+### `npm run build`
+- Status: pass
+- Notes: static export completed successfully (`out` generated).
 
 ### `npm run test:e2e`
-- Status: fail (current verified run)
-- Failure mode: all 3 tests timed out at `page.goto("/")` with teardown timeout/trace archive issues.
-- Useful context:
-  - Next dev warning shown: cross-origin request notice for `/ _next/*` and recommendation to set `allowedDevOrigins`.
+- Status: pass
+- Files: `e2e/smoke.spec.ts`
+- Results: 4 passed, 0 failed
 
-## Known Limitations
-1. E2E currently unstable in this environment and not a reliable gate at the moment.
-2. Coverage remains low for UI-heavy modules despite passing thresholds.
-3. No visual regression suite is configured.
+## E2E Stability Notes
+To eliminate teardown/timeouts and selector collisions observed earlier in this environment:
+1. Playwright host/origin was aligned to `localhost`.
+2. `fullyParallel` was disabled for deterministic smoke execution.
+3. `allowedDevOrigins` was added to `next.config.mjs` for local dev host compatibility.
+4. language toggle button selectors use `exact: true` to avoid Next.js Dev Tools button collisions.
 
-## Recommendations
-1. Stabilize E2E by adjusting Playwright web server strategy (or using `next start` for smoke tests) and evaluating `allowedDevOrigins` for dev.
-2. Add targeted tests for map/lightbox/header interactions and network failure paths.
-3. Raise line/statement thresholds incrementally once flaky E2E is resolved.
+## Remaining Limitations
+1. Non-blocking environment warnings (`NO_COLOR` with `FORCE_COLOR`) still appear during Playwright runs.
+2. UI-language synchronization is intentionally minimal and focused on reported routes/behaviors.

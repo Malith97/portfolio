@@ -16,7 +16,9 @@ test("primary navigation opens case studies", async ({ page }) => {
 
   await expect(page).toHaveURL(/\/case-studies$/);
   await expect(
-    page.getByRole("heading", { name: "Selected Work" }),
+    page.getByRole("heading", {
+      name: "Infrastructure & Delivery Case Studies",
+    }),
   ).toBeVisible();
 });
 
@@ -29,7 +31,7 @@ test("Finnish locale renders when language cookie is set", async ({
     {
       name: "portfolio-lang",
       value: "fi",
-      url: baseURL ?? "http://127.0.0.1:4173",
+      url: baseURL ?? "http://localhost:4173",
     },
   ]);
 
@@ -44,33 +46,36 @@ test("language toggle switches both ways and persists after refresh", async ({
   page,
 }) => {
   await page.goto("/");
+  await expect(
+    page.getByRole("heading", {
+      name: /DevOps Engineer building resilient cloud systems/i,
+    }),
+  ).toBeVisible();
 
-  await page.getByRole("button", { name: "FI" }).click();
+  await page.getByRole("button", { name: "FI", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: /DevOps-insinööri/i }).first(),
   ).toBeVisible();
   await expect(page.getByRole("link", { name: "Työnäytteet" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "FI" })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
+  await expect(
+    page.getByRole("button", { name: "FI", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
 
   await page.reload();
   await expect(
     page.getByRole("heading", { name: /DevOps-insinööri/i }).first(),
   ).toBeVisible();
 
-  await page.getByRole("button", { name: "EN" }).click();
+  await page.getByRole("button", { name: "EN", exact: true }).click();
   await expect(
     page.getByRole("heading", {
       name: /DevOps Engineer building resilient cloud systems/i,
     }),
   ).toBeVisible();
   await expect(page.getByRole("link", { name: "Case Studies" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "EN" })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
+  await expect(
+    page.getByRole("button", { name: "EN", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
 
   await page.reload();
   await expect(

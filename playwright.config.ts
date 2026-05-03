@@ -8,13 +8,13 @@ export default defineConfig({
   expect: {
     timeout: 10_000,
   },
-  fullyParallel: true,
+  fullyParallel: false,
   retries: process.env.CI ? 2 : 0,
   reporter: process.env.CI
     ? [["github"], ["html", { open: "never" }]]
     : [["list"]],
   use: {
-    baseURL: `http://127.0.0.1:${PORT}`,
+    baseURL: `http://localhost:${PORT}`,
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
     video: "retain-on-failure",
@@ -26,8 +26,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: `npm run dev -- --port ${PORT}`,
-    url: `http://127.0.0.1:${PORT}`,
+    command: `npm run dev -- --hostname localhost --port ${PORT}`,
+    url: `http://localhost:${PORT}`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },

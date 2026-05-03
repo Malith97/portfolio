@@ -137,9 +137,10 @@ export const fi: Dictionary = {
       tools: "Käytetyt työkalut"
     },
     caseStudiesPage: {
-      label: "Työnäytteet",
-      title: "Valitut työt",
-      description: "Vain vahvimmat tuloksiin keskittyvät kokonaisuudet.",
+      label: "CASE STUDIES",
+      title: "Infra- ja toimitusputken työnäytteet",
+      description:
+        "Käytännön DevOps-, pilvi-, automaatio- ja luotettavuustyötä, joka keskittyy mitattaviin toimitustuloksiin.",
       allLabel: "Kaikki työnäytteet",
       fallbackOutcome: "Operatiiviset parannukset"
     },
