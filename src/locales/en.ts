@@ -139,9 +139,10 @@ export const en: Dictionary = {
       tools: "Tools used"
     },
     caseStudiesPage: {
-      label: "Case Studies",
-      title: "Selected Work",
-      description: "Only the strongest outcome-focused deliveries.",
+      label: "CASE STUDIES",
+      title: "Infrastructure & Delivery Case Studies",
+      description:
+        "Real-world DevOps, cloud, automation, and reliability work focused on measurable delivery outcomes.",
       allLabel: "All case studies",
       fallbackOutcome: "Operational improvements"
     },

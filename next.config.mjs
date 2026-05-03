@@ -3,6 +3,7 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   output: "export",
+  allowedDevOrigins: ["localhost", "127.0.0.1"],
   images: {
     unoptimized: true,
     formats: ["image/avif", "image/webp"],
