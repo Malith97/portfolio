@@ -5,7 +5,7 @@ describe("createMetadata", () => {
     const metadata = createMetadata();
 
     expect(metadata.title).toBe("Malith Ileperuma | DevOps Engineer");
-    expect(metadata.alternates?.canonical).toBe("https://malithileperuma.dev/");
+    expect(metadata.alternates?.canonical).toBe("https://malithileperuma.com/");
     expect(metadata.openGraph?.images).toBeDefined();
   });
 
@@ -20,7 +20,7 @@ describe("createMetadata", () => {
     expect(metadata.title).toBe("Case Studies | Malith Ileperuma");
     expect(metadata.description).toBe("Practical work");
     expect(metadata.alternates?.canonical).toBe(
-      "https://malithileperuma.dev/case-studies",
+      "https://malithileperuma.com/case-studies",
     );
   });
 });

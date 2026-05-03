@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://malithileperuma.dev";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://malithileperuma.com";
 
 export const siteDescription =
   "Minimal portfolio for Malith Ileperuma, a DevOps Engineer in Finland focused on reliable cloud systems and practical automation.";
