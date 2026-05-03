@@ -87,7 +87,7 @@ function localizeBeyondCategory(
 
   return t.beyondWorkPage.filters.other;
 }
-const HERO_PORTRAIT_SRC = "/media/malith-portrait.jpg";
+const HERO_PORTRAIT_SRC = "/media/malith-portrait.png";
 
 export const metadata = createMetadata({
   title: "Home",
