@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import { Fraunces, IBM_Plex_Mono, Inter } from "next/font/google";
 
 import { SiteFooter } from "@/components/site-footer";
@@ -53,7 +52,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const nonce = (await headers()).get("x-nonce") ?? undefined;
   const language = await getServerLanguage();
   const t = getDictionary(language);
 
@@ -80,7 +78,6 @@ export default async function RootLayout({
           <SiteFooter builtWithText={t.footer.builtWithCare} />
         </div>
         <script
-          nonce={nonce}
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(personSchema),

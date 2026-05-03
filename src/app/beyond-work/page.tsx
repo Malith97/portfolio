@@ -19,27 +19,6 @@ const filters = [
 
 type FilterKey = (typeof filters)[number]["key"];
 
-interface BeyondWorkPageProps {
-  searchParams?: Promise<{
-    category?: string | string[];
-    page?: string | string[];
-  }>;
-}
-
-const POSTS_PER_PAGE = 6;
-
-function normalizeFilter(input?: string | string[]): FilterKey {
-  const value = Array.isArray(input) ? input[0] : input;
-  const normalized = value?.toLowerCase();
-  return filters.some((filter) => filter.key === normalized) ? (normalized as FilterKey) : "all";
-}
-
-function normalizePage(input?: string | string[]): number {
-  const value = Array.isArray(input) ? input[0] : input;
-  const parsed = Number.parseInt(value ?? "1", 10);
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
-}
-
 function toFilterKey(categoryId?: string, category?: string): Exclude<FilterKey, "all"> {
   const normalizedId = categoryId?.toLowerCase() ?? "";
   if (normalizedId === "running") return "running";
@@ -95,25 +74,14 @@ export const metadata = createMetadata({
   path: "/beyond-work"
 });
 
-export default async function BeyondWorkPage({ searchParams }: BeyondWorkPageProps) {
-  const resolvedSearchParams = searchParams ? await searchParams : undefined;
+export default async function BeyondWorkPage() {
   const language = await getServerLanguage();
   const t = getDictionary(language);
 
-  const selectedFilter = normalizeFilter(resolvedSearchParams?.category);
-  const requestedPage = normalizePage(resolvedSearchParams?.page);
+  const selectedFilter: FilterKey = "all";
   const posts = await getAllBeyondWorkPosts(language);
-  const isAllView = selectedFilter === "all";
-
-  const filteredPosts =
-    isAllView
-      ? posts
-      : posts.filter((post) => toFilterKey(post.categoryId, post.category) === selectedFilter);
-  const totalPages = isAllView ? Math.max(1, Math.ceil(filteredPosts.length / POSTS_PER_PAGE)) : 1;
-  const currentPage = isAllView ? Math.min(requestedPage, totalPages) : 1;
-  const paginatedPosts = isAllView
-    ? filteredPosts.slice((currentPage - 1) * POSTS_PER_PAGE, currentPage * POSTS_PER_PAGE)
-    : filteredPosts;
+  const filteredPosts = posts;
+  const paginatedPosts = filteredPosts;
   const hasFilteredPosts = filteredPosts.length > 0;
 
   return (
@@ -127,22 +95,17 @@ export default async function BeyondWorkPage({ searchParams }: BeyondWorkPagePro
       <nav aria-label={t.beyondWorkPage.categoriesAriaLabel} className="-mt-4 border-b border-border pb-5">
         <ul className="flex flex-wrap gap-2">
           {filters.map((filter) => {
-            const href = filter.key === "all" ? "/beyond-work" : `/beyond-work?category=${filter.key}`;
             const isActive = selectedFilter === filter.key;
 
             return (
               <li key={filter.key}>
-                <Link
-                  href={href}
-                  className={`inline-flex rounded-md border px-3 py-1.5 text-xs uppercase tracking-label transition-colors ${
-                    isActive
-                      ? "border-accent text-accent"
-                      : "border-border text-muted hover:border-accent hover:text-accent"
+                <span
+                  className={`inline-flex rounded-md border px-3 py-1.5 text-xs uppercase tracking-label ${
+                    isActive ? "border-accent text-accent" : "border-border text-muted"
                   }`}
-                  aria-current={isActive ? "page" : undefined}
                 >
                   {t.beyondWorkPage.filters[filter.key]}
-                </Link>
+                </span>
               </li>
             );
           })}
@@ -203,42 +166,6 @@ export default async function BeyondWorkPage({ searchParams }: BeyondWorkPagePro
             ))}
           </div>
 
-          {isAllView && totalPages > 1 ? (
-            <nav
-              className="flex flex-col items-center justify-center gap-3 border-t border-border pt-5 sm:flex-row sm:justify-between"
-              aria-label={`${t.beyondWorkPage.label} ${t.common.pagination}`}
-            >
-              {currentPage > 1 ? (
-                <Link
-                  href={`/beyond-work?page=${currentPage - 1}#beyond-work-grid`}
-                  className="inline-flex rounded-md border border-border px-4 py-2 text-xs uppercase tracking-label text-muted transition-colors hover:border-accent hover:text-accent"
-                >
-                  {t.common.previous}
-                </Link>
-              ) : (
-                <span className="inline-flex cursor-not-allowed rounded-md border border-border/60 px-4 py-2 text-xs uppercase tracking-label text-muted/50">
-                  {t.common.previous}
-                </span>
-              )}
-
-              <p className="font-mono text-xs uppercase tracking-label text-muted">
-                {t.common.page} {currentPage} {t.common.of} {totalPages}
-              </p>
-
-              {currentPage < totalPages ? (
-                <Link
-                  href={`/beyond-work?page=${currentPage + 1}#beyond-work-grid`}
-                  className="inline-flex rounded-md border border-border px-4 py-2 text-xs uppercase tracking-label text-muted transition-colors hover:border-accent hover:text-accent"
-                >
-                  {t.common.next}
-                </Link>
-              ) : (
-                <span className="inline-flex cursor-not-allowed rounded-md border border-border/60 px-4 py-2 text-xs uppercase tracking-label text-muted/50">
-                  {t.common.next}
-                </span>
-              )}
-            </nav>
-          ) : null}
         </div>
       ) : (
         <section className="surface-card p-6">

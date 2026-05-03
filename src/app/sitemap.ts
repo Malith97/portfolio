@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 const baseUrl = "https://malithileperuma.dev";
+export const dynamic = "force-static";
 
 const pages = ["", "/story", "/work-education", "/case-studies", "/beyond-work", "/contact"];
 
