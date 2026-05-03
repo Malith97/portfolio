@@ -52,8 +52,8 @@ function ArticleImage({
   );
 }
 
-export function KubernetesRbacOktaEditorial() {
-  const language = getServerLanguage();
+export async function KubernetesRbacOktaEditorial() {
+  const language = await getServerLanguage();
   const t = getDictionary(language);
   const title = getLocalizedPostTitle("kubernetes-rbac-okta", "Supercharge Kubernetes RBAC with Okta", language);
   const summary = getLocalizedPostSummary(

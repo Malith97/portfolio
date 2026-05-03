@@ -56,8 +56,8 @@ function resolveMode(categoryId: string | undefined, category: string | undefine
   return normalized === "cycling" ? "bike" : "run";
 }
 
-export function BeyondWorkMap({ categoryId, category, map, postTitle, sectionLabel, className, view = "detail" }: BeyondWorkMapProps) {
-  const language = getServerLanguage();
+export async function BeyondWorkMap({ categoryId, category, map, postTitle, sectionLabel, className, view = "detail" }: BeyondWorkMapProps) {
+  const language = await getServerLanguage();
   const t = getDictionary(language);
 
   if (view !== "detail") {

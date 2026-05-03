@@ -15,7 +15,7 @@ export const metadata = createMetadata({
 });
 
 export default async function CaseStudiesPage() {
-  const language = getServerLanguage();
+  const language = await getServerLanguage();
   const t = getDictionary(language);
   const fallbackOutcome = t.caseStudiesPage.fallbackOutcome;
 

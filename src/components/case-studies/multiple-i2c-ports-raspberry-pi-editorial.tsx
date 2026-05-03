@@ -55,8 +55,8 @@ function ArticleImage({
   );
 }
 
-export function MultipleI2cPortsRaspberryPiEditorial() {
-  const language = getServerLanguage();
+export async function MultipleI2cPortsRaspberryPiEditorial() {
+  const language = await getServerLanguage();
   const t = getDictionary(language);
   const title = getLocalizedPostTitle(
     "multiple-i2c-ports-raspberry-pi",

@@ -24,8 +24,8 @@ export const metadata = createMetadata({
   path: "/contact"
 });
 
-export default function ContactPage() {
-  const language = getServerLanguage();
+export default async function ContactPage() {
+  const language = await getServerLanguage();
   const t = getDictionary(language);
 
   const socialLabels = {

@@ -11,27 +11,36 @@ import {
   HeroTitleReveal,
   HoverLift,
   StaggerInView,
-  StaggerItem
+  StaggerItem,
 } from "@/components/motion/primitives";
 import { SafeImage } from "@/components/safe-image";
 import { TechBadge, TechIcon } from "@/components/tech-badge";
 import { formatDate } from "@/lib/format";
 import { getAllBeyondWorkPosts, getAllCaseStudies } from "@/lib/content";
+import {
+  getCompanyInitials,
+  localizeEducationRole,
+  localizeWorkRole,
+  resolveCompanyLogo,
+} from "@/lib/experience";
 import { getDictionary } from "@/lib/i18n";
 import { getServerLanguage } from "@/lib/i18n-server";
 import { createMetadata } from "@/lib/metadata";
 import {
-  type ExperienceItem,
   certifications,
   experienceTimeline,
   getLocalizedText,
   professionalSummary,
   selectedBeyondWorkSlugs,
   sortExperienceByMostRecent,
-  toolCategories
+  toolCategories,
 } from "@/lib/profile";
 
-function selectItemsBySlug<T extends { slug: string }>(items: T[], slugs: readonly string[], limit: number): T[] {
+function selectItemsBySlug<T extends { slug: string }>(
+  items: T[],
+  slugs: readonly string[],
+  limit: number,
+): T[] {
   const selected: T[] = slugs
     .map((slug) => items.find((item) => item.slug === slug))
     .filter((item): item is T => Boolean(item));
@@ -41,7 +50,9 @@ function selectItemsBySlug<T extends { slug: string }>(items: T[], slugs: readon
   }
 
   const selectedSlugs = new Set(selected.map((item) => item.slug));
-  const fallback = items.filter((item) => !selectedSlugs.has(item.slug)).slice(0, limit - selected.length);
+  const fallback = items
+    .filter((item) => !selectedSlugs.has(item.slug))
+    .slice(0, limit - selected.length);
   return [...selected, ...fallback];
 }
 
@@ -49,13 +60,14 @@ function localizeBeyondCategory(
   categoryId: string | undefined,
   category: string | undefined,
   language: "eng" | "fi",
-  t: ReturnType<typeof getDictionary>
+  t: ReturnType<typeof getDictionary>,
 ): string {
   const normalizedId = categoryId?.toLowerCase();
   if (normalizedId === "running") return t.beyondWorkPage.filters.running;
   if (normalizedId === "cycling") return t.beyondWorkPage.filters.cycling;
   if (normalizedId === "cooking") return t.beyondWorkPage.filters.cooking;
-  if (normalizedId === "achievements") return t.beyondWorkPage.filters.achievements;
+  if (normalizedId === "achievements")
+    return t.beyondWorkPage.filters.achievements;
   if (normalizedId === "other") return t.beyondWorkPage.filters.other;
 
   if (!category) {
@@ -70,99 +82,25 @@ function localizeBeyondCategory(
   if (normalized.includes("running")) return t.beyondWorkPage.filters.running;
   if (normalized.includes("cycling")) return t.beyondWorkPage.filters.cycling;
   if (normalized.includes("cooking")) return t.beyondWorkPage.filters.cooking;
-  if (normalized.includes("achievements")) return t.beyondWorkPage.filters.achievements;
+  if (normalized.includes("achievements"))
+    return t.beyondWorkPage.filters.achievements;
 
   return t.beyondWorkPage.filters.other;
 }
-
-function localizeEducationRole(
-  role: string,
-  language: "eng" | "fi",
-  t: ReturnType<typeof getDictionary>
-): string {
-  if (language !== "fi") {
-    return role;
-  }
-
-  if (role === "Finnish Language Studies (A1–B2)") {
-    return `${t.workEducationPage.roleLabels.finnishLanguageStudies} (A1–B2)`;
-  }
-
-  if (role === "BSc (Hons) Computer Science") {
-    return `${t.workEducationPage.roleLabels.bachelorOfScience} (Hons), Tietojenkäsittelytiede`;
-  }
-
-  if (role === "High School") {
-    return t.workEducationPage.roleLabels.highSchool;
-  }
-
-  return role;
-}
-
-function localizeWorkRole(role: string, language: "eng" | "fi"): string {
-  if (language !== "fi") {
-    return role;
-  }
-
-  if (role === "DevOps Engineer") {
-    return "DevOps-insinööri";
-  }
-
-  if (role === "Software Engineer") {
-    return "Ohjelmistoinsinööri";
-  }
-
-  return role;
-}
-
-const HERO_PORTRAIT_SRC = "/media/malith-portrait.png";
+const HERO_PORTRAIT_SRC = "/media/malith-portrait.jpg";
 
 export const metadata = createMetadata({
   title: "Home",
-  description: "DevOps portfolio of Malith Ileperuma with selected case studies, experience highlights, and beyond-work stories.",
+  description:
+    "DevOps portfolio of Malith Ileperuma with selected case studies, experience highlights, and beyond-work stories.",
   path: "/",
-  image: HERO_PORTRAIT_SRC
+  image: HERO_PORTRAIT_SRC,
 });
 
-const COMPANY_LOGO_FALLBACK_MAP: Array<{ keyword: string; logo: string }> = [
-  { keyword: "almosafer", logo: "/logos/almosafer.svg" },
-  { keyword: "oracle", logo: "/logos/oracle.svg" },
-  { keyword: "london stock exchange", logo: "/logos/london-stock-exchange.png" },
-  { keyword: "zebra", logo: "/logos/zebra-technologies.png" },
-  { keyword: "sy labs", logo: "/logos/sylabs.png" },
-  { keyword: "sylabs", logo: "/logos/sylabs.png" }
-];
-
-function resolveCompanyLogo(item: ExperienceItem): string | null {
-  if (item.companyLogo) {
-    return item.companyLogo;
-  }
-
-  const normalized = item.company.toLowerCase();
-  const mapped = COMPANY_LOGO_FALLBACK_MAP.find((entry) => normalized.includes(entry.keyword));
-  return mapped?.logo ?? null;
-}
-
-function getCompanyInitials(company: string): string {
-  const words = company
-    .split(/[\s&/-]+/)
-    .map((token) => token.trim())
-    .filter(Boolean)
-    .slice(0, 2);
-
-  if (words.length === 0) {
-    return "CO";
-  }
-
-  if (words.length === 1) {
-    return words[0].slice(0, 2).toUpperCase();
-  }
-
-  return `${words[0].charAt(0)}${words[1].charAt(0)}`.toUpperCase();
-}
-
-const METRIC_HIGHLIGHT_SPLIT_REGEX = /(~?\$\d+(?:[.,]\d+)?(?:K|M|B)?(?:\/[a-zA-Z]+)?|\d+(?:[.,]\d+)?%)/g;
-const METRIC_HIGHLIGHT_MATCH_REGEX = /^(~?\$\d+(?:[.,]\d+)?(?:K|M|B)?(?:\/[a-zA-Z]+)?|\d+(?:[.,]\d+)?%)$/;
+const METRIC_HIGHLIGHT_SPLIT_REGEX =
+  /(~?\$\d+(?:[.,]\d+)?(?:K|M|B)?(?:\/[a-zA-Z]+)?|\d+(?:[.,]\d+)?%)/g;
+const METRIC_HIGHLIGHT_MATCH_REGEX =
+  /^(~?\$\d+(?:[.,]\d+)?(?:K|M|B)?(?:\/[a-zA-Z]+)?|\d+(?:[.,]\d+)?%)$/;
 
 function renderMetricText(text: string): ReactNode {
   return text.split(METRIC_HIGHLIGHT_SPLIT_REGEX).map((part, index) => {
@@ -189,7 +127,8 @@ function toConciseSummary(text: string): string {
   }
 
   const [firstSentence] = normalized.split(/(?<=[.!?])\s+/);
-  const concise = firstSentence && firstSentence.length > 0 ? firstSentence : normalized;
+  const concise =
+    firstSentence && firstSentence.length > 0 ? firstSentence : normalized;
 
   if (concise.length <= 150) {
     return concise;
@@ -199,20 +138,37 @@ function toConciseSummary(text: string): string {
 }
 
 export default async function HomePage() {
-  const language = getServerLanguage();
+  const language = await getServerLanguage();
   const t = getDictionary(language);
 
   const caseStudies = await getAllCaseStudies(language);
   const beyondWorkPosts = await getAllBeyondWorkPosts(language);
 
-  const newestCaseStudies = [...caseStudies].sort((a, b) => b.date.localeCompare(a.date));
-  const selectedWork = newestCaseStudies.length > 3 ? newestCaseStudies.slice(0, 3) : newestCaseStudies;
-  const selectedBeyondWork = selectItemsBySlug(beyondWorkPosts, selectedBeyondWorkSlugs, 3);
+  const newestCaseStudies = [...caseStudies].sort((a, b) =>
+    b.date.localeCompare(a.date),
+  );
+  const selectedWork =
+    newestCaseStudies.length > 3
+      ? newestCaseStudies.slice(0, 3)
+      : newestCaseStudies;
+  const selectedBeyondWork = selectItemsBySlug(
+    beyondWorkPosts,
+    selectedBeyondWorkSlugs,
+    3,
+  );
   const selectedWorkGridClass =
-    selectedWork.length === 2 ? "grid gap-4 md:grid-cols-2" : selectedWork.length >= 3 ? "grid gap-4 md:grid-cols-2 lg:grid-cols-3" : "grid gap-4";
+    selectedWork.length === 2
+      ? "grid gap-4 md:grid-cols-2"
+      : selectedWork.length >= 3
+        ? "grid gap-4 md:grid-cols-2 lg:grid-cols-3"
+        : "grid gap-4";
 
-  const workExperience = sortExperienceByMostRecent(experienceTimeline.filter((item) => item.kind === "work"));
-  const educationItems = sortExperienceByMostRecent(experienceTimeline.filter((item) => item.kind === "education"));
+  const workExperience = sortExperienceByMostRecent(
+    experienceTimeline.filter((item) => item.kind === "work"),
+  );
+  const educationItems = sortExperienceByMostRecent(
+    experienceTimeline.filter((item) => item.kind === "education"),
+  );
   const homepageCertifications = certifications.slice(0, 5);
   const recentExperiencePreview = workExperience.slice(0, 2).map((item) => ({
     source: item,
@@ -223,7 +179,7 @@ export default async function HomePage() {
     impacts: [...item.impactBullets, ...(item.additionalImpactBullets ?? [])]
       .slice(0, 5)
       .map((impactItem) => getLocalizedText(impactItem, language)),
-    stackPreview: item.tech
+    stackPreview: item.tech,
   }));
 
   return (
@@ -232,14 +188,18 @@ export default async function HomePage() {
         <HeroAmbientBackground />
 
         <HeroStagger className="relative z-10 max-w-3xl space-y-6">
-          <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.label}</p>
+          <p className="font-mono text-xs uppercase tracking-label text-muted">
+            {t.home.label}
+          </p>
 
           <HeroTitleReveal className="max-w-[16ch] font-serif text-4xl leading-[1.06] text-text sm:max-w-[18ch] sm:text-5xl lg:max-w-[20ch] lg:text-6xl">
             {t.home.heroTitle}
           </HeroTitleReveal>
 
           <HeroStaggerItem delay={0.56}>
-            <p className="max-w-2xl text-base leading-relaxed text-muted sm:text-lg">{t.home.heroSummary}</p>
+            <p className="max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
+              {t.home.heroSummary}
+            </p>
           </HeroStaggerItem>
 
           <p
@@ -252,7 +212,9 @@ export default async function HomePage() {
             {t.common.currentlyInFinland} 🇫🇮
           </p>
 
-          <p className="font-mono text-xs uppercase tracking-label text-accent">{t.home.heroMeta}</p>
+          <p className="font-mono text-xs uppercase tracking-label text-accent">
+            {t.home.heroMeta}
+          </p>
 
           <HeroCtaRow className="flex flex-wrap gap-3 pt-1">
             <Link
@@ -294,8 +256,12 @@ export default async function HomePage() {
 
       <section className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
         <FadeInOnView className="space-y-5">
-          <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.summaryLabel}</p>
-          <h2 className="font-serif text-3xl leading-tight text-text sm:text-4xl">{t.home.summaryTitle}</h2>
+          <p className="font-mono text-xs uppercase tracking-label text-muted">
+            {t.home.summaryLabel}
+          </p>
+          <h2 className="font-serif text-3xl leading-tight text-text sm:text-4xl">
+            {t.home.summaryTitle}
+          </h2>
           <div className="space-y-4 text-sm leading-relaxed text-muted sm:text-base">
             {professionalSummary.map((paragraph) => (
               <p key={paragraph.eng}>{getLocalizedText(paragraph, language)}</p>
@@ -306,11 +272,22 @@ export default async function HomePage() {
         <div className="space-y-4">
           <FadeInOnView delay={0.05}>
             <article className="surface-card h-full space-y-4 p-5">
-              <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.educationLabel}</p>
+              <p className="font-mono text-xs uppercase tracking-label text-muted">
+                {t.home.educationLabel}
+              </p>
               <ul className="space-y-3">
                 {educationItems.map((item) => (
-                  <li key={`${item.role}-${item.period}`} className="border-l-2 border-border pl-3">
-                    <p className="text-sm font-semibold text-text">{localizeEducationRole(item.role, language, t)}</p>
+                  <li
+                    key={`${item.role}-${item.period}`}
+                    className="border-l-2 border-border pl-3"
+                  >
+                    <p className="text-sm font-semibold text-text">
+                      {localizeEducationRole(
+                        item.role,
+                        language,
+                        t.workEducationPage.roleLabels,
+                      )}
+                    </p>
                     {item.companyUrl ? (
                       <a
                         href={item.companyUrl}
@@ -323,7 +300,9 @@ export default async function HomePage() {
                     ) : (
                       <p className="text-sm text-muted">{item.company}</p>
                     )}
-                    <p className="font-mono text-[11px] uppercase tracking-label text-muted">{item.period}</p>
+                    <p className="font-mono text-[11px] uppercase tracking-label text-muted">
+                      {item.period}
+                    </p>
                   </li>
                 ))}
               </ul>
@@ -334,26 +313,40 @@ export default async function HomePage() {
 
       <section className="space-y-5">
         <div className="space-y-2">
-          <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.toolsLabel}</p>
+          <p className="font-mono text-xs uppercase tracking-label text-muted">
+            {t.home.toolsLabel}
+          </p>
           <p className="text-sm text-muted">{t.home.toolsDescription}</p>
         </div>
 
         <StaggerInView className="grid items-stretch gap-4 [grid-template-columns:repeat(auto-fit,minmax(220px,1fr))]">
           {toolCategories.map((category, index) => (
-            <StaggerItem key={category.label.eng} delay={index * 0.06} className="h-full">
+            <StaggerItem
+              key={category.label.eng}
+              delay={index * 0.06}
+              className="h-full"
+            >
               <HoverLift className="h-full" glow>
                 <article className="surface-card surface-card-interactive flex h-full min-h-[220px] flex-col p-4">
-                  <h3 className="font-serif text-xl text-text">{getLocalizedText(category.label, language)}</h3>
+                  <h3 className="font-serif text-xl text-text">
+                    {getLocalizedText(category.label, language)}
+                  </h3>
                   <ul className="mt-3 grid gap-2">
                     {category.tools.map((tool) => (
                       <li
                         key={`${category.label.eng}-${tool}`}
                         className="flex items-center gap-2 rounded-md border border-border/70 bg-background/45 px-2.5 py-1.5"
                       >
-                        <span className="inline-flex h-5 w-5 items-center justify-center" role="img" aria-label={`${tool} icon`}>
+                        <span
+                          className="inline-flex h-5 w-5 items-center justify-center"
+                          role="img"
+                          aria-label={`${tool} icon`}
+                        >
                           <TechIcon tool={tool} className="h-4 w-4" />
                         </span>
-                        <span className="font-mono text-[11px] uppercase tracking-label text-muted">{tool}</span>
+                        <span className="font-mono text-[11px] uppercase tracking-label text-muted">
+                          {tool}
+                        </span>
                       </li>
                     ))}
                   </ul>
@@ -366,13 +359,21 @@ export default async function HomePage() {
 
       <section id="certifications" className="space-y-5 scroll-mt-24">
         <div className="space-y-2">
-          <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.certificationsLabel}</p>
-          <p className="text-sm text-muted">{t.home.certificationsDescription}</p>
+          <p className="font-mono text-xs uppercase tracking-label text-muted">
+            {t.home.certificationsLabel}
+          </p>
+          <p className="text-sm text-muted">
+            {t.home.certificationsDescription}
+          </p>
         </div>
 
         <StaggerInView className="grid items-stretch gap-4 [grid-template-columns:repeat(auto-fit,minmax(220px,1fr))]">
           {homepageCertifications.map((certification, index) => (
-            <StaggerItem key={certification.name} delay={index * 0.05} className="h-full">
+            <StaggerItem
+              key={certification.name}
+              delay={index * 0.05}
+              className="h-full"
+            >
               <article className="surface-card surface-card-interactive flex h-full min-h-[122px] items-center p-3 sm:min-h-[130px] sm:p-4">
                 <div className="flex w-full items-center gap-3.5">
                   <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-border/75 bg-[#101010] shadow-[inset_0_0_0_1px_rgba(242,199,91,0.04)] sm:h-14 sm:w-14">
@@ -396,13 +397,17 @@ export default async function HomePage() {
                     )}
                   </span>
                   <div className="min-w-0 flex-1 space-y-1">
-                    <p className="text-sm font-semibold leading-snug text-text">{certification.name}</p>
-                    <p className="text-xs leading-snug text-muted">{certification.provider}</p>
+                    <p className="text-sm font-semibold leading-snug text-text">
+                      {certification.name}
+                    </p>
+                    <p className="text-xs leading-snug text-muted">
+                      {certification.provider}
+                    </p>
                     <div className="flex items-center gap-2">
                       <span className="rounded-full bg-accent/15 px-2 py-0.5 font-mono text-[10px] uppercase tracking-label text-accent">
                         {certification.issuer}
                       </span>
-                          {certification.status === "expired" ? (
+                      {certification.status === "expired" ? (
                         <span className="font-mono text-[10px] uppercase tracking-label text-muted">
                           {t.home.pastCertificationLabel}
                         </span>
@@ -419,9 +424,15 @@ export default async function HomePage() {
       <section className="space-y-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="space-y-2">
-            <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.recentExperienceLabel}</p>
-            <h2 className="font-serif text-3xl leading-tight text-text sm:text-4xl">{t.home.recentExperienceTitle}</h2>
-            <p className="max-w-3xl text-sm leading-relaxed text-muted">{t.home.recentExperienceDescription}</p>
+            <p className="font-mono text-xs uppercase tracking-label text-muted">
+              {t.home.recentExperienceLabel}
+            </p>
+            <h2 className="font-serif text-3xl leading-tight text-text sm:text-4xl">
+              {t.home.recentExperienceTitle}
+            </h2>
+            <p className="max-w-3xl text-sm leading-relaxed text-muted">
+              {t.home.recentExperienceDescription}
+            </p>
           </div>
           <Link
             href="/work-education"
@@ -436,7 +447,11 @@ export default async function HomePage() {
             const companyLogo = resolveCompanyLogo(item.source);
 
             return (
-              <StaggerItem key={`${item.company}-${item.period}`} delay={index * 0.05} className="h-full">
+              <StaggerItem
+                key={`${item.company}-${item.period}`}
+                delay={index * 0.05}
+                className="h-full"
+              >
                 <HoverLift className="h-full" glow>
                   <article className="surface-card surface-card-interactive flex h-full min-h-[330px] flex-col p-5">
                     <header className="space-y-3 border-b border-border pb-3">
@@ -452,7 +467,10 @@ export default async function HomePage() {
                               className="h-full w-full object-cover object-center"
                             />
                           ) : (
-                            <span aria-hidden="true" className="inline-flex h-full w-full items-center justify-center font-mono text-xs font-semibold uppercase text-accent/90">
+                            <span
+                              aria-hidden="true"
+                              className="inline-flex h-full w-full items-center justify-center font-mono text-xs font-semibold uppercase text-accent/90"
+                            >
                               {getCompanyInitials(item.company)}
                             </span>
                           )}
@@ -460,8 +478,12 @@ export default async function HomePage() {
                         <div className="min-w-0 flex-1">
                           <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                             <div className="min-w-0">
-                              <h3 className="font-serif text-2xl leading-tight text-text">{item.role}</h3>
-                              <p className="text-sm text-muted">{item.company}</p>
+                              <h3 className="font-serif text-2xl leading-tight text-text">
+                                {item.role}
+                              </h3>
+                              <p className="text-sm text-muted">
+                                {item.company}
+                              </p>
                             </div>
                             <p className="font-mono text-[11px] uppercase tracking-label text-muted sm:pt-1 sm:text-right">
                               {item.period}
@@ -469,16 +491,26 @@ export default async function HomePage() {
                           </div>
                         </div>
                       </div>
-                      <p className="pt-1 text-sm leading-relaxed text-muted">{item.summary}</p>
+                      <p className="pt-1 text-sm leading-relaxed text-muted">
+                        {item.summary}
+                      </p>
                     </header>
 
                     <div className="mt-1 space-y-3 border-t border-border/70 pt-4">
                       <div className="space-y-2">
-                        <p className="font-mono text-xs font-semibold uppercase tracking-label text-text">{t.home.impactLabel}</p>
+                        <p className="font-mono text-xs font-semibold uppercase tracking-label text-text">
+                          {t.home.impactLabel}
+                        </p>
                         <ul className="space-y-1.5 text-sm leading-relaxed text-muted">
                           {item.impacts.map((impactText) => (
-                            <li key={`${item.company}-${impactText}`} className="flex items-start gap-2 text-text">
-                              <span className="pt-0.5 text-accent" aria-hidden="true">
+                            <li
+                              key={`${item.company}-${impactText}`}
+                              className="flex items-start gap-2 text-text"
+                            >
+                              <span
+                                className="pt-0.5 text-accent"
+                                aria-hidden="true"
+                              >
                                 •
                               </span>
                               <span>{renderMetricText(impactText)}</span>
@@ -488,10 +520,15 @@ export default async function HomePage() {
                       </div>
 
                       <div className="space-y-2 pt-1">
-                        <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.stackPreviewLabel}</p>
+                        <p className="font-mono text-xs uppercase tracking-label text-muted">
+                          {t.home.stackPreviewLabel}
+                        </p>
                         <ul className="flex flex-wrap gap-2">
                           {item.stackPreview.map((tool) => (
-                            <TechBadge key={`${item.company}-${tool}`} tool={tool} />
+                            <TechBadge
+                              key={`${item.company}-${tool}`}
+                              tool={tool}
+                            />
                           ))}
                         </ul>
                       </div>
@@ -507,9 +544,15 @@ export default async function HomePage() {
       <section className="space-y-6 border-t border-border pt-10">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="space-y-2">
-            <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.selectedWorkLabel}</p>
-            <h2 className="font-serif text-3xl leading-tight text-text sm:text-4xl">{t.home.selectedWorkTitle}</h2>
-            <p className="text-sm text-muted">{t.home.selectedWorkDescription}</p>
+            <p className="font-mono text-xs uppercase tracking-label text-muted">
+              {t.home.selectedWorkLabel}
+            </p>
+            <h2 className="font-serif text-3xl leading-tight text-text sm:text-4xl">
+              {t.home.selectedWorkTitle}
+            </h2>
+            <p className="text-sm text-muted">
+              {t.home.selectedWorkDescription}
+            </p>
           </div>
           <Link href="/case-studies" className="quiet-link text-sm text-accent">
             {t.common.viewAll}
@@ -518,10 +561,16 @@ export default async function HomePage() {
 
         <StaggerInView className={selectedWorkGridClass}>
           {selectedWork.map((post, index) => (
-            <StaggerItem key={post.slug} delay={index * 0.06} className="h-full">
+            <StaggerItem
+              key={post.slug}
+              delay={index * 0.06}
+              className="h-full"
+            >
               <HoverLift className="h-full" glow>
                 <article className="surface-card surface-card-interactive flex h-full min-h-[320px] flex-col p-5">
-                  <p className="font-mono text-xs uppercase tracking-label text-muted">{formatDate(post.date, language)}</p>
+                  <p className="font-mono text-xs uppercase tracking-label text-muted">
+                    {formatDate(post.date, language)}
+                  </p>
                   <h3 className="pt-2 font-serif text-2xl leading-tight text-text">
                     {post.title}
                   </h3>
@@ -529,7 +578,8 @@ export default async function HomePage() {
                     {toConciseSummary(post.summary)}
                   </p>
                   <p className="pt-4 font-mono text-xs uppercase tracking-label text-accent">
-                    {t.common.result}: {post.impact ?? t.caseStudiesPage.fallbackOutcome}
+                    {t.common.result}:{" "}
+                    {post.impact ?? t.caseStudiesPage.fallbackOutcome}
                   </p>
                   <Link
                     href={`/case-studies/${post.slug}`}
@@ -547,9 +597,15 @@ export default async function HomePage() {
       <section className="space-y-6 border-t border-border pt-10">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="space-y-2">
-            <p className="font-mono text-xs uppercase tracking-label text-muted">{t.home.photoNotesLabel}</p>
-            <h2 className="font-serif text-3xl leading-tight text-text sm:text-4xl">{t.home.photoNotesTitle}</h2>
-            <p className="max-w-3xl text-sm leading-relaxed text-muted">{t.home.beyondWorkDescription}</p>
+            <p className="font-mono text-xs uppercase tracking-label text-muted">
+              {t.home.photoNotesLabel}
+            </p>
+            <h2 className="font-serif text-3xl leading-tight text-text sm:text-4xl">
+              {t.home.photoNotesTitle}
+            </h2>
+            <p className="max-w-3xl text-sm leading-relaxed text-muted">
+              {t.home.beyondWorkDescription}
+            </p>
           </div>
           <Link href="/beyond-work" className="quiet-link text-sm text-accent">
             {t.common.viewJournal}
@@ -558,13 +614,22 @@ export default async function HomePage() {
 
         <StaggerInView className="grid items-stretch gap-4 md:grid-cols-3">
           {selectedBeyondWork.map((post, index) => (
-            <StaggerItem key={post.slug} delay={index * 0.06} className="h-full">
+            <StaggerItem
+              key={post.slug}
+              delay={index * 0.06}
+              className="h-full"
+            >
               <HoverLift glow className="h-full">
                 <article className="surface-card flex h-full min-h-[250px] flex-col justify-between p-5">
                   <div>
                     <p className="font-mono text-xs uppercase tracking-label text-muted">
-                      {localizeBeyondCategory(post.categoryId, post.category, language, t).toUpperCase()} ·{" "}
-                      {formatDate(post.date, language)}
+                      {localizeBeyondCategory(
+                        post.categoryId,
+                        post.category,
+                        language,
+                        t,
+                      ).toUpperCase()}{" "}
+                      · {formatDate(post.date, language)}
                     </p>
                     <h3 className="pt-2 font-serif text-2xl leading-tight text-text">
                       {post.title}

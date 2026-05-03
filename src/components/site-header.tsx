@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
@@ -20,28 +20,34 @@ interface SiteHeaderProps {
 
 export function SiteHeader({ initialLanguage }: SiteHeaderProps) {
   const pathname = usePathname();
-  const router = useRouter();
   const prefersReducedMotion = useReducedMotion();
   const [language, setLanguage] = useState<Language>(initialLanguage);
   const t = useMemo(() => getDictionary(language), [language]);
 
+  const persistLanguage = (nextLanguage: Language) => {
+    window.localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLanguage);
+    document.cookie = `${LANGUAGE_COOKIE_KEY}=${nextLanguage}; Path=/; Max-Age=31536000; SameSite=Lax`;
+  };
+
   useEffect(() => {
     const stored = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
-    const storedLanguage = stored ? normalizeLanguage(stored) : initialLanguage;
+    const storedLanguage = stored ? normalizeLanguage(stored) : null;
 
-    if (!stored) {
-      window.localStorage.setItem(LANGUAGE_STORAGE_KEY, initialLanguage);
+    if (!storedLanguage) {
+      persistLanguage(initialLanguage);
+      setLanguage(initialLanguage);
+      return;
     }
 
     if (storedLanguage !== initialLanguage) {
-      document.cookie = `${LANGUAGE_COOKIE_KEY}=${storedLanguage}; path=/; max-age=31536000; samesite=lax`;
+      persistLanguage(storedLanguage);
       setLanguage(storedLanguage);
-      router.refresh();
+      window.location.replace(pathname || "/");
       return;
     }
 
     setLanguage(initialLanguage);
-  }, [initialLanguage, router]);
+  }, [initialLanguage, pathname]);
 
   const navigation = [
     { href: "/", label: t.nav.home },
@@ -52,14 +58,14 @@ export function SiteHeader({ initialLanguage }: SiteHeaderProps) {
   ];
 
   const changeLanguage = (nextLanguage: Language) => {
-    if (nextLanguage === language) {
+    const normalizedNext = normalizeLanguage(nextLanguage);
+    if (normalizedNext === language) {
       return;
     }
 
-    setLanguage(nextLanguage);
-    window.localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLanguage);
-    document.cookie = `${LANGUAGE_COOKIE_KEY}=${nextLanguage}; path=/; max-age=31536000; samesite=lax`;
-    router.refresh();
+    setLanguage(normalizedNext);
+    persistLanguage(normalizedNext);
+    window.location.replace(pathname || "/");
   };
 
   const isActiveLink = (href: string): boolean => {

@@ -12,9 +12,9 @@ import { getServerLanguage } from "@/lib/i18n-server";
 import { createMetadata } from "@/lib/metadata";
 
 interface CaseStudyPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateStaticParams() {
@@ -23,14 +23,15 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: CaseStudyPageProps): Promise<Metadata> {
-  const language = getServerLanguage();
+  const { slug } = await params;
+  const language = await getServerLanguage();
   const t = getDictionary(language);
-  const post = await getCaseStudyBySlug(params.slug, language);
+  const post = await getCaseStudyBySlug(slug, language);
 
   if (!post) {
     return createMetadata({
       title: t.caseStudyDetail.notFoundTitle,
-      path: `/case-studies/${params.slug}`
+      path: `/case-studies/${slug}`
     });
   }
 
@@ -43,11 +44,12 @@ export async function generateMetadata({ params }: CaseStudyPageProps): Promise<
 }
 
 export default async function CaseStudyDetailPage({ params }: CaseStudyPageProps) {
-  const language = getServerLanguage();
+  const { slug } = await params;
+  const language = await getServerLanguage();
   const t = getDictionary(language);
   const fallbackOutcome = t.caseStudyDetail.fallbackOutcome;
 
-  const post = await getCaseStudyBySlug(params.slug, language);
+  const post = await getCaseStudyBySlug(slug, language);
   const showTopGallery = post?.slug !== "cloud-cost-optimization";
 
   if (!post) {

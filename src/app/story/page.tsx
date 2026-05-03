@@ -20,8 +20,8 @@ export const metadata = createMetadata({
   path: "/story"
 });
 
-export default function StoryPage() {
-  const language = getServerLanguage();
+export default async function StoryPage() {
+  const language = await getServerLanguage();
   const t = getDictionary(language);
 
   return (

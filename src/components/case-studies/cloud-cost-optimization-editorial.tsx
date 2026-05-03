@@ -55,8 +55,8 @@ function ArticleImage({
   );
 }
 
-export function CloudCostOptimizationEditorial() {
-  const language = getServerLanguage();
+export async function CloudCostOptimizationEditorial() {
+  const language = await getServerLanguage();
   const t = getDictionary(language);
   const title = getLocalizedPostTitle("cloud-cost-optimization", "Cloud Cost Optimization", language);
   const summary = getLocalizedPostSummary(

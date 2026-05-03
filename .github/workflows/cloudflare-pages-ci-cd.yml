@@ -1,0 +1,286 @@
+name: Cloudflare Pages CI/CD
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: cloudflare-pages-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: Quality Gates
+    runs-on: ubuntu-latest
+    outputs:
+      can_deploy: ${{ steps.deploy_bundle.outputs.can_deploy }}
+      deploy_reason: ${{ steps.deploy_bundle.outputs.deploy_reason }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Detect package scripts
+        id: scripts
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+          const scripts = pkg.scripts || {};
+          const out = process.env.GITHUB_OUTPUT;
+          const set = (k, v) => fs.appendFileSync(out, `${k}=${v}\n`);
+
+          const optionalScripts = {
+            has_validate_content: 'validate:content',
+            has_test_e2e: 'test:e2e',
+            has_audit_bundle: 'audit:bundle',
+            has_audit_images: 'audit:images',
+            has_audit_cwv: 'audit:cwv',
+            has_audit_links: 'audit:links',
+            has_audit_deps_usage: 'audit:deps:usage',
+            has_audit_secrets: 'audit:secrets',
+            has_audit_deps_vuln: 'audit:deps:vuln'
+          };
+
+          const buildCommand = scripts['build:pages']
+            ? 'build:pages'
+            : scripts.build
+              ? 'build'
+              : '';
+          const testCommand = scripts['test:coverage']
+            ? 'test:coverage'
+            : scripts['test:unit']
+              ? 'test:unit'
+              : '';
+
+          set('build_command', buildCommand);
+          set('test_command', testCommand);
+          set('has_test_command', testCommand ? 'true' : 'false');
+
+          for (const [outputName, scriptName] of Object.entries(optionalScripts)) {
+            set(outputName, scripts[scriptName] ? 'true' : 'false');
+          }
+          NODE
+
+      - name: Verify required build script exists
+        if: steps.scripts.outputs.build_command == ''
+        run: |
+          echo "Missing required build script: define either 'build' or 'build:pages' in package.json."
+          exit 1
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Validate content
+        if: steps.scripts.outputs.has_validate_content == 'true'
+        run: npm run validate:content
+
+      - name: Unit/Coverage tests
+        if: steps.scripts.outputs.has_test_command == 'true'
+        run: npm run ${{ steps.scripts.outputs.test_command }}
+
+      - name: Build
+        run: npm run ${{ steps.scripts.outputs.build_command }}
+
+      - name: Install Playwright browsers
+        if: steps.scripts.outputs.has_test_e2e == 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: E2E tests
+        if: steps.scripts.outputs.has_test_e2e == 'true'
+        run: npm run test:e2e
+
+      - name: Bundle audit
+        if: steps.scripts.outputs.has_audit_bundle == 'true'
+        run: npm run audit:bundle
+
+      - name: Image audit
+        if: steps.scripts.outputs.has_audit_images == 'true'
+        run: npm run audit:images
+
+      - name: Core Web Vitals audit
+        if: steps.scripts.outputs.has_audit_cwv == 'true'
+        run: npm run audit:cwv
+
+      - name: Link audit
+        if: steps.scripts.outputs.has_audit_links == 'true'
+        run: npm run audit:links
+
+      - name: Dependency usage audit
+        if: steps.scripts.outputs.has_audit_deps_usage == 'true'
+        run: npm run audit:deps:usage
+
+      - name: Secrets audit
+        if: steps.scripts.outputs.has_audit_secrets == 'true'
+        run: npm run audit:secrets
+
+      - name: Detect explicit vulnerability risk acceptance
+        if: steps.scripts.outputs.has_audit_deps_vuln == 'true'
+        id: vuln_policy
+        run: |
+          if rg -qi "accepted risk|risk accepted|accepted vulnerabilities|vulnerability risk accepted" docs/audit README.md; then
+            echo "accepted=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "accepted=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Vulnerability audit (enforced)
+        if: steps.scripts.outputs.has_audit_deps_vuln == 'true' && steps.vuln_policy.outputs.accepted != 'true'
+        run: npm run audit:deps:vuln
+
+      - name: Vulnerability audit (accepted risk)
+        if: steps.scripts.outputs.has_audit_deps_vuln == 'true' && steps.vuln_policy.outputs.accepted == 'true'
+        continue-on-error: true
+        run: npm run audit:deps:vuln
+
+      - name: Detect deploy bundle
+        id: deploy_bundle
+        run: |
+          if [ -f out/index.html ]; then
+            echo "can_deploy=true" >> "$GITHUB_OUTPUT"
+            echo "deploy_reason=ready" >> "$GITHUB_OUTPUT"
+          elif [ -d out ]; then
+            echo "can_deploy=false" >> "$GITHUB_OUTPUT"
+            echo "deploy_reason=missing_index_html" >> "$GITHUB_OUTPUT"
+          else
+            echo "can_deploy=false" >> "$GITHUB_OUTPUT"
+            echo "deploy_reason=missing_out_directory" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage
+          if-no-files-found: ignore
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report
+          if-no-files-found: ignore
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test-results
+          if-no-files-found: ignore
+
+      - name: Upload audit docs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-docs
+          path: docs/audit
+          if-no-files-found: ignore
+
+      - name: Upload build output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: out
+          if-no-files-found: ignore
+
+  deploy-blocked:
+    name: Deploy Blocked
+    runs-on: ubuntu-latest
+    needs: ci
+    if: (github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')) && needs.ci.outputs.can_deploy != 'true'
+    steps:
+      - name: Fail with deployment guidance
+        run: |
+          echo "Cloudflare Pages direct upload requires a static deploy bundle at out/index.html."
+          echo "Blocker: ${{ needs.ci.outputs.deploy_reason }}"
+          echo "This repository currently relies on runtime features (middleware and request APIs)."
+          echo "Recommended path: OpenNext + Cloudflare Workers (@opennextjs/cloudflare), or refactor for static export."
+          exit 1
+
+  deploy-preview:
+    name: Deploy Preview
+    runs-on: ubuntu-latest
+    needs: ci
+    if: github.event_name == 'pull_request' && needs.ci.outputs.can_deploy == 'true'
+    environment: preview
+    steps:
+      - name: Download build output
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: .
+
+      - name: Deploy to Cloudflare Pages (preview)
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy out --project-name=${{ vars.CLOUDFLARE_PROJECT_NAME }} --branch=${{ github.head_ref }}
+
+      - name: Deployment summary
+        run: |
+          {
+            echo "### Preview Deployment"
+            echo "- Environment: preview"
+            echo "- Project: ${{ vars.CLOUDFLARE_PROJECT_NAME }}"
+            echo "- Branch: ${{ github.head_ref }}"
+            echo "- Deployment URL: ${{ steps.deploy.outputs.deployment-url }}"
+            echo "- Alias URL: ${{ steps.deploy.outputs.pages-deployment-alias-url }}"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  deploy-production:
+    name: Deploy Production
+    runs-on: ubuntu-latest
+    needs: ci
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.ci.outputs.can_deploy == 'true'
+    environment: production
+    steps:
+      - name: Download build output
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: .
+
+      - name: Deploy to Cloudflare Pages (production)
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy out --project-name=${{ vars.CLOUDFLARE_PROJECT_NAME }} --branch=main
+
+      - name: Deployment summary
+        run: |
+          {
+            echo "### Production Deployment"
+            echo "- Environment: production"
+            echo "- Project: ${{ vars.CLOUDFLARE_PROJECT_NAME }}"
+            echo "- Branch: main"
+            echo "- Deployment URL: ${{ steps.deploy.outputs.deployment-url }}"
+            echo "- Alias URL: ${{ steps.deploy.outputs.pages-deployment-alias-url }}"
+          } >> "$GITHUB_STEP_SUMMARY"

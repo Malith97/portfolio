@@ -12,9 +12,9 @@ import { DEFAULT_LANGUAGE, getDictionary } from "@/lib/i18n";
 import { getServerLanguage } from "@/lib/i18n-server";
 
 interface BeyondWorkPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 interface MetaItem {
@@ -117,14 +117,15 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: BeyondWorkPageProps): Promise<Metadata> {
-  const language = getServerLanguage();
+  const { slug } = await params;
+  const language = await getServerLanguage();
   const t = getDictionary(language);
-  const post = await getBeyondWorkPostBySlug(params.slug, language);
+  const post = await getBeyondWorkPostBySlug(slug, language);
 
   if (!post) {
     return createMetadata({
       title: t.notFoundPage.label,
-      path: `/beyond-work/${params.slug}`
+      path: `/beyond-work/${slug}`
     });
   }
 
@@ -137,10 +138,11 @@ export async function generateMetadata({ params }: BeyondWorkPageProps): Promise
 }
 
 export default async function BeyondWorkDetailPage({ params }: BeyondWorkPageProps) {
-  const language = getServerLanguage();
+  const { slug } = await params;
+  const language = await getServerLanguage();
   const t = getDictionary(language);
 
-  const post = await getBeyondWorkPostBySlug(params.slug, language);
+  const post = await getBeyondWorkPostBySlug(slug, language);
   const posts = await getAllBeyondWorkPosts(language);
 
   if (!post) {

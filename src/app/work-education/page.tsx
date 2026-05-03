@@ -3,50 +3,25 @@ import type { ReactNode } from "react";
 import { SafeImage } from "@/components/safe-image";
 import { SectionHeading } from "@/components/section-heading";
 import { TechBadge } from "@/components/tech-badge";
+import {
+  getCompanyInitials,
+  localizeEducationRole,
+  localizeWorkRole,
+  resolveCompanyLogo,
+} from "@/lib/experience";
 import { getDictionary } from "@/lib/i18n";
 import { getServerLanguage } from "@/lib/i18n-server";
 import { createMetadata } from "@/lib/metadata";
-import { type ExperienceItem, experienceTimeline, getLocalizedText, sortExperienceByMostRecent } from "@/lib/profile";
+import {
+  experienceTimeline,
+  getLocalizedText,
+  sortExperienceByMostRecent,
+} from "@/lib/profile";
 
-const COMPANY_LOGO_FALLBACK_MAP: Array<{ keyword: string; logo: string }> = [
-  { keyword: "almosafer", logo: "/logos/almosafer.svg" },
-  { keyword: "oracle", logo: "/logos/oracle.svg" },
-  { keyword: "london stock exchange", logo: "/logos/london-stock-exchange.png" },
-  { keyword: "zebra", logo: "/logos/zebra-technologies.png" },
-  { keyword: "sy labs", logo: "/logos/sylabs.png" },
-  { keyword: "sylabs", logo: "/logos/sylabs.png" }
-];
-
-const METRIC_HIGHLIGHT_SPLIT_REGEX = /(~?\$\d+(?:[.,]\d+)?(?:K|M|B)?(?:\/[a-zA-Z]+)?|\d+(?:[.,]\d+)?%)/g;
-const METRIC_HIGHLIGHT_MATCH_REGEX = /^(~?\$\d+(?:[.,]\d+)?(?:K|M|B)?(?:\/[a-zA-Z]+)?|\d+(?:[.,]\d+)?%)$/;
-
-function resolveCompanyLogo(item: ExperienceItem): string | null {
-  if (item.companyLogo) {
-    return item.companyLogo;
-  }
-
-  const normalized = item.company.toLowerCase();
-  const mapped = COMPANY_LOGO_FALLBACK_MAP.find((entry) => normalized.includes(entry.keyword));
-  return mapped?.logo ?? null;
-}
-
-function getCompanyInitials(company: string): string {
-  const words = company
-    .split(/[\s&/-]+/)
-    .map((token) => token.trim())
-    .filter(Boolean)
-    .slice(0, 2);
-
-  if (words.length === 0) {
-    return "CO";
-  }
-
-  if (words.length === 1) {
-    return words[0].slice(0, 2).toUpperCase();
-  }
-
-  return `${words[0].charAt(0)}${words[1].charAt(0)}`.toUpperCase();
-}
+const METRIC_HIGHLIGHT_SPLIT_REGEX =
+  /(~?\$\d+(?:[.,]\d+)?(?:K|M|B)?(?:\/[a-zA-Z]+)?|\d+(?:[.,]\d+)?%)/g;
+const METRIC_HIGHLIGHT_MATCH_REGEX =
+  /^(~?\$\d+(?:[.,]\d+)?(?:K|M|B)?(?:\/[a-zA-Z]+)?|\d+(?:[.,]\d+)?%)$/;
 
 function renderImpactText(text: string): ReactNode {
   return text.split(METRIC_HIGHLIGHT_SPLIT_REGEX).map((part, index) => {
@@ -66,57 +41,22 @@ function renderImpactText(text: string): ReactNode {
   });
 }
 
-function localizeEducationRole(
-  role: string,
-  language: "eng" | "fi",
-  t: ReturnType<typeof getDictionary>
-): string {
-  if (language !== "fi") {
-    return role;
-  }
-
-  if (role === "Finnish Language Studies (A1–B2)") {
-    return `${t.workEducationPage.roleLabels.finnishLanguageStudies} (A1–B2)`;
-  }
-
-  if (role === "BSc (Hons) Computer Science") {
-    return `${t.workEducationPage.roleLabels.bachelorOfScience} (Hons), Tietojenkäsittelytiede`;
-  }
-
-  if (role === "High School") {
-    return t.workEducationPage.roleLabels.highSchool;
-  }
-
-  return role;
-}
-
-function localizeWorkRole(role: string, language: "eng" | "fi"): string {
-  if (language !== "fi") {
-    return role;
-  }
-
-  if (role === "DevOps Engineer") {
-    return "DevOps-insinööri";
-  }
-
-  if (role === "Software Engineer") {
-    return "Ohjelmistoinsinööri";
-  }
-
-  return role;
-}
-
 export const metadata = createMetadata({
   title: "Work & Education",
-  description: "Work experience timeline and education highlights for Malith Ileperuma.",
-  path: "/work-education"
+  description:
+    "Work experience timeline and education highlights for Malith Ileperuma.",
+  path: "/work-education",
 });
 
-export default function WorkEducationPage() {
-  const language = getServerLanguage();
+export default async function WorkEducationPage() {
+  const language = await getServerLanguage();
   const t = getDictionary(language);
-  const workExperience = sortExperienceByMostRecent(experienceTimeline.filter((item) => item.kind === "work"));
-  const educationItems = sortExperienceByMostRecent(experienceTimeline.filter((item) => item.kind === "education"));
+  const workExperience = sortExperienceByMostRecent(
+    experienceTimeline.filter((item) => item.kind === "work"),
+  );
+  const educationItems = sortExperienceByMostRecent(
+    experienceTimeline.filter((item) => item.kind === "education"),
+  );
 
   return (
     <div className="space-y-16">
@@ -128,7 +68,9 @@ export default function WorkEducationPage() {
 
       <section className="space-y-5">
         <div className="space-y-2">
-          <p className="font-mono text-xs uppercase tracking-label text-muted">{t.workEducationPage.workSection}</p>
+          <p className="font-mono text-xs uppercase tracking-label text-muted">
+            {t.workEducationPage.workSection}
+          </p>
         </div>
 
         <div className="relative space-y-4">
@@ -140,7 +82,10 @@ export default function WorkEducationPage() {
           {workExperience.map((item, index) => {
             const companyLogo = resolveCompanyLogo(item);
             const isSyLabs = item.company.toLowerCase().includes("sy labs");
-            const impactBullets = [...item.impactBullets, ...(item.additionalImpactBullets ?? [])];
+            const impactBullets = [
+              ...item.impactBullets,
+              ...(item.additionalImpactBullets ?? []),
+            ];
 
             return (
               <div key={`${item.role}-${item.period}`} className="relative">
@@ -173,7 +118,10 @@ export default function WorkEducationPage() {
                             className={`h-full w-full ${isSyLabs ? "object-contain p-1.5" : "object-cover object-center"}`}
                           />
                         ) : (
-                          <span aria-hidden="true" className="inline-flex h-full w-full items-center justify-center font-mono text-xs font-semibold uppercase text-accent/90">
+                          <span
+                            aria-hidden="true"
+                            className="inline-flex h-full w-full items-center justify-center font-mono text-xs font-semibold uppercase text-accent/90"
+                          >
                             {getCompanyInitials(item.company)}
                           </span>
                         )}
@@ -181,7 +129,9 @@ export default function WorkEducationPage() {
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-col gap-1 md:flex-row md:items-start md:justify-between md:gap-4">
                           <div className="min-w-0">
-                            <h2 className="font-serif text-2xl leading-tight text-text">{localizeWorkRole(item.role, language)}</h2>
+                            <h2 className="font-serif text-2xl leading-tight text-text">
+                              {localizeWorkRole(item.role, language)}
+                            </h2>
                             <p className="text-sm text-muted">{item.company}</p>
                           </div>
                           <p className="font-mono text-[11px] uppercase tracking-label text-muted md:pt-1 md:text-right">
@@ -191,7 +141,9 @@ export default function WorkEducationPage() {
                       </div>
                     </div>
 
-                    <p className="font-mono text-[11px] uppercase tracking-label text-accent">{t.workEducationPage.workTag}</p>
+                    <p className="font-mono text-[11px] uppercase tracking-label text-accent">
+                      {t.workEducationPage.workTag}
+                    </p>
                     <p className="pt-1 text-sm leading-relaxed text-text">
                       {getLocalizedText(item.summary, language)}
                     </p>
@@ -199,16 +151,25 @@ export default function WorkEducationPage() {
 
                   <div className="flex flex-1 flex-col justify-between gap-4 pt-4">
                     <div className="space-y-2">
-                      <p className="font-mono text-xs uppercase tracking-label text-muted">{t.workEducationPage.impactLabel}</p>
+                      <p className="font-mono text-xs uppercase tracking-label text-muted">
+                        {t.workEducationPage.impactLabel}
+                      </p>
                       <ul className="space-y-2 text-sm leading-relaxed text-text">
                         {impactBullets.map((bullet) => (
-                          <li key={bullet.eng}>• {renderImpactText(getLocalizedText(bullet, language))}</li>
+                          <li key={bullet.eng}>
+                            •{" "}
+                            {renderImpactText(
+                              getLocalizedText(bullet, language),
+                            )}
+                          </li>
                         ))}
                       </ul>
                     </div>
 
                     <div className="space-y-2">
-                      <p className="font-mono text-xs uppercase tracking-label text-muted">{t.workEducationPage.stackLabel}</p>
+                      <p className="font-mono text-xs uppercase tracking-label text-muted">
+                        {t.workEducationPage.stackLabel}
+                      </p>
                       <ul className="flex flex-wrap gap-2">
                         {item.tech.map((tool) => (
                           <TechBadge key={tool} tool={tool} />
@@ -225,21 +186,32 @@ export default function WorkEducationPage() {
 
       <section className="space-y-5 border-t border-border pt-10">
         <div className="space-y-2">
-          <p className="font-mono text-xs uppercase tracking-label text-muted">{t.workEducationPage.educationSection}</p>
+          <p className="font-mono text-xs uppercase tracking-label text-muted">
+            {t.workEducationPage.educationSection}
+          </p>
         </div>
 
         <div className="space-y-3">
           {educationItems.map((item) => (
-            <article key={`${item.role}-${item.period}`} className="relative border-l border-border pl-4 py-1">
+            <article
+              key={`${item.role}-${item.period}`}
+              className="relative border-l border-border pl-4 py-1"
+            >
               <span
                 aria-hidden="true"
                 className="absolute -left-[4px] top-[10px] h-2 w-2 rounded-full bg-accent/70 shadow-[0_0_8px_rgba(242,199,91,0.35)]"
               />
               <div className="flex flex-col gap-0.5 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                 <h2 className="font-serif text-lg leading-tight text-text">
-                  {localizeEducationRole(item.role, language, t)}
+                  {localizeEducationRole(
+                    item.role,
+                    language,
+                    t.workEducationPage.roleLabels,
+                  )}
                 </h2>
-                <p className="font-mono text-[11px] uppercase tracking-label text-muted sm:pt-1">{item.period}</p>
+                <p className="font-mono text-[11px] uppercase tracking-label text-muted sm:pt-1">
+                  {item.period}
+                </p>
               </div>
               {item.companyUrl ? (
                 <a
@@ -253,7 +225,9 @@ export default function WorkEducationPage() {
               ) : (
                 <p className="text-sm text-muted">{item.company}</p>
               )}
-              <p className="text-sm leading-relaxed text-muted">{getLocalizedText(item.summary, language)}</p>
+              <p className="text-sm leading-relaxed text-muted">
+                {getLocalizedText(item.summary, language)}
+              </p>
             </article>
           ))}
         </div>

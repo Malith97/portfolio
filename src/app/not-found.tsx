@@ -2,8 +2,8 @@ import Link from "next/link";
 import { getDictionary } from "@/lib/i18n";
 import { getServerLanguage } from "@/lib/i18n-server";
 
-export default function NotFound() {
-  const language = getServerLanguage();
+export default async function NotFound() {
+  const language = await getServerLanguage();
   const t = getDictionary(language);
 
   return (

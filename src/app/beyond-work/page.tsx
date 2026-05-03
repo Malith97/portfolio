@@ -20,10 +20,10 @@ const filters = [
 type FilterKey = (typeof filters)[number]["key"];
 
 interface BeyondWorkPageProps {
-  searchParams?: {
+  searchParams?: Promise<{
     category?: string | string[];
     page?: string | string[];
-  };
+  }>;
 }
 
 const POSTS_PER_PAGE = 6;
@@ -96,11 +96,12 @@ export const metadata = createMetadata({
 });
 
 export default async function BeyondWorkPage({ searchParams }: BeyondWorkPageProps) {
-  const language = getServerLanguage();
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
+  const language = await getServerLanguage();
   const t = getDictionary(language);
 
-  const selectedFilter = normalizeFilter(searchParams?.category);
-  const requestedPage = normalizePage(searchParams?.page);
+  const selectedFilter = normalizeFilter(resolvedSearchParams?.category);
+  const requestedPage = normalizePage(resolvedSearchParams?.page);
   const posts = await getAllBeyondWorkPosts(language);
   const isAllView = selectedFilter === "all";
 
