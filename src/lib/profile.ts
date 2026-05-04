@@ -258,6 +258,7 @@ export const experienceTimeline: ExperienceItem[] = [
   {
     role: "BSc (Hons) Computer Science",
     company: "General Sir John Kotelawala Defence University",
+    companyUrl: "https://kdu.ac.lk",
     period: "2018–2021",
     kind: "education",
     summary: {

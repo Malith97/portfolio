@@ -10,6 +10,8 @@ const routes: Array<{
   priority: number;
 }> = [
   { path: "/", priority: 1 },
+  { path: "/story", priority: 0.9 },
+  { path: "/experience", priority: 0.85 },
   { path: "/about", priority: 0.9 },
   { path: "/case-studies", priority: 0.8 },
   { path: "/work-education", priority: 0.8 },

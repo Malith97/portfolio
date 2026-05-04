@@ -8,6 +8,8 @@ const BASE_URL = "https://malithileperuma.com";
 
 const expectedRoutes = [
   "/",
+  "/story",
+  "/experience",
   "/about",
   "/work-education",
   "/case-studies",
@@ -84,8 +86,25 @@ function parseSitemapPaths(xml) {
 function main() {
   ensureFile(path.join(OUT_DIR, "index.html"), "Homepage output");
   ensureAnyExists(
-    [path.join(OUT_DIR, "about.html"), path.join(OUT_DIR, "about", "index.html")],
+    [
+      path.join(OUT_DIR, "about.html"),
+      path.join(OUT_DIR, "about", "index.html"),
+    ],
     "About page output",
+  );
+  ensureAnyExists(
+    [
+      path.join(OUT_DIR, "story.html"),
+      path.join(OUT_DIR, "story", "index.html"),
+    ],
+    "Story page output",
+  );
+  ensureAnyExists(
+    [
+      path.join(OUT_DIR, "experience.html"),
+      path.join(OUT_DIR, "experience", "index.html"),
+    ],
+    "Experience page output",
   );
 
   const sitemapPath = path.join(OUT_DIR, "sitemap.xml");
@@ -106,10 +125,6 @@ function main() {
   );
   if (missingExpected.length > 0) {
     fail(`Sitemap is missing expected routes: ${missingExpected.join(", ")}`);
-  }
-
-  if (uniqueSitemapPaths.includes("/story")) {
-    fail("Sitemap must not include /story.");
   }
 
   const unexpectedRoutes = uniqueSitemapPaths.filter(
@@ -134,12 +149,16 @@ function main() {
 
   const robotsText = fs.readFileSync(robotsPath, "utf8");
   if (!robotsText.includes(`${BASE_URL}/sitemap.xml`)) {
-    fail("robots.txt does not reference https://malithileperuma.com/sitemap.xml");
+    fail(
+      "robots.txt does not reference https://malithileperuma.com/sitemap.xml",
+    );
   }
 
   console.log("✅ Static SEO verification passed.");
   console.log(`   Verified routes: ${expectedRoutes.join(", ")}`);
-  console.log(`   Existing static routes detected: ${existingStaticRoutes.join(", ")}`);
+  console.log(
+    `   Existing static routes detected: ${existingStaticRoutes.join(", ")}`,
+  );
 }
 
 main();

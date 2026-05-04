@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, IBM_Plex_Mono, Inter } from "next/font/google";
 
+import { LanguageProvider } from "@/components/language-provider";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { getServerLanguage } from "@/lib/i18n-server";
@@ -90,22 +91,24 @@ export default async function RootLayout({
       className={`${headingFont.variable} ${bodyFont.variable} ${labelFont.variable}`}
     >
       <body className="font-sans text-text antialiased">
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:border focus:border-accent focus:bg-background focus:px-3 focus:py-2 focus:text-sm focus:text-text"
-        >
-          {language === "fi" ? "Siirry pääsisältöön" : "Skip to main content"}
-        </a>
-        <div className="flex min-h-screen flex-col bg-background">
-          <SiteHeader initialLanguage={language} />
-          <main
-            id="main-content"
-            className="mx-auto w-full max-w-6xl flex-1 px-6 py-16 sm:px-8 sm:py-20"
+        <LanguageProvider initialLanguage={language}>
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:border focus:border-accent focus:bg-background focus:px-3 focus:py-2 focus:text-sm focus:text-text"
           >
-            {children}
-          </main>
-          <SiteFooter builtWithText={t.footer.builtWithCare} />
-        </div>
+            {language === "fi" ? "Siirry pääsisältöön" : "Skip to main content"}
+          </a>
+          <div className="flex min-h-screen flex-col bg-background">
+            <SiteHeader />
+            <main
+              id="main-content"
+              className="mx-auto w-full max-w-6xl flex-1 px-6 py-16 sm:px-8 sm:py-20"
+            >
+              {children}
+            </main>
+            <SiteFooter builtWithText={t.footer.builtWithCare} />
+          </div>
+        </LanguageProvider>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
