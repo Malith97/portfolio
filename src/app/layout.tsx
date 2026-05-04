@@ -32,7 +32,9 @@ const labelFont = IBM_Plex_Mono({
 
 export const metadata: Metadata = createMetadata();
 
-const normalizedSiteUrl = siteUrl.endsWith("/") ? siteUrl.slice(0, -1) : siteUrl;
+const normalizedSiteUrl = siteUrl.endsWith("/")
+  ? siteUrl.slice(0, -1)
+  : siteUrl;
 
 const personSchema = {
   "@context": "https://schema.org",
