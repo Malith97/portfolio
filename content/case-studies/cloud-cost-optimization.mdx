@@ -1,6 +1,8 @@
 ---
 title: "Cloud Cost Optimization: Reducing Spend by 35%"
+titleFi: "Pilvikustannusten optimointi: kulut alas 35 %"
 summary: "Reducing cloud spend by 35% (~$75K/year) through governance, visibility, and automation."
+summaryFi: "Pilvikulut laskivat 35 % (~$75K/vuosi) hallintamallin, näkyvyyden ja automaation avulla."
 slug: "cloud-cost-optimization"
 date: "2025-08-30"
 tags:
@@ -8,13 +10,139 @@ tags:
   - Cloud Optimization
   - Cost Governance
   - Automation
+tagsFi:
+  - FinOps
+  - Pilvioptimointi
+  - Kustannushallinta
+  - Automaatio
 category: "FinOps / Cloud Optimization"
 image: "/case-studies/cloud-cost-optimization/img1.webp"
 coverImage: "/case-studies/cloud-cost-optimization/img1.webp"
 images:
   - "/case-studies/cloud-cost-optimization/img1.webp"
 impact: "Reduced cloud spend by 35% (~$75K/year)"
+impactFi: "Pilvikulut laskivat 35 % (~$75K/vuosi)"
 featured: true
+contentFi: |
+  **Täysi työnäyte, alun perin julkaistu Mediumissa**
+
+  Tämä kirjoitus kokoaa FinOps-työvirrasta käytännön polun ongelman tunnistamisesta toteutukseen ja mitattuihin tuloksiin.
+
+  ## Miksi pilvikustannusten optimointi oli välttämätöntä
+  Pilvipalveluiden käytön kasvaessa myös kustannukset kasvavat nopeasti.
+
+  Ilman selkeitä kontrollikäytäntöjä kulut alkavat karata huomaamatta, mikä vaikuttaa budjettiin, toimituskykyyn ja pitkän aikavälin suunnitteluun.
+
+  Tavoite ei ollut leikata kustannuksia hinnalla millä hyvänsä. Tavoite oli parantaa kustannustehokkuutta niin, että luotettavuus ja skaalautuvuus säilyvät.
+
+  ![Pilvikustannusten näkyvyyden lähtötilanne](/case-studies/cloud-cost-optimization/img1.webp)
+
+  ## Kasvavat kulut ja puutteellinen näkyvyys
+  Kun ympäristöt laajenivat, kuukausikulut nousivat samaa tahtia.
+
+  Tiimit toimivat nopeasti ja provisioivat resursseja jatkuvasti, mutta yhteinen kustannusnäkyvyys ja ohjaus eivät pysyneet perässä.
+
+  Käytännössä tämä näkyi toistuvina hukkapisteinä:
+
+  - Testiympäristöjä luotiin hajautetusti ilman yhtenäistä rajaa.
+  - Ei-tuotantoympäristöjä jätettiin päälle öiksi ja viikonlopuiksi.
+  - Resursseja ylimitoitettiin varmuuden vuoksi.
+  - Käyttämättömiä ympäristöjä ei poistettu johdonmukaisesti.
+  - Kubernetes-klustereissa näkyi yliprovisiointia, irrallisia levyjä ja epätarkkaa skaalautumista.
+
+  Nämä tekijät vaikeuttivat ennustamista ja lisäsivät painetta kustannushallintaan.
+
+  ## Dataohjattu ratkaisu ja poikkitiiminen toteutus
+  Ratkaisin tilanteen rakenteisella mallilla, jossa yhdistyivät data-analyysi, poikkitiiminen yhteistyö, automaatio ja jatkuva ohjaus.
+
+  Lähtötilanne:
+  - Tiimeissä toimi noin 60 henkilöä eri rooleissa.
+  - Kuukausikustannus oli noin 20 000 dollaria ja trendi nousi kohti 24 000 dollaria.
+  - Ensimmäinen tavoite oli vähintään 30 prosentin lasku.
+
+  ### Datan keruu ja analyysi
+  Aloitin syvällä kulujen ja käyttökuorman auditoinnilla.
+
+  AWS Cost Explorer, yhtenäinen tagitus sekä Prometheus ja Grafana paljastivat suurimmat kuluerät ja toistuvat tehottomuudet.
+
+  Keskeiset hukkakategoriat olivat:
+  - Idle-tietokannat
+  - Ylimitoitetut ja käyttämättömät snapshotit
+  - Vanhentuneet imaget
+  - Yö ja viikonloppukäytön hukka
+  - Korkeat verkkosiirtokustannukset
+  - Vanhat release- ja tallennusartefaktit
+  - Ylimitoitetut instanssit
+  - Liian korkeat Kubernetes-solmumäärät
+  - Orvot persistent volumet
+  - Spot-kapasiteetin alikäyttö
+
+  ![Rightsizing ja skaalauksen optimointi](/case-studies/cloud-cost-optimization/img2.webp)
+
+  ### Kohdennetut toimenpiteet automaatiolla ja governance-käytännöillä
+  Kun hotspotit oli tunnistettu, toteutus tehtiin käytännön toimenpiteinä, jotka vietiin osaksi arjen toimintamallia.
+
+  #### 1. Idle-tietokannat
+  Lambda-automaatio seurasi CloudWatchin CPU- ja yhteysmittareita. Kehitystietokannat pysäytettiin automaattisesti, jos ne olivat pitkään ilman käyttöä.
+
+  #### 2. Ylimitoitetut ja käyttämättömät snapshotit
+  Snapshotteihin lisättiin ikään perustuva tagitus ja poistologiikka. Pitkään käyttämättömät snapshotit poistettiin hallitusti raportoinnin kautta.
+
+  #### 3. Vanhentuneet imaget
+  ECR:n lifecycle-politiikat ja skannaus poistivat vanhentuneita imagetiedostoja. Samalla AMI-hygieniaa parannettiin säännöllisellä siivouksella ja päivityksillä.
+
+  #### 4. Käyntiajat ja off-hour-käyttö
+  CloudWatchin ajastukset ja Lambda vähensivät ei-kriittisten resurssien käyttöä öisin ja viikonloppuisin. Poikkeukset hallittiin keskitetysti.
+
+  #### 5. Verkkokustannukset
+  Siirtokuluja laskettiin parantamalla alueellista sijoittelua ja rajaamalla turha cross-region-replikointi vain olennaiseen liikenteeseen.
+
+  #### 6. Datan säilytys ja release-hygienia
+  S3 lifecycle -säännöt automatisoivat datan siirron edullisempiin kerroksiin ja poistivat vanhoja loki- sekä release-artefakteja.
+
+  #### 7. Yliprovisioidut instanssit
+  Provisiointiohjeet yhtenäistettiin ja resurssipyynnöt sidottiin todelliseen kuormaan. Kehitys- ja testikuormille standardoitiin kevyempiä instanssiluokkia.
+
+  #### 8. Liian korkeat Kubernetes-solmumäärät
+  Cluster Autoscalerin raja-arvoja hienosäädettiin. Podien request- ja limit-käytännöt standardoitiin, mikä paransi pakkaustehokkuutta.
+
+  #### 9. Orvot persistent volumet
+  Ajastetut tarkistukset nostivat irralliset EBS-volyymit näkyville turvallista siivousta varten.
+
+  #### 10. Spot-instanssit
+  Spot-kapasiteetti otettiin käyttöön lyhytkestoisissa build-kuormissa, ja fallback on-demandiin varmistettiin keskeytystilanteita varten.
+
+  ## Miten säästöt pidettiin pysyvinä
+  Kustannusten lasku ei pysy ilman jatkuvaa toimintamallia.
+
+  Säästöt vakioitiin reaaliaikaisilla dashboardeilla, hälytyksillä, policy-pohjaisilla guardraileilla ja säännöllisillä poikkitiimisillä katselmoinneilla.
+
+  Pysyvät käytännöt:
+  - Jatkuva seuranta ja poikkeamahälytykset
+  - Tagituksen ja resurssikäytön automatisoitu governance
+  - Säännölliset kustannuskatselmukset omistajuuksineen
+  - Kustannustietoisuuden vahvistaminen tiimeissä
+  - Lifecycle-automaation laajentaminen
+  - Strategian jatkuva päivitys käytön muuttuessa
+
+  ![Tulokset ja ylläpidetty toimintamalli](/case-studies/cloud-cost-optimization/img3.webp)
+
+  ## Lopputulos ja opit
+  Tämä kokonaisuus osoitti, että merkittävä kustannuslasku on mahdollista ilman kompromisseja palvelun luotettavuudessa.
+
+  Portfoliossa esitetty lopputulos oli **35 %** kululasku, eli noin **$75K/vuosi** annualisoituna säästönä.
+
+  Alkuperäisessä toteutusikkunassa seurattiin myös kuukausitason muutosta noin 20 000 dollarista kohti 12 000 dollaria aktiivisten optimointisyklien aikana.
+
+  Ydinoppi oli selkeä: kustannusoptimointi ei ole kertaprojekti, vaan jatkuva kyvykkyys, joka vaatii näkyvyyttä, omistajuutta, governancea ja automaatiota.
+
+  ## Keskeiset nostot
+  - Pilvikustannusten hallinta on yhteinen vastuu tekniikan ja liiketoiminnan välillä.
+  - Läpinäkyvä kustannusnäkyvyys on päätösten perusta.
+  - Governance on pidettävä jatkuvana, jotta regressio ei palaa.
+  - Automaatio tekee säästöistä toistettavia ja skaalautuvia.
+
+  [Avaa alkuperäinen artikkeli Mediumissa](https://medium.com/@mileperuma/optimizing-cloud-spend-with-precision-my-approach-to-cutting-cloud-costs-by-40-d9ba311bc252)
 ---
 
 **Full Case Study — Originally published on Medium**

@@ -1,7 +1,12 @@
+"use client";
+
 import MapRoute from "@/components/MapRoute";
 import type { PostMapMeta } from "@/lib/content";
+import { useLanguage } from "@/components/language-provider";
+import { getDictionary } from "@/lib/i18n";
 
 interface BeyondWorkMapProps {
+  categoryId?: string;
   category?: string;
   map?: PostMapMeta;
   postTitle?: string;
@@ -16,6 +21,11 @@ function normalizeCategory(category?: string): string {
 
 function isEligibleMapCategory(category?: string): boolean {
   const normalized = normalizeCategory(category);
+  return normalized === "running" || normalized === "cycling";
+}
+
+function isEligibleMapCategoryId(categoryId?: string): boolean {
+  const normalized = normalizeCategory(categoryId);
   return normalized === "running" || normalized === "cycling";
 }
 
@@ -35,7 +45,7 @@ function hasRenderableMap(map?: PostMapMeta): boolean {
   return Boolean(map.start && map.end);
 }
 
-function resolveMode(category: string | undefined, map: PostMapMeta): "bike" | "run" {
+function resolveMode(categoryId: string | undefined, category: string | undefined, map: PostMapMeta): "bike" | "run" {
   if (map.mode === "bike") {
     return "bike";
   }
@@ -44,21 +54,24 @@ function resolveMode(category: string | undefined, map: PostMapMeta): "bike" | "
     return "run";
   }
 
-  const normalized = normalizeCategory(category);
+  const normalized = normalizeCategory(categoryId ?? category);
   return normalized === "cycling" ? "bike" : "run";
 }
 
-export function BeyondWorkMap({ category, map, postTitle, sectionLabel, className, view = "detail" }: BeyondWorkMapProps) {
+export function BeyondWorkMap({ categoryId, category, map, postTitle, sectionLabel, className, view = "detail" }: BeyondWorkMapProps) {
+  const { language } = useLanguage();
+  const t = getDictionary(language);
+
   if (view !== "detail") {
     return null;
   }
 
-  if (!isEligibleMapCategory(category) || !hasRenderableMap(map) || !map) {
+  if ((!isEligibleMapCategoryId(categoryId) && !isEligibleMapCategory(category)) || !hasRenderableMap(map) || !map) {
     return null;
   }
 
-  const title = map.title ?? (postTitle ? `${postTitle} Route` : "Route");
-  const mode = resolveMode(category, map);
+  const title = map.title ?? (postTitle ? `${postTitle} ${t.beyondWorkDetail.route}` : t.beyondWorkDetail.route);
+  const mode = resolveMode(categoryId, category, map);
 
   return (
     <section className={className ?? "space-y-4"}>
@@ -71,6 +84,15 @@ export function BeyondWorkMap({ category, map, postTitle, sectionLabel, classNam
         end={map.end}
         routeFile={map.routeFile}
         distanceLabel={map.distanceLabel}
+        labels={{
+          routeMap: t.common.routeMap,
+          loading: t.common.loading,
+          mapDataUnavailable: t.common.mapDataUnavailable,
+          runningMode: t.common.runningMode,
+          cyclingMode: t.common.cyclingMode,
+          start: t.common.start,
+          end: t.common.end
+        }}
       />
     </section>
   );

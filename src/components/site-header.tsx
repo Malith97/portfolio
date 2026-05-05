@@ -3,63 +3,38 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { startTransition, useMemo } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
-import {
-  getDictionary,
-  LANGUAGE_COOKIE_KEY,
-  LANGUAGE_STORAGE_KEY,
-  Language,
-  normalizeLanguage
-} from "@/lib/i18n";
+import { useLanguage } from "@/components/language-provider";
+import { getDictionary, type Language, normalizeLanguage } from "@/lib/i18n";
 
-interface SiteHeaderProps {
-  initialLanguage: Language;
-}
-
-export function SiteHeader({ initialLanguage }: SiteHeaderProps) {
+export function SiteHeader() {
   const pathname = usePathname();
   const router = useRouter();
   const prefersReducedMotion = useReducedMotion();
-  const [language, setLanguage] = useState<Language>(initialLanguage);
+  const { language, setLanguage } = useLanguage();
   const t = useMemo(() => getDictionary(language), [language]);
-
-  useEffect(() => {
-    const stored = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
-    const storedLanguage = stored ? normalizeLanguage(stored) : initialLanguage;
-
-    if (!stored) {
-      window.localStorage.setItem(LANGUAGE_STORAGE_KEY, initialLanguage);
-    }
-
-    if (storedLanguage !== initialLanguage) {
-      document.cookie = `${LANGUAGE_COOKIE_KEY}=${storedLanguage}; path=/; max-age=31536000; samesite=lax`;
-      setLanguage(storedLanguage);
-      router.refresh();
-      return;
-    }
-
-    setLanguage(initialLanguage);
-  }, [initialLanguage, router]);
 
   const navigation = [
     { href: "/", label: t.nav.home },
+    { href: "/story", label: t.nav.story },
     { href: "/work-education", label: t.nav.experience },
     { href: "/case-studies", label: t.nav.caseStudies },
     { href: "/beyond-work", label: t.nav.beyondWork },
-    { href: "/contact", label: t.nav.contact }
+    { href: "/contact", label: t.nav.contact },
   ];
 
   const changeLanguage = (nextLanguage: Language) => {
-    if (nextLanguage === language) {
+    const normalizedNext = normalizeLanguage(nextLanguage);
+    if (normalizedNext === language) {
       return;
     }
 
-    setLanguage(nextLanguage);
-    window.localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLanguage);
-    document.cookie = `${LANGUAGE_COOKIE_KEY}=${nextLanguage}; path=/; max-age=31536000; samesite=lax`;
-    router.refresh();
+    setLanguage(normalizedNext);
+    startTransition(() => {
+      router.refresh();
+    });
   };
 
   const isActiveLink = (href: string): boolean => {
@@ -80,7 +55,9 @@ export function SiteHeader({ initialLanguage }: SiteHeaderProps) {
           <span className="inline-flex h-8 w-8 overflow-hidden rounded-full border border-border bg-surface shadow-[inset_0_0_0_1px_rgba(242,199,91,0.08)]">
             <Image
               src="/media/malith-avatar.png"
-              alt="Malith avatar"
+              alt={
+                language === "fi" ? "Malithin profiilikuva" : "Malith avatar"
+              }
               width={32}
               height={32}
               className="h-full w-full object-cover"
@@ -90,7 +67,7 @@ export function SiteHeader({ initialLanguage }: SiteHeaderProps) {
         </Link>
 
         <div className="flex flex-wrap items-center gap-4 md:justify-end">
-          <nav aria-label="Primary">
+          <nav aria-label={t.common.primaryNavigation}>
             <ul className="flex flex-wrap items-center justify-end gap-x-1 gap-y-2 text-sm">
               {navigation.map((item) => {
                 const isActive = isActiveLink(item.href);
@@ -99,11 +76,14 @@ export function SiteHeader({ initialLanguage }: SiteHeaderProps) {
                   <li key={item.href}>
                     <motion.div
                       whileHover={prefersReducedMotion ? undefined : { y: -1 }}
-                      whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
+                      whileTap={
+                        prefersReducedMotion ? undefined : { scale: 0.98 }
+                      }
                       transition={{ duration: 0.16, ease: "easeOut" }}
                     >
                       <Link
                         href={item.href}
+                        prefetch={false}
                         className={`relative inline-flex items-center rounded-md px-2.5 py-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                           isActive
                             ? "bg-accent/14 text-accent shadow-[0_0_0_1px_rgba(242,199,91,0.36),0_0_18px_rgba(242,199,91,0.26)]"
@@ -118,9 +98,13 @@ export function SiteHeader({ initialLanguage }: SiteHeaderProps) {
                           initial={false}
                           animate={{
                             scaleX: isActive ? 1 : 0,
-                            opacity: isActive ? 1 : 0.85
+                            opacity: isActive ? 1 : 0.85,
                           }}
-                          whileHover={prefersReducedMotion ? undefined : { scaleX: 1, opacity: 1 }}
+                          whileHover={
+                            prefersReducedMotion
+                              ? undefined
+                              : { scaleX: 1, opacity: 1 }
+                          }
                           transition={{ duration: 0.18, ease: "easeOut" }}
                           style={{ transformOrigin: "left center" }}
                         />
@@ -139,7 +123,9 @@ export function SiteHeader({ initialLanguage }: SiteHeaderProps) {
             <button
               type="button"
               className={`rounded-full px-2 py-0.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 focus-visible:ring-offset-1 focus-visible:ring-offset-surface ${
-                language === "eng" ? "bg-accent/15 text-accent" : "hover:text-text"
+                language === "eng"
+                  ? "bg-accent/15 text-accent"
+                  : "hover:text-text"
               }`}
               aria-pressed={language === "eng"}
               onClick={() => changeLanguage("eng")}
@@ -150,7 +136,9 @@ export function SiteHeader({ initialLanguage }: SiteHeaderProps) {
             <button
               type="button"
               className={`rounded-full px-2 py-0.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 focus-visible:ring-offset-1 focus-visible:ring-offset-surface ${
-                language === "fi" ? "bg-accent/15 text-accent" : "hover:text-text"
+                language === "fi"
+                  ? "bg-accent/15 text-accent"
+                  : "hover:text-text"
               }`}
               aria-pressed={language === "fi"}
               onClick={() => changeLanguage("fi")}

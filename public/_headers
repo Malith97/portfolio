@@ -1,0 +1,27 @@
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  X-Permitted-Cross-Domain-Policies: none
+  X-DNS-Prefetch-Control: off
+  Origin-Agent-Cluster: ?1
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data: blob: https://images.unsplash.com https://cdn.jsdelivr.net https://*.tile.openstreetmap.org; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self' https://*.tile.openstreetmap.org; form-action 'self'; frame-src 'none'; upgrade-insecure-requests
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-site
+
+/media/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/logos/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/content/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/case-studies/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/routes/*
+  Cache-Control: public, max-age=3600, stale-while-revalidate=3600

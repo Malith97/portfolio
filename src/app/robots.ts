@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
-const baseUrl = "https://malithileperuma.dev";
+const baseUrl = "https://malithileperuma.com";
+export const dynamic = "force-static";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -8,6 +9,7 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/"
     },
+    host: baseUrl,
     sitemap: `${baseUrl}/sitemap.xml`
   };
 }

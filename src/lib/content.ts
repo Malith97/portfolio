@@ -5,6 +5,7 @@ import matter from "gray-matter";
 import { remark } from "remark";
 import remarkGfm from "remark-gfm";
 import remarkHtml from "remark-html";
+import type { Language } from "@/lib/i18n";
 
 export type ContentSection = "case-studies" | "beyond-work";
 
@@ -50,11 +51,14 @@ export interface PostMeta {
   theme?: string;
   photoCount?: string;
   notes?: string;
+  temperature?: string;
+  distanceWalked?: string;
   dishType?: string;
   cuisine?: string;
   timeSpent?: string;
   whatITried?: string;
   whatILearned?: string;
+  sharedWith?: string;
   personalNote?: string;
   ingredients: string[];
   steps: string[];
@@ -70,26 +74,16 @@ export interface Post extends PostMeta {
 }
 
 const CONTENT_ROOT = path.join(process.cwd(), "content");
-type CaseStudySlug = "cloud-cost-optimization" | "kubernetes-rbac-okta";
-
-const ALLOWED_CASE_STUDY_SLUGS = new Set<CaseStudySlug>([
-  "cloud-cost-optimization",
-  "kubernetes-rbac-okta"
-] as const);
-
-function isAllowedCaseStudySlug(slug: string): slug is CaseStudySlug {
-  return ALLOWED_CASE_STUDY_SLUGS.has(slug as CaseStudySlug);
-}
 
 function getDirectory(section: ContentSection): string {
   return path.join(CONTENT_ROOT, section);
 }
 
-function toReadingTime(markdown: string): string {
+function toReadingTime(markdown: string, language: Language): string {
   const text = markdown.replace(/[\n#*_`>-]/g, " ");
   const words = text.trim().split(/\s+/).filter(Boolean).length;
   const minutes = Math.max(1, Math.round(words / 220));
-  return `${minutes} min read`;
+  return language === "fi" ? `${minutes} min lukuaika` : `${minutes} min read`;
 }
 
 function optimizeContentHtml(html: string): string {
@@ -99,8 +93,80 @@ function optimizeContentHtml(html: string): string {
 function normalizeMeta(
   slug: string,
   data: Record<string, unknown>,
-  markdown: string
+  markdown: string,
+  language: Language
 ): PostMeta {
+  const resolveLocalizedValue = <T>(value: unknown): T | undefined => {
+    if (value === null || value === undefined) {
+      return undefined;
+    }
+
+    if (Array.isArray(value)) {
+      return value as T;
+    }
+
+    if (typeof value === "object") {
+      const localizedObject = value as Record<string, unknown>;
+      const preferred = language === "fi" ? localizedObject.fi : localizedObject.eng ?? localizedObject.en;
+      const fallback = localizedObject.eng ?? localizedObject.en ?? localizedObject.fi;
+      return (preferred ?? fallback) as T | undefined;
+    }
+
+    return value as T;
+  };
+
+  const getLocalizedField = <T>(key: string): T | undefined => {
+    const directRaw = data[key];
+
+    // Object-localized fields like { eng, fi } are resolved first.
+    if (directRaw && typeof directRaw === "object" && !Array.isArray(directRaw)) {
+      const directObjectValue = resolveLocalizedValue<T>(directRaw);
+      if (directObjectValue !== undefined) {
+        return directObjectValue;
+      }
+    }
+
+    // For Finnish, prefer explicit *Fi fields before falling back to base keys.
+    if (language === "fi") {
+      const fiValue = resolveLocalizedValue<T>(data[`${key}Fi`]);
+      if (fiValue !== undefined) {
+        return fiValue;
+      }
+    }
+
+    return resolveLocalizedValue<T>(directRaw);
+  };
+
+  const getLocalizedString = (key: string): string | undefined => {
+    const value = getLocalizedField<string>(key);
+    return typeof value === "string" ? value : undefined;
+  };
+
+  const toStringArray = (value: unknown): string[] => {
+    if (Array.isArray(value)) {
+      return value.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
+    }
+
+    if (typeof value === "string" && value.trim().length > 0) {
+      return value
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+
+    return [];
+  };
+
+  const getLocalizedStringArray = (key: string): string[] => {
+    const directValue = getLocalizedField<unknown>(key);
+    const localizedArray = toStringArray(directValue);
+    if (localizedArray.length > 0) {
+      return localizedArray;
+    }
+
+    return toStringArray(data[key]);
+  };
+
   const toCoordinatePair = (value: unknown): [number, number] | undefined => {
     if (!Array.isArray(value) || value.length < 2) {
       return undefined;
@@ -135,9 +201,9 @@ function normalizeMeta(
       : [];
     const start = toCoordinatePair(mapObject.start);
     const end = toCoordinatePair(mapObject.end);
-    const routeFile = typeof mapObject.routeFile === "string" ? mapObject.routeFile : undefined;
-    const title = typeof mapObject.title === "string" ? mapObject.title : undefined;
-    const distanceLabel = typeof mapObject.distanceLabel === "string" ? mapObject.distanceLabel : undefined;
+    const routeFile = resolveLocalizedValue<string>(mapObject.routeFile);
+    const title = resolveLocalizedValue<string>(mapObject.title);
+    const distanceLabel = resolveLocalizedValue<string>(mapObject.distanceLabel);
 
     if (!routeFile && points.length < 2 && !(start && end)) {
       return undefined;
@@ -154,83 +220,71 @@ function normalizeMeta(
     };
   };
 
-  const toStringArray = (value: unknown): string[] => {
-    if (Array.isArray(value)) {
-      return value.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
-    }
-
-    if (typeof value === "string" && value.trim().length > 0) {
-      return value
-        .split(",")
-        .map((item) => item.trim())
-        .filter(Boolean);
-    }
-
-    return [];
-  };
-
-  const images = toStringArray(data.images);
-  const photos = toStringArray(data.photos);
+  const images = getLocalizedStringArray("images");
+  const photos = getLocalizedStringArray("photos");
   const mergedImages = [...images, ...photos];
   const uniqueImages = mergedImages.filter((image, index) => mergedImages.indexOf(image) === index);
 
   const coverImage =
-    typeof data.coverImage === "string"
-      ? data.coverImage
-      : typeof data.image === "string"
-        ? data.image
+    typeof getLocalizedString("coverImage") === "string"
+      ? (getLocalizedString("coverImage") as string)
+      : typeof getLocalizedString("image") === "string"
+        ? (getLocalizedString("image") as string)
         : uniqueImages[0] ?? "";
 
-  const tags = toStringArray(data.tags);
-  const gear = toStringArray(data.gear);
-  const highlights = toStringArray(data.highlights);
-  const ingredients = toStringArray(data.ingredients);
-  const steps = toStringArray(data.steps);
-  const notesForNextTime = toStringArray(data.notesForNextTime);
+  const tags = getLocalizedStringArray("tags");
+  const gear = getLocalizedStringArray("gear");
+  const highlights = getLocalizedStringArray("highlights");
+  const ingredients = getLocalizedStringArray("ingredients");
+  const steps = getLocalizedStringArray("steps");
+  const notesForNextTime = getLocalizedStringArray("notesForNextTime");
 
   return {
-    slug: typeof data.slug === "string" ? data.slug : slug,
-    title: typeof data.title === "string" ? data.title : slug,
-    summary: typeof data.summary === "string" ? data.summary : "",
-    date: typeof data.date === "string" ? data.date : "1970-01-01",
+    slug: typeof getLocalizedString("slug") === "string" ? (getLocalizedString("slug") as string) : slug,
+    title: typeof getLocalizedString("title") === "string" ? (getLocalizedString("title") as string) : slug,
+    summary: typeof getLocalizedString("summary") === "string" ? (getLocalizedString("summary") as string) : "",
+    date: typeof getLocalizedString("date") === "string" ? (getLocalizedString("date") as string) : "1970-01-01",
     tags,
     image: coverImage,
     images: uniqueImages.length > 0 ? uniqueImages : coverImage ? [coverImage] : [],
     coverImage,
     photos: uniqueImages.length > 0 ? uniqueImages : coverImage ? [coverImage] : [],
-    impact: typeof data.impact === "string" ? data.impact : undefined,
-    categoryId: typeof data.categoryId === "string" ? data.categoryId : undefined,
-    category: typeof data.category === "string" ? data.category : undefined,
-    location: typeof data.location === "string" ? data.location : undefined,
+    impact: getLocalizedString("impact"),
+    categoryId: getLocalizedString("categoryId"),
+    category: getLocalizedString("category"),
+    location: getLocalizedString("location"),
     featured: typeof data.featured === "boolean" ? data.featured : false,
-    cardMeta: typeof data.cardMeta === "string" ? data.cardMeta : undefined,
-    distance: typeof data.distance === "string" ? data.distance : undefined,
-    duration: typeof data.duration === "string" ? data.duration : undefined,
-    occasion: typeof data.occasion === "string" ? data.occasion : undefined,
-    event: typeof data.event === "string" ? data.event : undefined,
-    result: typeof data.result === "string" ? data.result : undefined,
-    team: typeof data.team === "string" ? data.team : undefined,
-    weather: typeof data.weather === "string" ? data.weather : undefined,
-    route: typeof data.route === "string" ? data.route : undefined,
-    routeImage: typeof data.routeImage === "string" ? data.routeImage : undefined,
-    map: toMapMeta(data.map),
-    difficulty: typeof data.difficulty === "string" ? data.difficulty : undefined,
-    theme: typeof data.theme === "string" ? data.theme : undefined,
-    photoCount: typeof data.photoCount === "string" ? data.photoCount : undefined,
-    notes: typeof data.notes === "string" ? data.notes : undefined,
-    dishType: typeof data.dishType === "string" ? data.dishType : undefined,
-    cuisine: typeof data.cuisine === "string" ? data.cuisine : undefined,
-    timeSpent: typeof data.timeSpent === "string" ? data.timeSpent : undefined,
-    whatITried: typeof data.whatITried === "string" ? data.whatITried : undefined,
-    whatILearned: typeof data.whatILearned === "string" ? data.whatILearned : undefined,
-    personalNote: typeof data.personalNote === "string" ? data.personalNote : undefined,
+    cardMeta: getLocalizedString("cardMeta"),
+    distance: getLocalizedString("distance"),
+    duration: getLocalizedString("duration"),
+    occasion: getLocalizedString("occasion"),
+    event: getLocalizedString("event"),
+    result: getLocalizedString("result"),
+    team: getLocalizedString("team"),
+    weather: getLocalizedString("weather"),
+    route: getLocalizedString("route"),
+    routeImage: getLocalizedString("routeImage"),
+    map: toMapMeta(resolveLocalizedValue<Record<string, unknown>>(data.map)),
+    difficulty: getLocalizedString("difficulty"),
+    theme: getLocalizedString("theme"),
+    photoCount: getLocalizedString("photoCount"),
+    notes: getLocalizedString("notes"),
+    temperature: getLocalizedString("temperature"),
+    distanceWalked: getLocalizedString("distanceWalked"),
+    dishType: getLocalizedString("dishType"),
+    cuisine: getLocalizedString("cuisine"),
+    timeSpent: getLocalizedString("timeSpent"),
+    whatITried: getLocalizedString("whatITried"),
+    whatILearned: getLocalizedString("whatILearned"),
+    sharedWith: getLocalizedString("sharedWith"),
+    personalNote: getLocalizedString("personalNote"),
     ingredients,
     steps,
-    cookingTime: typeof data.cookingTime === "string" ? data.cookingTime : undefined,
+    cookingTime: getLocalizedString("cookingTime"),
     notesForNextTime,
     gear,
     highlights,
-    readingTime: toReadingTime(markdown)
+    readingTime: toReadingTime(markdown, language)
   };
 }
 
@@ -252,7 +306,7 @@ async function readPostFile(section: ContentSection, slug: string): Promise<stri
   throw new Error(`Post not found: ${section}/${slug}`);
 }
 
-export async function getAllPosts(section: ContentSection): Promise<PostMeta[]> {
+export async function getAllPosts(section: ContentSection, language: Language): Promise<PostMeta[]> {
   const directory = getDirectory(section);
   const files = await fs.readdir(directory);
   const postFiles = files.filter((file) => file.endsWith(".mdx") || file.endsWith(".md"));
@@ -262,7 +316,7 @@ export async function getAllPosts(section: ContentSection): Promise<PostMeta[]> 
       const slug = file.replace(/\.mdx?$/, "");
       const source = await readPostFile(section, slug);
       const { data, content } = matter(source);
-      return normalizeMeta(slug, data as Record<string, unknown>, content);
+      return normalizeMeta(slug, data as Record<string, unknown>, content, language);
     })
   );
 
@@ -271,15 +325,20 @@ export async function getAllPosts(section: ContentSection): Promise<PostMeta[]> 
 
 export async function getPostBySlug(
   section: ContentSection,
-  slug: string
+  slug: string,
+  language: Language
 ): Promise<Post | null> {
   try {
     const source = await readPostFile(section, slug);
     const { data, content } = matter(source);
-    const processed = await remark().use(remarkGfm).use(remarkHtml).process(content);
+    const localizedMarkdown =
+      language === "fi" && typeof (data as Record<string, unknown>).contentFi === "string"
+        ? ((data as Record<string, unknown>).contentFi as string)
+        : content;
+    const processed = await remark().use(remarkGfm).use(remarkHtml).process(localizedMarkdown);
 
     return {
-      ...normalizeMeta(slug, data as Record<string, unknown>, content),
+      ...normalizeMeta(slug, data as Record<string, unknown>, localizedMarkdown, language),
       contentHtml: optimizeContentHtml(processed.toString())
     };
   } catch {
@@ -287,22 +346,18 @@ export async function getPostBySlug(
   }
 }
 
-export function getAllCaseStudies(): Promise<PostMeta[]> {
-  return getAllPosts("case-studies").then((posts) => posts.filter((post) => isAllowedCaseStudySlug(post.slug)));
+export function getAllCaseStudies(language: Language): Promise<PostMeta[]> {
+  return getAllPosts("case-studies", language);
 }
 
-export function getCaseStudyBySlug(slug: string): Promise<Post | null> {
-  if (!isAllowedCaseStudySlug(slug)) {
-    return Promise.resolve(null);
-  }
-
-  return getPostBySlug("case-studies", slug);
+export function getCaseStudyBySlug(slug: string, language: Language): Promise<Post | null> {
+  return getPostBySlug("case-studies", slug, language);
 }
 
-export function getAllBeyondWorkPosts(): Promise<PostMeta[]> {
-  return getAllPosts("beyond-work");
+export function getAllBeyondWorkPosts(language: Language): Promise<PostMeta[]> {
+  return getAllPosts("beyond-work", language);
 }
 
-export function getBeyondWorkPostBySlug(slug: string): Promise<Post | null> {
-  return getPostBySlug("beyond-work", slug);
+export function getBeyondWorkPostBySlug(slug: string, language: Language): Promise<Post | null> {
+  return getPostBySlug("beyond-work", slug, language);
 }
