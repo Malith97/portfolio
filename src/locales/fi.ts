@@ -9,7 +9,7 @@ export const fi: Dictionary = {
     caseStudies: "Työnäytteet",
     beyondWork: "Vapaa-ajalla",
     certifications: "Sertifikaatit",
-    contact: "Yhteys",
+    contact: "Yhteydenotto",
   },
   language: {
     label: "Kielivalinta",
@@ -30,7 +30,7 @@ export const fi: Dictionary = {
     routeScreenshot: "Reittikuva",
     previous: "Edellinen",
     next: "Seuraava",
-    backToBeyondWork: "Takaisin Vapaa-ajalle",
+    backToBeyondWork: "Takaisin vapaa-ajalle",
     backToCaseStudies: "Takaisin työnäytteisiin",
     gallery: "Galleria",
     story: "Tarina",
@@ -65,7 +65,7 @@ export const fi: Dictionary = {
   },
   footer: {
     builtWithCare:
-      "Suunniteltu luotettavia ja skaalautuvia järjestelmiä varten, selkeällä järjestelmäsuunnittelulla.",
+      "Rakennettu luotettavuutta, skaalautuvuutta ja selkeää järjestelmäsuunnittelua painottaen.",
   },
   home: {
     label: "Etusivu",
@@ -74,7 +74,7 @@ export const fi: Dictionary = {
     heroPortraitAlt: "Muotokuva Malith Ileperumasta",
     heroSummary:
       "Suunnittelen, automatisoin ja ylläpidän toimitusalustoja tiimeille, jotka tarvitsevat nopeutta, luotettavuutta ja hallittavuutta.",
-    heroMeta: "Avoin DevOps-mahdollisuuksille Suomessa, EU:ssa ja etätiimeissä",
+    heroMeta: "Avoin DevOps-rooleille Suomessa, EU:ssa ja etätiimeissä",
     ctaViewWork: "Katso työt",
     ctaDownloadResume: "Ota yhteyttä",
     summaryLabel: "Yhteenveto",
@@ -97,7 +97,7 @@ export const fi: Dictionary = {
     selectedWorkLabel: "Valitut työt",
     selectedWorkTitle: "Valitut työt",
     selectedWorkDescription:
-      "Vain vahvimmat tuloksiin keskittyvät kokonaisuudet.",
+      "Valikoima vaikuttavimpia tuloslähtöisiä toteutuksia.",
     photoNotesLabel: "Vapaa-ajalla",
     photoNotesTitle: "Elämää työn ulkopuolella",
     beyondWorkDescription:
@@ -233,7 +233,7 @@ export const fi: Dictionary = {
         paragraphs: [
           "LSEG:llä vastuun mittakaava kasvoi. Tuin London Stock Exchangeen ja Turquoiseen liittyviä tiimejä CI/CD-putkissa, pilvimigraatioissa, skriptauksessa ja automaatiossa.",
           "Finanssiteknologiassa luotettavuus ei ole lisäominaisuus. Järjestelmien on oltava vakaita, turvallisia, jäljitettäviä ja ylläpidettäviä, koska ihmiset ovat niistä riippuvaisia.",
-          "Myöhemmin Millennium Surveillance -alueella toimin pienen tiimin senior-engineerinä vastaten muun muassa pilvikustannuksista, governance-käytännöistä, pipeline-kovennuksesta, migraatioista, päivityksistä ja GitLab-siirroista.",
+          "Myöhemmin Millennium Surveillance -alueella toimin pienen tiimin senior-engineerinä vastaten muun muassa pilvikustannuksista, ohjauskäytännöistä, pipeline-kovennuksesta, migraatioista, päivityksistä ja GitLab-siirroista.",
           "Se vaihe opetti kysymään pidemmälle: onko tämä turvallinen, ymmärrettävä, skaalautuva ja ylläpidettävä myös paineen alla?",
         ],
         imageAlt:
@@ -286,7 +286,7 @@ export const fi: Dictionary = {
     stackLabel: "Teknologiat",
     roleLabels: {
       finnishLanguageStudies: "Suomen kielen opinnot",
-      bachelorOfScience: "Bachelor of Science",
+      bachelorOfScience: "Luonnontieteiden kandidaatti",
       highSchool: "Lukio",
     },
     responsibilities: "Keskeiset vastuut",
@@ -294,7 +294,7 @@ export const fi: Dictionary = {
     tools: "Käytetyt työkalut",
   },
   caseStudiesPage: {
-    label: "CASE STUDIES",
+    label: "TYÖNÄYTTEET",
     title: "Infra- ja toimitusputken työnäytteet",
     description:
       "Käytännön DevOps-, pilvi-, automaatio- ja luotettavuustyötä, joka keskittyy mitattaviin toimitustuloksiin.",
@@ -321,7 +321,7 @@ export const fi: Dictionary = {
     },
   },
   beyondWorkDetail: {
-    fieldMetadata: "Metatiedot",
+    fieldMetadata: "Tiedot",
     highlights: "Kohokohdat",
     category: "Kategoria",
     date: "Päivämäärä",
@@ -339,7 +339,7 @@ export const fi: Dictionary = {
     theme: "Teema",
     photos: "Kuvat",
     cameraGear: "Kamera / Kalusto",
-    session: "Sessio",
+    session: "Kerta",
     notes: "Muistiinpanot",
     temperature: "Lämpötila",
     distanceWalked: "Kävelty matka",
@@ -386,8 +386,8 @@ export const fi: Dictionary = {
     label: "Yhteys",
     title: "Rakennetaan luotettavia järjestelmiä yhdessä",
     description:
-      "Avoin DevOps-, platform engineering- ja pilviluotettavuuden rooleille Suomessa, EU:ssa ja etätiimeissä.",
-    hook: "Suunnittelen ja ylläpidän tuotantotason pilvijärjestelmiä, joissa luotettavuus ei ole valinnainen ominaisuus.",
+      "Avoin DevOps-, Platform Engineering- ja pilviluotettavuuden rooleille Suomessa, EU:ssa ja etätiimeissä.",
+    hook: "Suunnittelen ja ylläpidän tuotantotason pilvijärjestelmiä, joissa luotettavuus on perusvaatimus.",
     startConversation: "Aloitetaan keskustelu",
     intro:
       "Jos etsit osaajaa DevOpsiin, platform engineeringiin, pilvi-infrastruktuuriin tai luotettavuustyöhön, ota mielellään yhteyttä.",
@@ -402,7 +402,7 @@ export const fi: Dictionary = {
     openToTitle: "Tällä hetkellä avoin",
     openToItems: [
       "DevOps-insinöörin roolit",
-      "Alustainsinöörin roolit",
+      "Platform Engineer -roolit",
       "Pilviluotettavuuden tehtävät",
       "CI/CD- ja automaatioprojektit",
       "Mahdollisuudet Suomessa, EU:ssa ja etänä",

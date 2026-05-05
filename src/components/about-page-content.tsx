@@ -8,9 +8,9 @@ export function AboutPageContent() {
   const isFinnish = language === "fi";
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-10 sm:space-y-12">
       <SectionHeading
-        label={isFinnish ? "Tietoa" : "ABOUT"}
+        label={isFinnish ? "Tietoa minusta" : "ABOUT"}
         title={isFinnish ? "Malith Ileperuma" : "About Malith Ileperuma"}
         description={
           isFinnish
@@ -19,7 +19,7 @@ export function AboutPageContent() {
         }
       />
 
-      <section className="max-w-reading space-y-4 text-base leading-relaxed text-muted">
+      <section className="max-w-reading space-y-4 text-[0.98rem] leading-7 text-muted sm:text-base sm:leading-relaxed">
         <p>
           {isFinnish
             ? "Suunnittelen ja ylläpidän tuotantotason järjestelmiä keskittyen CI/CD-putkiin, Kubernetes-ympäristöihin, Terraform-pohjaiseen infrastruktuuriin sekä käytännön automaatioon."

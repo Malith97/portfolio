@@ -1,8 +1,8 @@
 ---
 title: "Supercharge Kubernetes RBAC with Okta"
-titleFi: "Kubernetes RBAC kuntoon Oktan avulla"
+titleFi: "Kubernetes RBAC kuntoon Okta-integraatiolla"
 summary: "Improving Kubernetes access control with identity-driven RBAC, Okta integration, and safer multi-team cluster access."
-summaryFi: "Kubernetesin käyttöoikeushallinta parani identiteettipohjaisella RBAC-mallilla ja Okta-integraatiolla."
+summaryFi: "Kubernetesin käyttöoikeushallinta parani identiteettiohjatulla RBAC-mallilla ja Okta-integraatiolla."
 slug: "kubernetes-rbac-okta"
 date: "2025-06-15"
 tags:
@@ -29,17 +29,17 @@ featured: true
 contentFi: |
   **Täysi työnäyte, alun perin julkaistu Mediumissa**
 
-  Tämä case study käy läpi, miten Kubernetes RBAC integroitiiin Oktaan, jotta monitiimisen klusterin käyttöoikeudet saatiin hallittaviksi ja auditoitaviksi.
+  Tässä työnäytteessä käyn läpi, miten Kubernetes RBAC integroitiin Oktaan, jotta monitiimisen klusterin käyttöoikeudet saatiin hallittaviksi ja auditoitaviksi.
 
   ## Johdanto
   Kubernetes on vahva alusta sovellusten orkestrointiin, mutta käyttöoikeuksien hallinta monimutkaistuu nopeasti tiimien kasvaessa.
 
-  Ratkaisin tämän ottamalla käyttöön identity-pohjaisen RBAC-mallin Okta-integraatiolla. Käyttöoikeuksista tuli selkeämpiä, turvallisempia ja helpommin ylläpidettäviä.
+  Ratkaisin tämän ottamalla käyttöön identiteettiohjatun RBAC-mallin Okta-integraatiolla. Käyttöoikeuksista tuli selkeämpiä, turvallisempia ja helpommin ylläpidettäviä.
 
   ![Kubernetes-käyttöoikeudet keskitetyn identiteetin avulla](/case-studies/kubernetes-rbac-okta/img1.webp)
 
   ## Perinteisen Kubernetes-käyttöoikeusmallin haasteet
-  Monessa ympäristössä käyttöoikeudet nojaavat staattisiin tunnisteisiin ja käsin ylläpidettyihin role bindingeihin. Se lisää sekä riskiä että ylläpitokuormaa.
+  Monessa ympäristössä käyttöoikeudet nojaavat staattisiin tunnisteisiin ja käsin ylläpidettyihin RoleBindingeihin. Tämä lisää sekä riskiä että ylläpitokuormaa.
 
   Tyypilliset ongelmat:
   - Staattiset kubeconfig-tunnisteet ovat hankalia kierrättää.
@@ -50,7 +50,7 @@ contentFi: |
   Ilman keskitettyä identiteettiä klusterin oikeudet ajautuvat helposti pois least-privilege-linjasta.
 
   ## Kubernetes RBAC ja Okta käytännössä
-  Toteutus yhdisti Kubernetesin RBAC-primitiiivit, Okta-ryhmät ja OIDC-autentikoinnin.
+  Toteutus yhdisti Kubernetesin RBAC-primitiivit, Okta-ryhmät ja OIDC-autentikoinnin.
 
   ### 1. Okta-ryhmät käyttöoikeustason mukaan
   Rakensin Oktaan ryhmärakenteet, jotka mapattiin suoraan klusterin käyttömalliin, esimerkiksi:
@@ -73,7 +73,7 @@ contentFi: |
   Roolit rajattiin vain välttämättömiin resursseihin, ja bindingit sidottiin vastaaviin Okta-ryhmiin.
 
   ### 3. OIDC-autentikointi Kubernetesiin ja kubectliin
-  Kubernetes konfiguroitiin luottamaan Oktaan OIDC-identiteetin tarjoajana. Asiakaspuolella login tehtiin OIDC-tokenin kautta.
+  Kubernetes konfiguroitiin luottamaan Oktaan OIDC-identiteetin tarjoajana. Asiakaspuolella kirjautuminen tehtiin OIDC-tokenin kautta.
 
   Esimerkkiasetus:
 
@@ -129,11 +129,11 @@ contentFi: |
     - Syy: päällekkäiset RBAC-objektit ja eri skoopit
     - Korjaus: käyttöön otettiin deterministiset policy-testit ja roolirajat dokumentoitiin selkeästi
 
-  ## Hyödyt ja huomioitavat trade-offit
+  ## Hyödyt ja huomioitavat kompromissit
   Toteutuksessa oli selkeästi enemmän hyötyjä kuin haittoja.
 
   ### Hyödyt
-  - Turvallisuus parani identity-pohjaisen least-privilege-mallin ansiosta
+  - Turvallisuus parani identiteettiohjatun least-privilege-mallin ansiosta
   - Käyttöoikeuksien elinkaaren hallinta nopeutui
   - Governance ja auditointi helpottuivat merkittävästi
 

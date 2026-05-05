@@ -34,7 +34,7 @@ export function PhotoGrid({
   const items = maxItems ? images.slice(0, maxItems) : images;
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const lastTriggerRef = useRef<HTMLButtonElement | null>(null);
-  const gridColsClass = items.length === 1 ? "grid-cols-1" : "grid-cols-2 md:grid-cols-3";
+  const gridColsClass = items.length === 1 ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3";
   const hasMultiple = items.length > 1;
   const isLightboxOpen = enableLightbox && activeIndex !== null;
   const activeImage = useMemo(
@@ -44,7 +44,7 @@ export function PhotoGrid({
   const imageSizes =
     items.length === 1
       ? "(max-width: 768px) 100vw, 880px"
-      : "(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 380px";
+      : "(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 380px";
   const resolvedLabels = {
     openImage: labels?.openImage ?? "Open image",
     closeImageViewer: labels?.closeImageViewer ?? "Close image viewer",
@@ -194,7 +194,7 @@ export function PhotoGrid({
             <button
               type="button"
               onClick={closeLightbox}
-              className="absolute right-3 top-3 z-30 rounded-md border border-border bg-[#0d0d0d]/95 px-3 py-1.5 font-mono text-xs uppercase tracking-label text-text shadow-md transition-colors duration-150 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0b0b]"
+              className="absolute right-3 top-3 z-30 inline-flex min-h-11 items-center rounded-md border border-border bg-[#0d0d0d]/95 px-3 py-1.5 font-mono text-xs uppercase tracking-label text-text shadow-md transition-colors duration-150 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0b0b]"
               aria-label={resolvedLabels.closeImageViewer}
             >
               {resolvedLabels.closeImageViewer}
@@ -205,7 +205,7 @@ export function PhotoGrid({
                 <button
                   type="button"
                   onClick={goPrevious}
-                  className="absolute left-2 top-1/2 z-30 -translate-y-1/2 rounded-md border border-border bg-[#0d0d0d]/95 px-3 py-2 font-mono text-xs uppercase tracking-label text-text shadow-md transition-colors duration-150 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0b0b] sm:left-3"
+                  className="absolute left-2 top-1/2 z-30 inline-flex min-h-11 items-center -translate-y-1/2 rounded-md border border-border bg-[#0d0d0d]/95 px-3 py-2 font-mono text-xs uppercase tracking-label text-text shadow-md transition-colors duration-150 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0b0b] sm:left-3"
                   aria-label={resolvedLabels.previousImage}
                 >
                   {resolvedLabels.previousImage}
@@ -213,7 +213,7 @@ export function PhotoGrid({
                 <button
                   type="button"
                   onClick={goNext}
-                  className="absolute right-2 top-1/2 z-30 -translate-y-1/2 rounded-md border border-border bg-[#0d0d0d]/95 px-3 py-2 font-mono text-xs uppercase tracking-label text-text shadow-md transition-colors duration-150 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0b0b] sm:right-3"
+                  className="absolute right-2 top-1/2 z-30 inline-flex min-h-11 items-center -translate-y-1/2 rounded-md border border-border bg-[#0d0d0d]/95 px-3 py-2 font-mono text-xs uppercase tracking-label text-text shadow-md transition-colors duration-150 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0b0b] sm:right-3"
                   aria-label={resolvedLabels.nextImage}
                 >
                   {resolvedLabels.nextImage}

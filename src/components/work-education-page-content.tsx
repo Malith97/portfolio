@@ -54,7 +54,7 @@ export function WorkEducationPageContent() {
   );
 
   return (
-    <div className="space-y-16">
+    <div className="space-y-12 sm:space-y-16">
       <SectionHeading
         label={t.workEducationPage.label}
         title={t.workEducationPage.title}
@@ -92,7 +92,7 @@ export function WorkEducationPageContent() {
                 </span>
 
                 <article
-                  className={`surface-card surface-card-interactive relative ml-9 flex min-h-[360px] flex-col p-5 hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 md:ml-0 md:w-[calc(50%-1.5rem)] ${
+                  className={`surface-card surface-card-interactive relative ml-8 flex min-h-[320px] flex-col p-4 hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 sm:p-5 md:ml-0 md:min-h-[360px] md:w-[calc(50%-1.5rem)] ${
                     index % 2 === 0 ? "md:mr-auto" : "md:ml-auto"
                   }`}
                 >

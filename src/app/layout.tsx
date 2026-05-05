@@ -102,7 +102,7 @@ export default async function RootLayout({
             <SiteHeader />
             <main
               id="main-content"
-              className="mx-auto w-full max-w-6xl flex-1 px-6 py-16 sm:px-8 sm:py-20"
+              className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:px-8 sm:py-20"
             >
               {children}
             </main>
