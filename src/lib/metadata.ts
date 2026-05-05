@@ -41,7 +41,8 @@ function resolveCanonicalUrl(baseUrl: string, path: string): string {
 export function createMetadata(input: MetadataInput = {}): Metadata {
   const normalizedSiteUrl = normalizeSiteUrl(siteUrl);
   const title =
-    input.fullTitle ?? (input.title ? `${input.title} | Malith Ileperuma` : homepageTitle);
+    input.fullTitle ??
+    (input.title ? `${input.title} | Malith Ileperuma` : homepageTitle);
 
   const description = input.description ?? siteDescription;
   const path = input.path ?? "/";

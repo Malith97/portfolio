@@ -1,6 +1,10 @@
 import { HomePageContent } from "@/components/home-page-content";
 import { getAllBeyondWorkPosts, getAllCaseStudies } from "@/lib/content";
-import { createMetadata, homepageDescription, homepageTitle } from "@/lib/metadata";
+import {
+  createMetadata,
+  homepageDescription,
+  homepageTitle,
+} from "@/lib/metadata";
 
 const HERO_PORTRAIT_SRC = "/media/malith-portrait.png";
 
