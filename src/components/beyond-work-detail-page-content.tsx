@@ -362,7 +362,7 @@ export function BeyondWorkDetailPageContent({
             slug === "cycling-to-hailuoto" ||
             slug === "running-to-vartto" ||
             slug === "oyster-hack4health-best-pitch-award" ||
-            slug === "juhannus-oul" ||
+            slug === "juhannus-oulu" ||
             slug === "lumo-light-festival-oulu" ||
             slug === "coffee-cake-weekend-bake" ||
             slug === "frozen-sea-walk-nallikari" ||

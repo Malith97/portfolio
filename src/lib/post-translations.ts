@@ -50,7 +50,7 @@ const postTranslations: Record<string, PostTranslation> = {
     titleFi: "OYSTER Hack4Health – Best Pitch Award",
     summaryFi: "46 tunnin MedTech-hackathon Oulussa, jossa poikkitiimimme voitti Best Pitch -palkinnon puettavaan glukoosiennusteeseen perustuvalla konseptilla."
   },
-  "juhannus-oul": {
+  "juhannus-oulu": {
     titleFi: "Juhannusyö Oulussa",
     summaryFi: "Rauhallinen juhannusilta veden äärellä, kun kokko valaisi pitkää pohjoista yötä."
   },

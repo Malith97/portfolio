@@ -74,16 +74,6 @@ export interface Post extends PostMeta {
 }
 
 const CONTENT_ROOT = path.join(process.cwd(), "content");
-type CaseStudySlug = "cloud-cost-optimization" | "kubernetes-rbac-okta";
-
-const ALLOWED_CASE_STUDY_SLUGS = new Set<CaseStudySlug>([
-  "cloud-cost-optimization",
-  "kubernetes-rbac-okta"
-] as const);
-
-function isAllowedCaseStudySlug(slug: string): slug is CaseStudySlug {
-  return ALLOWED_CASE_STUDY_SLUGS.has(slug as CaseStudySlug);
-}
 
 function getDirectory(section: ContentSection): string {
   return path.join(CONTENT_ROOT, section);
@@ -357,16 +347,10 @@ export async function getPostBySlug(
 }
 
 export function getAllCaseStudies(language: Language): Promise<PostMeta[]> {
-  return getAllPosts("case-studies", language).then((posts) =>
-    posts.filter((post) => isAllowedCaseStudySlug(post.slug))
-  );
+  return getAllPosts("case-studies", language);
 }
 
 export function getCaseStudyBySlug(slug: string, language: Language): Promise<Post | null> {
-  if (!isAllowedCaseStudySlug(slug)) {
-    return Promise.resolve(null);
-  }
-
   return getPostBySlug("case-studies", slug, language);
 }
 
