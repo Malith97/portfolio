@@ -36,6 +36,7 @@ export async function generateMetadata({ params }: BeyondWorkPageProps): Promise
     description: post.summary,
     path: `/beyond-work/${post.slug}`,
     image: post.coverImage || post.image,
+    openGraphType: "article",
   });
 }
 

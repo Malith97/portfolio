@@ -4,7 +4,7 @@ import { createMetadata } from "@/lib/metadata";
 export const metadata = createMetadata({
   title: "About",
   description:
-    "About Malith Ileperuma, a DevOps Engineer specializing in cloud infrastructure, CI/CD automation, Kubernetes, Terraform, and reliability engineering.",
+    "Learn more about Malith Ileperuma and his background in DevOps, cloud infrastructure, and reliable software delivery.",
   path: "/about",
 });
 
