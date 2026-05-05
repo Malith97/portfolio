@@ -20,11 +20,11 @@ test("detail pages switch language EN <-> FI without stale content", async ({
   await expect(page.getByRole("link", { name: "Työnäytteet" })).toBeVisible();
   await expect(
     page.getByRole("heading", {
-      name: /Pilvikustannusten optimointi: kulut alas 35 %/i,
+      name: /Pilvikustannusten optimointi ja 35 prosentin säästö/i,
     }),
   ).toBeVisible();
   await expect(
-    page.getByText(/Pilvikulut laskivat 35 %/i).first(),
+    page.getByText(/Pilvikulut laskivat 35 prosenttia/i).first(),
   ).toBeVisible();
 
   await page.getByRole("button", { name: "EN", exact: true }).click();
@@ -40,7 +40,7 @@ test("detail pages switch language EN <-> FI without stale content", async ({
   await page.getByRole("button", { name: "FI", exact: true }).click();
   await expect(
     page.getByRole("heading", {
-      name: /Pilvikustannusten optimointi: kulut alas 35 %/i,
+      name: /Pilvikustannusten optimointi ja 35 prosentin säästö/i,
     }),
   ).toBeVisible();
 
