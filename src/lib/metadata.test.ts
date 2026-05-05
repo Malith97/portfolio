@@ -5,7 +5,7 @@ describe("createMetadata", () => {
     const metadata = createMetadata();
 
     expect(metadata.title).toBe("Malith Ileperuma | DevOps Engineer");
-    expect(metadata.alternates?.canonical).toBe("https://malithileperuma.com/");
+    expect(metadata.alternates?.canonical).toBe("https://malithileperuma.com");
     expect(metadata.openGraph?.images).toBeDefined();
   });
 

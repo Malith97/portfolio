@@ -66,7 +66,9 @@ export interface Dictionary {
   };
   home: {
     label: string;
+    heroRoleLine: string;
     heroTitle: string;
+    heroPortraitAlt: string;
     heroSummary: string;
     heroMeta: string;
     ctaViewWork: string;
@@ -100,13 +102,22 @@ export interface Dictionary {
   };
   storyPage: {
     label: string;
+    eyebrow: string;
     title: string;
-    description: string;
-    firstBlock: string[];
-    secondBlock: string[];
-    imageAltPrimary: string;
-    imageAltSecondary: string;
-    imageAltGalleryBase: string;
+    summary: string;
+    timelineLabel: string;
+    chapterNav: {
+      id: string;
+      label: string;
+    }[];
+    chapters: {
+      id: string;
+      shortLabel: string;
+      title: string;
+      paragraphs: string[];
+      imageAlt?: string;
+      imageCaption?: string;
+    }[];
   };
   workEducationPage: {
     label: string;

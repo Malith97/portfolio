@@ -1,7 +1,9 @@
+"use client";
+
 import MapRoute from "@/components/MapRoute";
 import type { PostMapMeta } from "@/lib/content";
+import { useLanguage } from "@/components/language-provider";
 import { getDictionary } from "@/lib/i18n";
-import { getServerLanguage } from "@/lib/i18n-server";
 
 interface BeyondWorkMapProps {
   categoryId?: string;
@@ -56,8 +58,8 @@ function resolveMode(categoryId: string | undefined, category: string | undefine
   return normalized === "cycling" ? "bike" : "run";
 }
 
-export async function BeyondWorkMap({ categoryId, category, map, postTitle, sectionLabel, className, view = "detail" }: BeyondWorkMapProps) {
-  const language = await getServerLanguage();
+export function BeyondWorkMap({ categoryId, category, map, postTitle, sectionLabel, className, view = "detail" }: BeyondWorkMapProps) {
+  const { language } = useLanguage();
   const t = getDictionary(language);
 
   if (view !== "detail") {

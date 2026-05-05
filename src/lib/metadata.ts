@@ -13,21 +13,37 @@ interface MetadataInput {
   image?: string;
 }
 
+function normalizeSiteUrl(url: string): string {
+  return url.endsWith("/") ? url.slice(0, -1) : url;
+}
+
+function resolveCanonicalUrl(baseUrl: string, path: string): string {
+  if (path === "/") {
+    return baseUrl;
+  }
+
+  return `${baseUrl}${path}`;
+}
+
 export function createMetadata(input: MetadataInput = {}): Metadata {
+  const normalizedSiteUrl = normalizeSiteUrl(siteUrl);
   const title = input.title
     ? `${input.title} | Malith Ileperuma`
     : "Malith Ileperuma | DevOps Engineer";
 
   const description = input.description ?? siteDescription;
   const path = input.path ?? "/";
-  const url = `${siteUrl}${path}`;
+  const url = resolveCanonicalUrl(normalizedSiteUrl, path);
   const image = input.image ?? "/media/malith-portrait.jpg";
-  const imageUrl = image.startsWith("http") ? image : `${siteUrl}${image}`;
+  const imageUrl = image.startsWith("http")
+    ? image
+    : `${normalizedSiteUrl}${image}`;
 
   return {
     title,
     description,
-    metadataBase: new URL(siteUrl),
+    metadataBase: new URL(normalizedSiteUrl),
+    manifest: "/manifest.webmanifest",
     icons: {
       icon: [{ url: "/media/malith-avatar.png", type: "image/png" }],
       shortcut: [{ url: "/media/malith-avatar.png", type: "image/png" }],
@@ -55,6 +71,7 @@ export function createMetadata(input: MetadataInput = {}): Metadata {
       title,
       description,
       images: [imageUrl],
+      creator: "@Malith97",
     },
   };
 }
