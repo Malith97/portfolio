@@ -1,13 +1,13 @@
 import type { MetadataRoute } from "next";
 
-import { siteDescription, siteUrl } from "@/lib/metadata";
+import { homepageTitle, siteDescription, siteUrl } from "@/lib/metadata";
 
 const normalizedSiteUrl = siteUrl.endsWith("/") ? siteUrl.slice(0, -1) : siteUrl;
 export const dynamic = "force-static";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Malith Ileperuma | DevOps Engineer",
+    name: homepageTitle,
     short_name: "Malith Portfolio",
     description: siteDescription,
     start_url: "/",

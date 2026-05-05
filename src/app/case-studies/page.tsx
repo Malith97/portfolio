@@ -3,9 +3,9 @@ import { getAllCaseStudies } from "@/lib/content";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata = createMetadata({
-  title: "Case Studies",
+  title: "Case Studies | DevOps and Cloud Projects",
   description:
-    "Practical DevOps case studies on cost, migration, delivery automation, and reliability.",
+    "Real project case studies covering cloud cost optimization, platform migration, delivery automation, and reliability improvements.",
   path: "/case-studies",
 });
 

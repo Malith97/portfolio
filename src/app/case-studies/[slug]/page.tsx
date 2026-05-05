@@ -37,7 +37,8 @@ export async function generateMetadata({ params }: CaseStudyPageProps): Promise<
     title: post.title,
     description: post.summary,
     path: `/case-studies/${post.slug}`,
-    image: post.coverImage || post.image
+    image: post.coverImage || post.image,
+    openGraphType: "article",
   });
 }
 

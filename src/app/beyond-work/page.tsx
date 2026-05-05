@@ -3,9 +3,9 @@ import { getAllBeyondWorkPosts } from "@/lib/content";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata = createMetadata({
-  title: "Beyond Work",
+  title: "Beyond Work | Activities and Personal Projects",
   description:
-    "Journal-style activity stories on running, cycling, photography, cooking, achievements, and notes.",
+    "A personal journal of running, cycling, photography, cooking, and side projects outside day-to-day engineering work.",
   path: "/beyond-work",
 });
 

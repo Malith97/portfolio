@@ -2,9 +2,9 @@ import { WorkEducationPageContent } from "@/components/work-education-page-conte
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata = createMetadata({
-  title: "Work & Education",
+  title: "Experience and Education",
   description:
-    "Work experience timeline and education highlights for Malith Ileperuma.",
+    "Professional experience timeline and education highlights across DevOps, platform engineering, and software delivery.",
   path: "/work-education",
 });
 

@@ -2,9 +2,9 @@ import { ContactPageContent } from "@/components/contact-page-content";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata = createMetadata({
-  title: "Contact",
+  title: "Contact | DevOps and Cloud Opportunities",
   description:
-    "Recruiter-friendly contact details for DevOps, platform engineering, and cloud reliability roles.",
+    "Get in touch for DevOps, cloud automation, and platform engineering opportunities, consulting, or collaboration.",
   path: "/contact",
 });
 

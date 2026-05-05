@@ -6,7 +6,13 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { getServerLanguage } from "@/lib/i18n-server";
 import { getDictionary } from "@/lib/i18n";
-import { createMetadata, siteDescription, siteUrl } from "@/lib/metadata";
+import {
+  createMetadata,
+  homepageDescription,
+  homepageTitle,
+  siteDescription,
+  siteUrl,
+} from "@/lib/metadata";
 
 import "./globals.css";
 import "leaflet/dist/leaflet.css";
@@ -47,14 +53,20 @@ const personSchema = {
   url: normalizedSiteUrl,
   jobTitle: "DevOps Engineer",
   image: `${normalizedSiteUrl}/media/malith-portrait.jpg`,
-  description: siteDescription,
+  description: homepageDescription,
   knowsAbout: [
-    "Cloud Infrastructure",
+    "DevOps",
+    "Cloud Automation",
+    "Infrastructure as Code",
     "CI/CD",
+    "AWS",
+    "Azure",
     "Kubernetes",
     "Terraform",
-    "Automation",
-    "Reliability Engineering",
+    "Platform Engineering",
+    "Software Delivery",
+    "React",
+    "TypeScript",
   ],
   sameAs: [
     "https://www.linkedin.com/in/malith-ileperuma-8a6a97167",
@@ -69,9 +81,9 @@ const websiteSchema = {
   "@type": "WebSite",
   "@id": `${normalizedSiteUrl}#website`,
   url: normalizedSiteUrl,
-  name: "Malith Ileperuma | DevOps Engineer",
+  name: homepageTitle,
   description: siteDescription,
-  inLanguage: "en",
+  inLanguage: ["en", "fi"],
   publisher: {
     "@id": `${normalizedSiteUrl}#person`,
   },
