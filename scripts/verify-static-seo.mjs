@@ -6,7 +6,7 @@ const OUT_DIR = path.join(ROOT, "out");
 const APP_DIR = path.join(ROOT, "src", "app");
 const BASE_URL = "https://malithileperuma.com";
 
-const expectedRoutes = [
+const requiredBaseRoutes = [
   "/",
   "/story",
   "/experience",
@@ -39,31 +39,45 @@ function ensureAnyExists(paths, description) {
   }
 }
 
-function listAppRoutesFromPages() {
-  const found = [];
+function listExportedDynamicRoutes(routePrefix) {
+  const exportedDir = path.join(OUT_DIR, routePrefix);
+  if (!fs.existsSync(exportedDir)) {
+    return [];
+  }
 
-  function walk(dir) {
-    const entries = fs.readdirSync(dir, { withFileTypes: true });
-    for (const entry of entries) {
-      const fullPath = path.join(dir, entry.name);
-      if (entry.isDirectory()) {
-        walk(fullPath);
-        continue;
-      }
+  const entries = fs.readdirSync(exportedDir, { withFileTypes: true });
+  const slugs = new Set();
 
-      if (!entry.isFile() || entry.name !== "page.tsx") {
-        continue;
-      }
+  for (const entry of entries) {
+    if (
+      entry.isFile() &&
+      entry.name.endsWith(".html") &&
+      entry.name !== "index.html"
+    ) {
+      slugs.add(entry.name.replace(/\.html$/, ""));
+    }
 
-      const relDir = path.relative(APP_DIR, path.dirname(fullPath));
-      const route = relDir === "" ? "/" : `/${relDir.replace(/\\/g, "/")}`;
-      found.push(route);
+    if (
+      entry.isDirectory() &&
+      fs.existsSync(path.join(exportedDir, entry.name, "index.html"))
+    ) {
+      slugs.add(entry.name);
     }
   }
 
-  walk(APP_DIR);
+  return [...slugs].map((slug) => `/${routePrefix}/${slug}`).sort();
+}
 
-  return found.filter((route) => !route.includes("[")).sort();
+function outputRouteExists(route) {
+  if (route === "/") {
+    return fs.existsSync(path.join(OUT_DIR, "index.html"));
+  }
+
+  const clean = route.replace(/^\/+/, "");
+  return (
+    fs.existsSync(path.join(OUT_DIR, `${clean}.html`)) ||
+    fs.existsSync(path.join(OUT_DIR, clean, "index.html"))
+  );
 }
 
 function parseSitemapPaths(xml) {
@@ -118,29 +132,24 @@ function main() {
   }
 
   const uniqueSitemapPaths = [...new Set(sitemapPaths)].sort();
-  const expectedSorted = [...expectedRoutes].sort();
+  const expectedRoutes = [
+    ...requiredBaseRoutes,
+    ...listExportedDynamicRoutes("case-studies"),
+    ...listExportedDynamicRoutes("beyond-work"),
+  ].sort();
 
-  const missingExpected = expectedSorted.filter(
+  const missingExpected = expectedRoutes.filter(
     (route) => !uniqueSitemapPaths.includes(route),
   );
   if (missingExpected.length > 0) {
     fail(`Sitemap is missing expected routes: ${missingExpected.join(", ")}`);
   }
-
-  const unexpectedRoutes = uniqueSitemapPaths.filter(
-    (route) => !expectedSorted.includes(route),
-  );
-  if (unexpectedRoutes.length > 0) {
-    fail(`Sitemap contains unexpected routes: ${unexpectedRoutes.join(", ")}`);
-  }
-
-  const existingStaticRoutes = listAppRoutesFromPages();
   const nonExistentRoutes = uniqueSitemapPaths.filter(
-    (route) => !existingStaticRoutes.includes(route),
+    (route) => !outputRouteExists(route),
   );
   if (nonExistentRoutes.length > 0) {
     fail(
-      `Sitemap contains routes without matching src/app/**/page.tsx: ${nonExistentRoutes.join(", ")}`,
+      `Sitemap references routes with no static output: ${nonExistentRoutes.join(", ")}`,
     );
   }
 
@@ -156,9 +165,6 @@ function main() {
 
   console.log("✅ Static SEO verification passed.");
   console.log(`   Verified routes: ${expectedRoutes.join(", ")}`);
-  console.log(
-    `   Existing static routes detected: ${existingStaticRoutes.join(", ")}`,
-  );
 }
 
 main();
