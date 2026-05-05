@@ -6,33 +6,13 @@ interface PostTranslation {
 }
 
 const postTranslations: Record<string, PostTranslation> = {
-  "chaos-engineering-for-better-reliability": {
-    titleFi: "Chaos Engineering parempaan luotettavuuteen",
-    summaryFi: "Hallittu resilienssiohjelma paljasti virhepolkuja varhain ja paransi incident-valmiutta tiimeissä."
-  },
-  "cicd-modernization-faster-and-safer-deployments": {
-    titleFi: "CI/CD-modernisointi: nopeammat ja turvallisemmat julkaisut",
-    summaryFi: "Putkien uudistus, ympäristöjen yhdenmukaisuus ja vahvemmat laatuportit lisäsivät toimitusnopeutta ja vähensivät julkaisuriskiä."
-  },
   "cloud-cost-optimization": {
     titleFi: "Pilvikustannusten optimointi",
     summaryFi: "Käytännöllinen FinOps-kokonaisuus laski kustannuksia 35 % ilman palvelutason heikentymistä."
   },
-  "cloud-migration-from-on-prem-to-cloud": {
-    titleFi: "Pilvimigraatio: on-premistä pilveen",
-    summaryFi: "Vaiheittainen migraatio siirsi liiketoimintakriittiset palvelut joustavampaan ja luotettavampaan arkkitehtuuriin."
-  },
-  "kubernetes-rbac-and-multi-team-access": {
-    titleFi: "Kubernetes RBAC ja monitiiminen käyttöoikeusmalli",
-    summaryFi: "Käyttörajat suunniteltiin niin, että tiimit voivat toimia itsenäisesti ilman turvallisuuskompromisseja."
-  },
   "kubernetes-rbac-okta": {
     titleFi: "Kubernetes RBACin tehostaminen Oktalla",
     summaryFi: "Kubernetes-käyttöoikeuksien hallinta parani identity-ohjatulla RBAC-mallilla ja Okta-integraatiolla."
-  },
-  "multiple-i2c-ports-raspberry-pi": {
-    titleFi: "Useiden I2C-porttien käyttöönotto Raspberry Pi:llä",
-    summaryFi: "Useiden I2C-väylien konfigurointi Raspberry Pi -ympäristössä anturimoduulien rinnakkaiseen testaukseen."
   },
   "cycling-to-kiiminki-from-oulu": {
     titleFi: "Pyöräily Oulusta Kiiminkiin",
