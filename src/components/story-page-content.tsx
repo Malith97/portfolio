@@ -92,16 +92,16 @@ export function StoryPageContent() {
   }, [content.chapterNav]);
 
   return (
-    <article className="space-y-12">
-      <header className="border-b border-border pb-10">
+    <article className="space-y-10 sm:space-y-12">
+      <header className="border-b border-border pb-8 sm:pb-10">
         <FadeInOnView className="space-y-4">
           <p className="font-mono text-xs uppercase tracking-label text-muted">
             {content.eyebrow}
           </p>
-          <h1 className="max-w-[22ch] font-serif text-4xl leading-tight text-text sm:text-5xl">
+          <h1 className="max-w-[22ch] font-serif text-3xl leading-tight text-text sm:text-5xl">
             {content.title}
           </h1>
-          <p className="max-w-[900px] text-base leading-8 text-muted sm:text-lg">
+          <p className="max-w-[900px] text-base leading-7 text-muted sm:text-lg sm:leading-8">
             {content.summary}
           </p>
         </FadeInOnView>
@@ -121,7 +121,7 @@ export function StoryPageContent() {
                   aria-current={
                     activeChapterId === chapter.id ? "location" : undefined
                   }
-                  className={`inline-flex rounded-full border px-3 py-1.5 font-mono text-[11px] uppercase tracking-label transition-colors ${
+                  className={`inline-flex min-h-11 items-center rounded-full border px-3 py-1.5 font-mono text-[11px] uppercase tracking-label transition-colors ${
                     activeChapterId === chapter.id
                       ? "border-accent/70 text-accent"
                       : "border-border text-muted hover:border-accent/60 hover:text-neutral-200"
@@ -134,7 +134,7 @@ export function StoryPageContent() {
           </ul>
         </nav>
 
-        <div className="grid gap-10 lg:grid-cols-[240px_minmax(0,760px)] lg:gap-12">
+        <div className="grid gap-8 lg:grid-cols-[240px_minmax(0,760px)] lg:gap-12">
           <aside className="hidden lg:block">
             <nav aria-label={content.timelineLabel} className="sticky top-24">
               <ul className="space-y-2">
@@ -159,7 +159,7 @@ export function StoryPageContent() {
             </nav>
           </aside>
 
-          <div className="space-y-12">
+          <div className="space-y-10 sm:space-y-12">
             {content.chapters.map((chapter, index) => {
               const chapterImageSrc = STORY_CHAPTER_IMAGES[chapter.id];
 
@@ -175,7 +175,7 @@ export function StoryPageContent() {
                     <h2 className="font-serif text-3xl leading-tight text-text sm:text-4xl">
                       {chapter.title}
                     </h2>
-                    <div className="max-w-[760px] space-y-4 text-base leading-8 text-muted">
+                    <div className="max-w-[760px] space-y-4 text-base leading-7 text-muted sm:leading-8">
                       {chapter.paragraphs.map((paragraph) => (
                         <p key={`${chapter.id}-${paragraph.slice(0, 32)}`}>
                           {paragraph}

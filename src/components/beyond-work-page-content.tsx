@@ -18,7 +18,7 @@ export function BeyondWorkPageContent({
   const posts = postsByLanguage[language] ?? [];
 
   return (
-    <div className="space-y-14">
+    <div className="space-y-10 sm:space-y-14">
       <SectionHeading
         label={t.beyondWorkPage.label}
         title={t.beyondWorkPage.title}

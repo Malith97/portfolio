@@ -9,7 +9,7 @@ function Callout({ title, body }: { title: string; body: string }) {
   return (
     <aside className="rounded-md border border-border p-4">
       <p className="font-mono text-[11px] uppercase tracking-label text-accent">{title}</p>
-      <p className="pt-2 text-sm leading-7 text-text">{body}</p>
+      <p className="pt-2 text-sm leading-6 text-text sm:leading-7">{body}</p>
     </aside>
   );
 }
@@ -17,7 +17,7 @@ function Callout({ title, body }: { title: string; body: string }) {
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="space-y-5">
-      <h2 className="mx-auto mb-5 w-full max-w-[720px] font-serif text-3xl leading-tight text-text">{title}</h2>
+      <h2 className="mx-auto mb-5 w-full max-w-[720px] font-serif text-2xl leading-tight text-text sm:text-3xl">{title}</h2>
       <div className="space-y-5 text-[1rem] leading-7 text-text [&>*:not(figure)]:mx-auto [&>*:not(figure)]:w-full [&>*:not(figure)]:max-w-[720px]">
         {children}
       </div>
@@ -63,10 +63,10 @@ export async function KubernetesRbacOktaEditorial() {
   );
 
   return (
-    <div className="mx-auto w-full max-w-[720px] space-y-14 sm:space-y-16">
+    <div className="mx-auto w-full max-w-[720px] space-y-10 sm:space-y-16">
       <header className="mx-auto w-full max-w-[720px] space-y-6">
         <p className="font-mono text-[11px] uppercase tracking-label text-muted">{t.common.caseStudy.toUpperCase()}</p>
-        <h1 className="font-serif text-4xl leading-tight text-text sm:text-6xl">{title}</h1>
+        <h1 className="font-serif text-3xl leading-tight text-text sm:text-6xl">{title}</h1>
         <p className="text-base leading-7 text-muted">{summary}</p>
         <p className="font-mono text-xs tracking-label text-muted">
           Kubernetes · RBAC · Okta · Security · Identity Access
@@ -132,7 +132,7 @@ export async function KubernetesRbacOktaEditorial() {
           `ClusterRoleBinding`.
         </p>
         <p>Typical workflow:</p>
-        <pre className="overflow-x-auto rounded-md border border-border bg-[#121212] p-4 text-sm leading-6 text-text">
+        <pre className="overflow-x-auto rounded-md border border-border bg-[#121212] p-4 text-xs leading-6 text-text sm:text-sm">
           <code>{`kubectl apply -f role.yaml
 kubectl apply -f rolebinding.yaml`}</code>
         </pre>
@@ -149,7 +149,7 @@ kubectl apply -f rolebinding.yaml`}</code>
           access.
         </p>
         <p>Representative client setup pattern:</p>
-        <pre className="overflow-x-auto rounded-md border border-border bg-[#121212] p-4 text-sm leading-6 text-text">
+        <pre className="overflow-x-auto rounded-md border border-border bg-[#121212] p-4 text-xs leading-6 text-text sm:text-sm">
           <code>{`kubectl config set-credentials okta-user \\
   --exec-api-version=client.authentication.k8s.io/v1beta1 \\
   --exec-command=kubectl \\
@@ -257,12 +257,12 @@ kubectl apply -f rolebinding.yaml`}</code>
           href="https://medium.com/@mileperuma/supercharge-kubernetes-rbac-with-okta-1e0462a04abe"
           target="_blank"
           rel="noopener noreferrer"
-          className="quiet-link mt-2 inline-block text-sm text-accent"
+          className="quiet-link mt-2 inline-flex min-h-11 items-center text-sm text-accent"
         >
           {t.common.viewOriginalArticleOnMedium}
         </a>
         <div className="pt-4">
-          <Link href="/case-studies" className="quiet-link text-sm text-muted">
+          <Link href="/case-studies" className="quiet-link inline-flex min-h-11 items-center text-sm text-muted">
             {t.common.backToCaseStudies}
           </Link>
         </div>

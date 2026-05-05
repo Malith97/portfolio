@@ -90,7 +90,7 @@ export const experienceTimeline: ExperienceItem[] = [
     impactBullets: [
       {
         eng: "Reduced cloud costs by 35% (~$75K/year) by introducing governance models and usage controls across multi-account environments.",
-        fi: "Pienensin pilvikuluja 35 % (~$75K/vuosi) ottamalla käyttöön hallintamallit ja käytönhallinnan monikattotiliympäristöissä."
+        fi: "Pienensin pilvikuluja 35 % (~$75K/vuosi) ottamalla käyttöön hallintamallit ja käytönhallinnan monitiliympäristöissä."
       },
       {
         eng: "Led migration of regulated workloads from on-prem to cloud, redesigning architecture for isolation, security, and scalability.",
@@ -98,15 +98,15 @@ export const experienceTimeline: ExperienceItem[] = [
       },
       {
         eng: "Introduced Chaos Engineering practices to simulate failures and improve resilience, reducing downtime by 20%.",
-        fi: "Otin käyttöön hallittuja vikakokeiluja (chaos engineering) vikatilanteiden simulointiin ja resilienssin parantamiseen, mikä vähensi käyttökatkoja 20 %."
+        fi: "Otin käyttöön hallittuja vikakokeiluja Chaos Engineering -periaatteilla vikatilanteiden simulointiin ja resilienssin parantamiseen, mikä vähensi käyttökatkoja 20 %."
       },
       {
         eng: "Owned end-to-end delivery systems (infrastructure + CI/CD), reducing deployment time by 40% and errors by 35%.",
-        fi: "Vastasin end-to-end-toimitusjärjestelmistä (infrastruktuuri + CI/CD), mikä lyhensi julkaisuaikaa 40 % ja vähensi virheitä 35 %."
+        fi: "Vastasin toimitusjärjestelmästä päästä päähän (infrastruktuuri + CI/CD), mikä lyhensi julkaisuaikaa 40 % ja vähensi virheitä 35 %."
       },
       {
         eng: "Defined and enforced Kubernetes RBAC and network segmentation for secure multi-team environments.",
-        fi: "Määrittelin ja jalkautin Kubernetes RBAC -mallin sekä verkon segmentoinnin turvallisiin monitiimiympäristöihin."
+        fi: "Määrittelin ja jalkautin Kubernetesin RBAC-mallin sekä verkon segmentoinnin turvallisiin monitiimiympäristöihin."
       }
     ],
     additionalImpactBullets: [
@@ -232,7 +232,7 @@ export const experienceTimeline: ExperienceItem[] = [
     additionalImpactBullets: [
       {
         eng: "Applied clean architecture and design principles for scalability.",
-        fi: "Hyödynsin clean architecture - ja design-periaatteita skaalautuvuuden varmistamiseksi."
+        fi: "Hyödynsin clean architecture- ja design-periaatteita skaalautuvuuden varmistamiseksi."
       }
     ],
     tech: ["React", "Node.js", "PostgreSQL", "Docker", "Jenkins", "AWS", "OAuth2", "JWT"]
@@ -250,7 +250,7 @@ export const experienceTimeline: ExperienceItem[] = [
     impactBullets: [
       {
         eng: "Developed practical communication capability from A1 to B2 level for workplace integration.",
-        fi: "Kehitin käytännön viestintävalmiutta tasolta A1 tasolle B2 työelämäintegraatiota varten."
+        fi: "Kehitin käytännön viestintävalmiutta tasolta A1 tasolle B2 työelämään integroitumista varten."
       }
     ],
     tech: ["Finnish Language Training"]
@@ -327,7 +327,7 @@ export const certifications: CredentialItem[] = [
 export const professionalSummary: LocalizedText[] = [
   {
     eng: "Results-driven DevOps Engineer with 6 years of experience across software development, cloud automation, infrastructure as code, and CI/CD optimization. Experienced in AWS and Azure environments, cloud cost optimization, large-scale migrations, secure platform engineering, and building resilient systems for financial and enterprise teams. Strong hands-on background in Terraform, Ansible, Kubernetes, Helm, Jenkins, GitLab, Docker, Prometheus, Grafana, and Datadog. Known for leading cross-functional teams, mentoring engineers, improving deployment reliability, incident response, system reliability engineering, and delivering business value through automation and continuous improvement.",
-    fi: "Tuloshakuinen DevOps-insinööri, jolla on kuuden vuoden kokemus ohjelmistokehityksestä, pilviautomaatiosta, infrastruktuurista koodina ja CI/CD-optimoinnista. Kokemusta AWS- ja Azure-ympäristöistä, pilvikustannusten optimoinnista, laajoista migraatioista, turvallisesta alustainfran kehittämisestä sekä kestävien järjestelmien rakentamisesta finanssi- ja suuryritystiimeille. Vahva käytännön osaaminen Terraformista, Ansibleista, Kubernetesista, Helmistä, Jenkinsistä, GitLabista, Dockerista, Prometheuksesta, Grafanasta ja Datadogista. Tunnettu poikkitiimisen työn johtamisesta, mentoroinnista, toimitusvarmuuden parantamisesta, häiriötilanteiden hallinnasta sekä liiketoimintahyödyn rakentamisesta automaation ja jatkuvan parantamisen avulla."
+    fi: "Tuloshakuinen DevOps-insinööri, jolla on kuuden vuoden kokemus ohjelmistokehityksestä, pilviautomaatiosta, infrastruktuurista koodina ja CI/CD-optimoinnista. Minulla on vahva tausta AWS- ja Azure-ympäristöistä, pilvikustannusten optimoinnista, laajoista migraatioista, turvallisesta platform engineeringistä ja kestävien järjestelmien rakentamisesta finanssi- ja yritystiimeille. Käytännön osaamiseni kattaa muun muassa Terraformin, Ansiblen, Kubernetesin, Helmin, Jenkinsin, GitLabin, Dockerin, Prometheuksen, Grafanan ja Datadogin. Olen tunnettu poikkitiimisen työn johtamisesta, mentoroinnista, toimitusvarmuuden parantamisesta, häiriötilanteiden hallinnasta sekä automaation ja jatkuvan parantamisen kautta syntyvästä liiketoimintahyödystä."
   }
 ];
 
@@ -343,7 +343,7 @@ export const credibilityStats: CredibilityStat[] = [
     value: "2022–Now",
     label: {
       eng: "Cloud / DevOps Focus",
-      fi: "Pilvi / DevOps-paino"
+      fi: "Pilvi ja DevOps painotus"
     }
   },
   {

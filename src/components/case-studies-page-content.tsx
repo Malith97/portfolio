@@ -22,7 +22,7 @@ export function CaseStudiesPageContent({
   const posts = postsByLanguage[language] ?? [];
 
   return (
-    <div className="space-y-14">
+    <div className="space-y-10 sm:space-y-14">
       <SectionHeading
         label={t.caseStudiesPage.label}
         title={t.caseStudiesPage.title}
@@ -34,7 +34,7 @@ export function CaseStudiesPageContent({
           {posts.map((post) => (
             <article
               key={post.slug}
-              className="surface-card surface-card-interactive flex h-full min-h-[420px] flex-col overflow-hidden hover:-translate-y-0.5 motion-reduce:hover:translate-y-0"
+              className="surface-card surface-card-interactive flex h-full min-h-[360px] flex-col overflow-hidden hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 sm:min-h-[420px]"
             >
               <Link
                 href={`/case-studies/${post.slug}`}
@@ -52,7 +52,7 @@ export function CaseStudiesPageContent({
                 </div>
               </Link>
 
-              <div className="flex flex-1 flex-col gap-3 p-4">
+              <div className="flex flex-1 flex-col gap-3 p-4 sm:p-5">
                 <p className="font-mono text-xs uppercase tracking-label text-muted">
                   {formatDate(post.date, language)} · {post.readingTime}
                 </p>

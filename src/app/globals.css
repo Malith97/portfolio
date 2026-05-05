@@ -268,3 +268,39 @@ img {
 .content-prose :where(img) {
   @apply my-6 h-auto w-full rounded-md border border-border;
 }
+
+@media (max-width: 768px) {
+  #main-content {
+    overflow-x: clip;
+  }
+
+  #main-content > * {
+    min-width: 0;
+  }
+
+  #main-content :where(section, article) {
+    min-width: 0;
+  }
+
+  #main-content :where(img, video, canvas, svg) {
+    max-width: 100%;
+    height: auto;
+  }
+
+  #main-content :where(a.inline-flex, button.inline-flex) {
+    min-height: 44px;
+  }
+
+  #main-content :where(h1, h2, h3, p, li, a) {
+    overflow-wrap: anywhere;
+  }
+
+  .content-prose {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .content-prose :where(p, li) {
+    line-height: 1.75;
+  }
+}

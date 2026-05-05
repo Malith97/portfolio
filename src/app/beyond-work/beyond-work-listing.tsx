@@ -82,7 +82,7 @@ export function BeyondWorkListing({
     <>
       <nav
         aria-label={labels.categoriesAriaLabel}
-        className="-mt-4 border-b border-border pb-5"
+        className="-mt-2 border-b border-border pb-4 sm:-mt-4 sm:pb-5"
       >
         <ul className="flex flex-wrap gap-2">
           {filters.map((filter) => {
@@ -94,7 +94,7 @@ export function BeyondWorkListing({
                   type="button"
                   onClick={() => setSelectedFilter(filter.key)}
                   aria-pressed={isActive}
-                  className={`inline-flex rounded-md border px-3 py-1.5 text-xs uppercase tracking-label transition-colors ${
+                  className={`inline-flex min-h-11 items-center rounded-md border px-3 py-2 text-xs uppercase tracking-label transition-colors ${
                     isActive
                       ? "border-accent text-accent"
                       : "border-border text-muted hover:border-accent/45 hover:text-text"
@@ -109,8 +109,8 @@ export function BeyondWorkListing({
       </nav>
 
       {hasFilteredPosts ? (
-        <div id="beyond-work-grid" className="space-y-8">
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div id="beyond-work-grid" className="space-y-6 sm:space-y-8">
+          <div className="grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
             {filteredPosts.map((post) => (
               <article key={post.slug} className="surface-card overflow-hidden">
                 <Link href={`/beyond-work/${post.slug}`} className="block">
@@ -125,7 +125,7 @@ export function BeyondWorkListing({
                     />
                   </div>
 
-                  <div className="space-y-3 p-4">
+                  <div className="space-y-3 p-4 sm:p-5">
                     <p className="font-mono text-xs uppercase tracking-label text-muted">
                       {formatDate(post.date, language)}
                     </p>
@@ -165,7 +165,7 @@ export function BeyondWorkListing({
           </div>
         </div>
       ) : (
-        <section className="surface-card p-6">
+        <section className="surface-card p-5 sm:p-6">
           <h2 className="font-serif text-2xl text-text">{labels.emptyStateTitle}</h2>
           <p className="pt-2 text-sm text-muted">{labels.emptyStateDescription}</p>
           <Link

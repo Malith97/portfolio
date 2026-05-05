@@ -185,7 +185,7 @@ export function HomePageContent({
   }));
 
   return (
-    <div className="space-y-20">
+    <div className="space-y-14 sm:space-y-20">
       <section className="relative isolate grid gap-8 overflow-hidden border-b border-border pb-12 md:overflow-visible lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
         <HeroAmbientBackground />
 
@@ -332,7 +332,7 @@ export function HomePageContent({
               className="h-full"
             >
               <HoverLift className="h-full" glow>
-                <article className="surface-card surface-card-interactive flex h-full min-h-[220px] flex-col p-4">
+                <article className="surface-card surface-card-interactive flex h-full min-h-[180px] flex-col p-4 sm:min-h-[220px]">
                   <h3 className="font-serif text-xl text-text">
                     {getLocalizedText(category.label, language)}
                   </h3>
@@ -458,7 +458,7 @@ export function HomePageContent({
                 className="h-full"
               >
                 <HoverLift className="h-full" glow>
-                  <article className="surface-card surface-card-interactive flex h-full min-h-[330px] flex-col p-5">
+                  <article className="surface-card surface-card-interactive flex h-full min-h-[280px] flex-col p-4 sm:min-h-[330px] sm:p-5">
                     <header className="space-y-3 border-b border-border pb-3">
                       <div className="flex items-start gap-3">
                         <span className="mt-0.5 inline-flex h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-border bg-[#101010] shadow-[inset_0_0_0_1px_rgba(242,199,91,0.06)] sm:h-16 sm:w-16">
@@ -572,7 +572,7 @@ export function HomePageContent({
               className="h-full"
             >
               <HoverLift className="h-full" glow>
-                <article className="surface-card surface-card-interactive group flex h-full min-h-[220px] flex-col p-5 sm:p-6">
+                <article className="surface-card surface-card-interactive group flex h-full min-h-[200px] flex-col p-4 sm:min-h-[220px] sm:p-6">
                   <div className="flex flex-1 flex-col">
                     <p className="font-mono text-xs uppercase tracking-label text-muted">
                       {formatDate(post.date, language)}
@@ -625,7 +625,7 @@ export function HomePageContent({
               className="h-full"
             >
               <HoverLift glow className="h-full">
-                <article className="surface-card flex h-full min-h-[250px] flex-col justify-between p-5">
+                <article className="surface-card flex h-full min-h-[220px] flex-col justify-between p-4 sm:min-h-[250px] sm:p-5">
                   <div>
                     <p className="font-mono text-xs uppercase tracking-label text-muted">
                       {localizeBeyondCategory(

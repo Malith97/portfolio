@@ -39,7 +39,7 @@ export function ContactPageContent() {
   };
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-10 sm:space-y-12">
       <header className="mb-12 space-y-4 border-b border-border pb-8">
         <p className="font-mono text-xs uppercase tracking-label text-muted">
           {t.contactPage.label}
@@ -69,14 +69,14 @@ export function ContactPageContent() {
           <div className="flex flex-wrap gap-3 border-y border-border py-4">
             <Link
               href="mailto:mileperuma@gmail.com"
-              className="inline-flex items-center justify-center rounded-md border border-accent bg-accent px-4 py-2 text-sm font-medium text-[#0b0b0b] transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0b0b]"
+              className="inline-flex min-h-11 items-center justify-center rounded-md border border-accent bg-accent px-4 py-2 text-sm font-medium text-[#0b0b0b] transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0b0b]"
               aria-label={t.contactPage.emailCta}
             >
               {t.contactPage.emailCta}
             </Link>
             <Link
               href="/resume/Malith-Ileperuma-Resume.pdf"
-              className="inline-flex items-center justify-center rounded-md border border-border px-4 py-2 text-sm text-text transition-colors hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0b0b]"
+              className="inline-flex min-h-11 items-center justify-center rounded-md border border-border px-4 py-2 text-sm text-text transition-colors hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0b0b]"
               aria-label={t.contactPage.resumeCta}
             >
               {t.contactPage.resumeCta}
@@ -156,7 +156,7 @@ export function ContactPageContent() {
                     href={item.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex w-full items-center gap-2 rounded-md border border-border px-3 py-2 text-sm text-text transition-colors hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0b0b]"
+                    className="group inline-flex min-h-11 w-full items-center gap-2 rounded-md border border-border px-3 py-2 text-sm text-text transition-colors hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0b0b]"
                     aria-label={`${socialLabels[item.id]} · ${t.common.openProfileInNewTab}`}
                   >
                     <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-border text-muted transition-colors group-hover:border-accent group-hover:text-accent">

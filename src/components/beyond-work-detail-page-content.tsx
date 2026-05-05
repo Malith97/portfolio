@@ -213,12 +213,12 @@ export function BeyondWorkDetailPageContent({
       : [];
 
   return (
-    <article className="space-y-12">
-      <Link href="/beyond-work" className="quiet-link text-sm text-muted">
+    <article className="space-y-10 sm:space-y-12">
+      <Link href="/beyond-work" className="quiet-link inline-flex min-h-11 items-center text-sm text-muted">
         {t.common.backToBeyondWork}
       </Link>
 
-      <div className="space-y-8">
+      <div className="space-y-6 sm:space-y-8">
         <div className="aspect-[16/9] overflow-hidden rounded-md border border-border">
           <SafeImage
             src={post.image}
@@ -231,12 +231,12 @@ export function BeyondWorkDetailPageContent({
           />
         </div>
 
-        <header className="space-y-4 border-b border-border pb-8">
+        <header className="space-y-4 border-b border-border pb-6 sm:pb-8">
           <p className="font-mono text-xs uppercase tracking-label text-muted">
             {kitchenLabel}
             {localizedCategoryLabel} · {formatDate(post.date, language)}
           </p>
-          <h1 className="max-w-4xl font-serif text-4xl leading-tight text-text sm:text-6xl">{post.title}</h1>
+          <h1 className="max-w-4xl font-serif text-3xl leading-tight text-text sm:text-6xl">{post.title}</h1>
           <p className="max-w-reading text-base leading-relaxed text-muted">{post.summary}</p>
         </header>
       </div>
@@ -344,7 +344,7 @@ export function BeyondWorkDetailPageContent({
         />
       </section>
 
-      <section className="space-y-4 border-t border-border pt-8">
+      <section className="space-y-4 border-t border-border pt-6 sm:pt-8">
         <p className="font-mono text-xs uppercase tracking-label text-muted">{t.common.gallery}</p>
         <PhotoGrid
           images={galleryImages}
@@ -384,23 +384,23 @@ export function BeyondWorkDetailPageContent({
         </section>
       ) : null}
 
-      <nav className="grid gap-3 border-t border-border pt-8 sm:grid-cols-2" aria-label={t.beyondWorkDetail.journalNavigation}>
+      <nav className="grid gap-3 border-t border-border pt-6 sm:grid-cols-2 sm:pt-8" aria-label={t.beyondWorkDetail.journalNavigation}>
         {previousPost ? (
-          <Link href={`/beyond-work/${previousPost.slug}`} className="surface-card block p-4">
+          <Link href={`/beyond-work/${previousPost.slug}`} className="surface-card block min-h-11 p-4">
             <p className="font-mono text-xs uppercase tracking-label text-muted">{t.common.previous}</p>
             <p className="pt-1 font-serif text-xl text-text">{previousPost.title}</p>
           </Link>
         ) : (
-          <div />
+          <div className="hidden sm:block" />
         )}
 
         {nextPost ? (
-          <Link href={`/beyond-work/${nextPost.slug}`} className="surface-card block p-4 sm:text-right">
+          <Link href={`/beyond-work/${nextPost.slug}`} className="surface-card block min-h-11 p-4 sm:text-right">
             <p className="font-mono text-xs uppercase tracking-label text-muted">{t.common.next}</p>
             <p className="pt-1 font-serif text-xl text-text">{nextPost.title}</p>
           </Link>
         ) : (
-          <div />
+          <div className="hidden sm:block" />
         )}
       </nav>
     </article>
