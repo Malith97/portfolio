@@ -14,7 +14,7 @@ describe("SiteFooter", () => {
           { href: "/", label: "Home" },
           { href: "/case-studies", label: "Case Studies" },
         ]}
-      />
+      />,
     );
 
     expect(screen.getByText(/Malith Ileperuma/)).toBeInTheDocument();

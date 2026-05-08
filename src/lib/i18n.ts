@@ -10,7 +10,7 @@ export const LANGUAGE_STORAGE_KEY = "portfolio-lang";
 
 const dictionaries: Record<Language, Dictionary> = {
   eng: en,
-  fi
+  fi,
 };
 
 export function normalizeLanguage(value: string | null | undefined): Language {

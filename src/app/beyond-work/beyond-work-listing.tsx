@@ -138,7 +138,8 @@ export function BeyondWorkListing({
                     <p className="font-mono text-xs uppercase tracking-label text-accent">
                       {buildMetadataLine(post, labels)}
                     </p>
-                    {toFilterKey(post.categoryId, post.category) === "cooking" ? (
+                    {toFilterKey(post.categoryId, post.category) ===
+                    "cooking" ? (
                       <div className="space-y-2 border-t border-border pt-3">
                         {post.timeSpent ? (
                           <p className="text-sm text-muted">
@@ -166,8 +167,12 @@ export function BeyondWorkListing({
         </div>
       ) : (
         <section className="surface-card p-5 sm:p-6">
-          <h2 className="font-serif text-2xl text-text">{labels.emptyStateTitle}</h2>
-          <p className="pt-2 text-sm text-muted">{labels.emptyStateDescription}</p>
+          <h2 className="font-serif text-2xl text-text">
+            {labels.emptyStateTitle}
+          </h2>
+          <p className="pt-2 text-sm text-muted">
+            {labels.emptyStateDescription}
+          </p>
           <Link
             href="/beyond-work"
             className="quiet-link mt-4 inline-block text-sm text-accent"

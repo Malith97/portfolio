@@ -53,9 +53,11 @@ export function createMetadata(input: MetadataInput = {}): Metadata {
   const imageUrl = image.startsWith("http")
     ? image
     : `${normalizedSiteUrl}${image}`;
-  const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
+  const googleSiteVerification =
+    process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
   const bingSiteVerification = process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION;
-  const yandexSiteVerification = process.env.NEXT_PUBLIC_YANDEX_SITE_VERIFICATION;
+  const yandexSiteVerification =
+    process.env.NEXT_PUBLIC_YANDEX_SITE_VERIFICATION;
   const keywords = input.keywords ?? [
     "DevOps Engineer",
     "Cloud Automation",
@@ -129,7 +131,9 @@ export function createMetadata(input: MetadataInput = {}): Metadata {
       google: googleSiteVerification || undefined,
       yandex: yandexSiteVerification || undefined,
       other: {
-        ...(bingSiteVerification ? { "msvalidate.01": bingSiteVerification } : {}),
+        ...(bingSiteVerification
+          ? { "msvalidate.01": bingSiteVerification }
+          : {}),
         me: [
           "https://www.linkedin.com/in/malith-ileperuma-8a6a97167",
           "https://github.com/Malith97",

@@ -2,7 +2,9 @@ import type { MetadataRoute } from "next";
 
 import { homepageTitle, siteDescription, siteUrl } from "@/lib/metadata";
 
-const normalizedSiteUrl = siteUrl.endsWith("/") ? siteUrl.slice(0, -1) : siteUrl;
+const normalizedSiteUrl = siteUrl.endsWith("/")
+  ? siteUrl.slice(0, -1)
+  : siteUrl;
 export const dynamic = "force-static";
 
 export default function manifest(): MetadataRoute.Manifest {

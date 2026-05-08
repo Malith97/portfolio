@@ -1,4 +1,7 @@
-import { filterBeyondWorkPosts, toFilterKey } from "@/app/beyond-work/filtering";
+import {
+  filterBeyondWorkPosts,
+  toFilterKey,
+} from "@/app/beyond-work/filtering";
 
 const samplePosts = [
   { slug: "run-1", categoryId: "running", category: "Running" },
@@ -19,17 +22,28 @@ describe("beyond-work filtering", () => {
   });
 
   it("returns all posts when filter is all", () => {
-    expect(filterBeyondWorkPosts(samplePosts, "all")).toHaveLength(samplePosts.length);
+    expect(filterBeyondWorkPosts(samplePosts, "all")).toHaveLength(
+      samplePosts.length,
+    );
   });
 
   it("filters posts by each category key", () => {
-    expect(filterBeyondWorkPosts(samplePosts, "running").map((item) => item.slug)).toEqual(["run-1"]);
-    expect(filterBeyondWorkPosts(samplePosts, "cycling").map((item) => item.slug)).toEqual(["ride-1"]);
-    expect(filterBeyondWorkPosts(samplePosts, "cooking").map((item) => item.slug)).toEqual(["cook-1"]);
-    expect(filterBeyondWorkPosts(samplePosts, "achievements").map((item) => item.slug)).toEqual(["award-1"]);
-    expect(filterBeyondWorkPosts(samplePosts, "other").map((item) => item.slug)).toEqual([
-      "misc-1",
-      "fallback-1",
-    ]);
+    expect(
+      filterBeyondWorkPosts(samplePosts, "running").map((item) => item.slug),
+    ).toEqual(["run-1"]);
+    expect(
+      filterBeyondWorkPosts(samplePosts, "cycling").map((item) => item.slug),
+    ).toEqual(["ride-1"]);
+    expect(
+      filterBeyondWorkPosts(samplePosts, "cooking").map((item) => item.slug),
+    ).toEqual(["cook-1"]);
+    expect(
+      filterBeyondWorkPosts(samplePosts, "achievements").map(
+        (item) => item.slug,
+      ),
+    ).toEqual(["award-1"]);
+    expect(
+      filterBeyondWorkPosts(samplePosts, "other").map((item) => item.slug),
+    ).toEqual(["misc-1", "fallback-1"]);
   });
 });

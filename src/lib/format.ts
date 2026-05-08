@@ -6,6 +6,6 @@ export function formatDate(dateString: string, language: Language): string {
   return new Intl.DateTimeFormat(locale, {
     year: "numeric",
     month: "long",
-    day: "numeric"
+    day: "numeric",
   }).format(new Date(dateString));
 }

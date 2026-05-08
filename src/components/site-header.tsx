@@ -180,7 +180,9 @@ export function SiteHeader() {
                   return (
                     <li key={item.href}>
                       <motion.div
-                        whileHover={prefersReducedMotion ? undefined : { y: -1 }}
+                        whileHover={
+                          prefersReducedMotion ? undefined : { y: -1 }
+                        }
                         whileTap={
                           prefersReducedMotion ? undefined : { scale: 0.98 }
                         }

@@ -29,17 +29,23 @@ export function PhotoGrid({
   aspectClass = "aspect-[4/3]",
   priorityFirst = false,
   enableLightbox = false,
-  labels
+  labels,
 }: PhotoGridProps) {
   const items = maxItems ? images.slice(0, maxItems) : images;
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const lastTriggerRef = useRef<HTMLButtonElement | null>(null);
-  const gridColsClass = items.length === 1 ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3";
+  const gridColsClass =
+    items.length === 1
+      ? "grid-cols-1"
+      : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3";
   const hasMultiple = items.length > 1;
   const isLightboxOpen = enableLightbox && activeIndex !== null;
   const activeImage = useMemo(
-    () => (activeIndex !== null && activeIndex >= 0 && activeIndex < items.length ? items[activeIndex] : null),
-    [activeIndex, items]
+    () =>
+      activeIndex !== null && activeIndex >= 0 && activeIndex < items.length
+        ? items[activeIndex]
+        : null,
+    [activeIndex, items],
   );
   const imageSizes =
     items.length === 1
@@ -50,7 +56,7 @@ export function PhotoGrid({
     closeImageViewer: labels?.closeImageViewer ?? "Close image viewer",
     previousImage: labels?.previousImage ?? "Previous image",
     nextImage: labels?.nextImage ?? "Next image",
-    imageViewer: labels?.imageViewer ?? "image viewer"
+    imageViewer: labels?.imageViewer ?? "image viewer",
   };
 
   const closeLightbox = useCallback(() => {
@@ -102,7 +108,8 @@ export function PhotoGrid({
 
     const originalOverflow = document.body.style.overflow;
     const originalPaddingRight = document.body.style.paddingRight;
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
 
     document.body.style.overflow = "hidden";
     if (scrollbarWidth > 0) {
@@ -161,7 +168,10 @@ export function PhotoGrid({
           );
 
           return (
-            <li key={`${image}-${index}`} className={`${aspectClass} overflow-hidden rounded-md border border-border`}>
+            <li
+              key={`${image}-${index}`}
+              className={`${aspectClass} overflow-hidden rounded-md border border-border`}
+            >
               {enableLightbox ? (
                 <button
                   type="button"
@@ -190,7 +200,10 @@ export function PhotoGrid({
           aria-label={`${altBase} ${resolvedLabels.imageViewer}`}
           onClick={closeLightbox}
         >
-          <div className="relative w-full max-w-[90vw] transition-transform duration-200" onClick={(event) => event.stopPropagation()}>
+          <div
+            className="relative w-full max-w-[90vw] transition-transform duration-200"
+            onClick={(event) => event.stopPropagation()}
+          >
             <button
               type="button"
               onClick={closeLightbox}

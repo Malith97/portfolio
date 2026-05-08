@@ -45,7 +45,11 @@ function hasRenderableMap(map?: PostMapMeta): boolean {
   return Boolean(map.start && map.end);
 }
 
-function resolveMode(categoryId: string | undefined, category: string | undefined, map: PostMapMeta): "bike" | "run" {
+function resolveMode(
+  categoryId: string | undefined,
+  category: string | undefined,
+  map: PostMapMeta,
+): "bike" | "run" {
   if (map.mode === "bike") {
     return "bike";
   }
@@ -58,7 +62,15 @@ function resolveMode(categoryId: string | undefined, category: string | undefine
   return normalized === "cycling" ? "bike" : "run";
 }
 
-export function BeyondWorkMap({ categoryId, category, map, postTitle, sectionLabel, className, view = "detail" }: BeyondWorkMapProps) {
+export function BeyondWorkMap({
+  categoryId,
+  category,
+  map,
+  postTitle,
+  sectionLabel,
+  className,
+  view = "detail",
+}: BeyondWorkMapProps) {
   const { language } = useLanguage();
   const t = getDictionary(language);
 
@@ -66,16 +78,29 @@ export function BeyondWorkMap({ categoryId, category, map, postTitle, sectionLab
     return null;
   }
 
-  if ((!isEligibleMapCategoryId(categoryId) && !isEligibleMapCategory(category)) || !hasRenderableMap(map) || !map) {
+  if (
+    (!isEligibleMapCategoryId(categoryId) &&
+      !isEligibleMapCategory(category)) ||
+    !hasRenderableMap(map) ||
+    !map
+  ) {
     return null;
   }
 
-  const title = map.title ?? (postTitle ? `${postTitle} ${t.beyondWorkDetail.route}` : t.beyondWorkDetail.route);
+  const title =
+    map.title ??
+    (postTitle
+      ? `${postTitle} ${t.beyondWorkDetail.route}`
+      : t.beyondWorkDetail.route);
   const mode = resolveMode(categoryId, category, map);
 
   return (
     <section className={className ?? "space-y-4"}>
-      {sectionLabel ? <p className="font-mono text-xs uppercase tracking-label text-muted">{sectionLabel}</p> : null}
+      {sectionLabel ? (
+        <p className="font-mono text-xs uppercase tracking-label text-muted">
+          {sectionLabel}
+        </p>
+      ) : null}
       <MapRoute
         title={title}
         mode={mode}
@@ -91,7 +116,7 @@ export function BeyondWorkMap({ categoryId, category, map, postTitle, sectionLab
           runningMode: t.common.runningMode,
           cyclingMode: t.common.cyclingMode,
           start: t.common.start,
-          end: t.common.end
+          end: t.common.end,
         }}
       />
     </section>

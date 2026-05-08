@@ -20,16 +20,31 @@ interface TechIconProps {
 const DEVICON_BASE_URL = "https://cdn.jsdelivr.net/gh/devicons/devicon/icons";
 
 const DEVICON_RULES: DeviconRule[] = [
-  { keywords: ["amazon web services", "aws"], iconPath: "amazonwebservices/amazonwebservices-original.svg" },
-  { keywords: ["cloudwatch", "eks", "iam"], iconPath: "amazonwebservices/amazonwebservices-original.svg" },
+  {
+    keywords: ["amazon web services", "aws"],
+    iconPath: "amazonwebservices/amazonwebservices-original.svg",
+  },
+  {
+    keywords: ["cloudwatch", "eks", "iam"],
+    iconPath: "amazonwebservices/amazonwebservices-original.svg",
+  },
   { keywords: ["jira"], iconPath: "jira/jira-original.svg" },
   { keywords: ["confluence"], iconPath: "confluence/confluence-original.svg" },
-  { keywords: ["oracle cloud", "oracle"], iconPath: "oracle/oracle-original.svg" },
-  { keywords: ["azure devops"], iconPath: "azuredevops/azuredevops-original.svg" },
+  {
+    keywords: ["oracle cloud", "oracle"],
+    iconPath: "oracle/oracle-original.svg",
+  },
+  {
+    keywords: ["azure devops"],
+    iconPath: "azuredevops/azuredevops-original.svg",
+  },
   { keywords: ["azure"], iconPath: "azure/azure-original.svg" },
   { keywords: ["argocd", "argo cd"], iconPath: "argocd/argocd-original.svg" },
   { keywords: ["gitlab ci", "gitlab"], iconPath: "gitlab/gitlab-original.svg" },
-  { keywords: ["github actions"], iconPath: "githubactions/githubactions-original.svg" },
+  {
+    keywords: ["github actions"],
+    iconPath: "githubactions/githubactions-original.svg",
+  },
   { keywords: ["jenkins"], iconPath: "jenkins/jenkins-original.svg" },
   { keywords: ["docker"], iconPath: "docker/docker-original.svg" },
   { keywords: ["kubernetes"], iconPath: "kubernetes/kubernetes-original.svg" },
@@ -41,11 +56,23 @@ const DEVICON_RULES: DeviconRule[] = [
   { keywords: ["grafana"], iconPath: "grafana/grafana-original.svg" },
   { keywords: ["datadog"], iconPath: "datadog/datadog-original.svg" },
   { keywords: ["react"], iconPath: "react/react-original.svg" },
-  { keywords: ["node.js", "nodejs"], iconPath: "nodedotjs/nodedotjs-original.svg" },
-  { keywords: ["postgresql", "postgres"], iconPath: "postgresql/postgresql-original.svg" },
+  {
+    keywords: ["node.js", "nodejs"],
+    iconPath: "nodedotjs/nodedotjs-original.svg",
+  },
+  {
+    keywords: ["postgresql", "postgres"],
+    iconPath: "postgresql/postgresql-original.svg",
+  },
   { keywords: ["mongodb"], iconPath: "mongodb/mongodb-original.svg" },
-  { keywords: ["powershell", "pwsh"], iconPath: "powershell/powershell-original.svg" },
-  { keywords: ["shell", "terminal", "zsh"], iconPath: "bash/bash-original.svg" },
+  {
+    keywords: ["powershell", "pwsh"],
+    iconPath: "powershell/powershell-original.svg",
+  },
+  {
+    keywords: ["shell", "terminal", "zsh"],
+    iconPath: "bash/bash-original.svg",
+  },
   { keywords: ["bash"], iconPath: "bash/bash-original.svg" },
   { keywords: ["python"], iconPath: "python/python-original.svg" },
   { keywords: ["go"], iconPath: "go/go-original.svg" },
@@ -53,12 +80,14 @@ const DEVICON_RULES: DeviconRule[] = [
   { keywords: ["linux"], iconPath: "linux/linux-original.svg" },
   { keywords: ["nginx"], iconPath: "nginx/nginx-original.svg" },
   { keywords: ["java"], iconPath: "java/java-original.svg" },
-  { keywords: ["gitops", "git"], iconPath: "git/git-original.svg" }
+  { keywords: ["gitops", "git"], iconPath: "git/git-original.svg" },
 ];
 
 function resolveDeviconPath(tool: string): string | null {
   const normalized = tool.trim().toLowerCase();
-  const match = DEVICON_RULES.find((rule) => rule.keywords.some((keyword) => normalized.includes(keyword)));
+  const match = DEVICON_RULES.find((rule) =>
+    rule.keywords.some((keyword) => normalized.includes(keyword)),
+  );
   return match?.iconPath ?? null;
 }
 
@@ -84,7 +113,7 @@ export function TechIcon({ tool, className = "h-4 w-4" }: TechIconProps) {
   const [iconVariantIndex, setIconVariantIndex] = useState(0);
   const iconCandidates = iconPath
     ? Array.from(
-        new Set([iconPath, iconPath.replace("-original.svg", "-plain.svg")])
+        new Set([iconPath, iconPath.replace("-original.svg", "-plain.svg")]),
       )
     : [];
   const activeIconPath = iconCandidates[iconVariantIndex] ?? null;
@@ -123,10 +152,16 @@ export function TechIcon({ tool, className = "h-4 w-4" }: TechIconProps) {
 export function TechBadge({ tool }: TechBadgeProps) {
   return (
     <li className="inline-flex items-center gap-2 rounded-md border border-border px-2 py-1">
-      <span className="inline-flex h-4 w-4 shrink-0 items-center justify-center" role="img" aria-label={`${tool} icon`}>
+      <span
+        className="inline-flex h-4 w-4 shrink-0 items-center justify-center"
+        role="img"
+        aria-label={`${tool} icon`}
+      >
         <TechIcon tool={tool} />
       </span>
-      <span className="font-mono text-[11px] uppercase tracking-label text-muted">{tool}</span>
+      <span className="font-mono text-[11px] uppercase tracking-label text-muted">
+        {tool}
+      </span>
     </li>
   );
 }
