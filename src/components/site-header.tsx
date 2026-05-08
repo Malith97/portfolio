@@ -121,8 +121,8 @@ export function SiteHeader() {
                   src="/media/malith-avatar.png"
                   alt={
                     language === "fi"
-                      ? "Malithin profiilikuva"
-                      : "Malith avatar"
+                      ? "Malith Ileperuman profiilikuva"
+                      : "Profile photo of Malith Ileperuma"
                   }
                   width={32}
                   height={32}

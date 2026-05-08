@@ -8,7 +8,7 @@ interface SafeImageProps extends Omit<ImageProps, "src"> {
   fallbackSrc?: string;
 }
 
-const DEFAULT_FALLBACK_SRC = "/media/photo-1.webp";
+const DEFAULT_FALLBACK_SRC = "/media/malith-portrait.jpg";
 
 export function SafeImage({
   src,

@@ -75,8 +75,8 @@ export const en: Dictionary = {
     heroSummary:
       "I design, automate, and operate delivery platforms for teams that need speed, reliability, and control.",
     heroMeta: "Open to EU, Finland, and remote DevOps opportunities",
-    ctaViewWork: "View Work",
-    ctaDownloadResume: "Contact Me",
+    ctaViewWork: "View DevOps Case Studies",
+    ctaDownloadResume: "Start a DevOps Conversation",
     summaryLabel: "Summary",
     summaryTitle: "Professional summary",
     educationLabel: "Education",

@@ -6,6 +6,12 @@ export const metadata = createMetadata({
   description:
     "Professional experience timeline and education highlights across DevOps, platform engineering, and software delivery.",
   path: "/work-education",
+  keywords: [
+    "DevOps experience",
+    "Cloud engineer experience",
+    "Platform engineering career",
+    "Engineering education",
+  ],
 });
 
 export default function WorkEducationPage() {

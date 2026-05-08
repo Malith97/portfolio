@@ -9,7 +9,6 @@ const BASE_URL = "https://malithileperuma.com";
 const requiredBaseRoutes = [
   "/",
   "/story",
-  "/experience",
   "/about",
   "/work-education",
   "/case-studies",
@@ -113,14 +112,6 @@ function main() {
     ],
     "Story page output",
   );
-  ensureAnyExists(
-    [
-      path.join(OUT_DIR, "experience.html"),
-      path.join(OUT_DIR, "experience", "index.html"),
-    ],
-    "Experience page output",
-  );
-
   const sitemapPath = path.join(OUT_DIR, "sitemap.xml");
   ensureFile(sitemapPath, "Sitemap output");
 

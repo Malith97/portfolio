@@ -87,7 +87,24 @@ function toReadingTime(markdown: string, language: Language): string {
 }
 
 function optimizeContentHtml(html: string): string {
-  return html.replace(/<img\s+/g, '<img loading="lazy" decoding="async" ');
+  const withOptimizedImages = html.replace(/<img\s+/g, '<img loading="lazy" decoding="async" ');
+
+  return withOptimizedImages.replace(
+    /<a\s+([^>]*href="https?:\/\/[^"]+"[^>]*)>/g,
+    (_match, attrs: string) => {
+      const nextAttrs: string[] = [attrs.trim()];
+
+      if (!/\btarget=/.test(attrs)) {
+        nextAttrs.push('target="_blank"');
+      }
+
+      if (!/\brel=/.test(attrs)) {
+        nextAttrs.push('rel="nofollow noopener noreferrer"');
+      }
+
+      return `<a ${nextAttrs.join(" ")}>`;
+    }
+  );
 }
 
 function normalizeMeta(

@@ -24,6 +24,7 @@ interface MetadataInput {
   path?: string;
   image?: string;
   openGraphType?: "website" | "article";
+  keywords?: string[];
 }
 
 function normalizeSiteUrl(url: string): string {
@@ -52,11 +53,35 @@ export function createMetadata(input: MetadataInput = {}): Metadata {
   const imageUrl = image.startsWith("http")
     ? image
     : `${normalizedSiteUrl}${image}`;
+  const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
+  const bingSiteVerification = process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION;
+  const yandexSiteVerification = process.env.NEXT_PUBLIC_YANDEX_SITE_VERIFICATION;
+  const keywords = input.keywords ?? [
+    "DevOps Engineer",
+    "Cloud Automation",
+    "Infrastructure as Code",
+    "Kubernetes",
+    "Terraform",
+    "CI/CD",
+    "Platform Engineering",
+    "FinOps",
+    "Site Reliability Engineering",
+    "AWS",
+    "Azure",
+    "Oulu Finland",
+  ];
 
   return {
     title,
     description,
+    keywords,
     metadataBase: new URL(normalizedSiteUrl),
+    applicationName: "Malith Ileperuma Portfolio",
+    referrer: "strict-origin-when-cross-origin",
+    creator: "Malith Ileperuma",
+    publisher: "Malith Ileperuma",
+    authors: [{ name: "Malith Ileperuma", url: normalizedSiteUrl }],
+    category: "Technology",
     manifest: "/manifest.webmanifest",
     icons: {
       icon: [{ url: "/media/malith-avatar.png", type: "image/png" }],
@@ -88,6 +113,29 @@ export function createMetadata(input: MetadataInput = {}): Metadata {
       images: [imageUrl],
       creator: "@Malith97",
       site: "@Malith97",
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
+    },
+    verification: {
+      google: googleSiteVerification || undefined,
+      yandex: yandexSiteVerification || undefined,
+      other: {
+        ...(bingSiteVerification ? { "msvalidate.01": bingSiteVerification } : {}),
+        me: [
+          "https://www.linkedin.com/in/malith-ileperuma-8a6a97167",
+          "https://github.com/Malith97",
+          "https://medium.com/@mileperuma",
+        ],
+      },
     },
   };
 }

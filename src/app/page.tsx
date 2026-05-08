@@ -13,6 +13,15 @@ export const metadata = createMetadata({
   description: homepageDescription,
   path: "/",
   image: HERO_PORTRAIT_SRC,
+  keywords: [
+    "DevOps Engineer Portfolio",
+    "Cloud Automation Engineer",
+    "Kubernetes Engineer",
+    "Terraform Infrastructure",
+    "CI/CD Pipelines",
+    "Platform Engineering",
+    "AWS and Azure DevOps",
+  ],
 });
 
 export default async function HomePage() {

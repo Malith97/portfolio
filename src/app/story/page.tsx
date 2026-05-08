@@ -6,6 +6,12 @@ export const metadata = createMetadata({
   description:
     "Personal journey from Sri Lanka to Finland, with lessons from software engineering, DevOps, and cloud platform work.",
   path: "/story",
+  keywords: [
+    "Malith Ileperuma story",
+    "DevOps journey",
+    "Sri Lanka to Finland engineer",
+    "Engineering career story",
+  ],
 });
 
 export default function StoryPage() {

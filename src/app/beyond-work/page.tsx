@@ -7,6 +7,12 @@ export const metadata = createMetadata({
   description:
     "A personal journal of running, cycling, photography, cooking, and side projects outside day-to-day engineering work.",
   path: "/beyond-work",
+  keywords: [
+    "Engineer personal blog",
+    "DevOps life in Finland",
+    "Running and cycling journal",
+    "Personal projects",
+  ],
 });
 
 export default async function BeyondWorkPage() {

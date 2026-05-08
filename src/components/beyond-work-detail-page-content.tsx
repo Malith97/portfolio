@@ -9,6 +9,7 @@ import { useLanguage } from "@/components/language-provider";
 import type { Post, PostMeta } from "@/lib/content";
 import { formatDate } from "@/lib/format";
 import { getDictionary, type Language } from "@/lib/i18n";
+import { siteUrl } from "@/lib/metadata";
 
 interface BeyondWorkDetailPageContentProps {
   slug: string;
@@ -141,10 +142,67 @@ export function BeyondWorkDetailPageContent({
   const { language } = useLanguage();
   const t = getDictionary(language);
   const post = resolvePost(language, postsByLanguage);
+  const normalizedSiteUrl = siteUrl.endsWith("/") ? siteUrl.slice(0, -1) : siteUrl;
 
   if (!post) {
     return null;
   }
+
+  const canonicalUrl = `${normalizedSiteUrl}/beyond-work/${post.slug}`;
+  const imageUrl = `${normalizedSiteUrl}${post.coverImage || post.image}`;
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: normalizedSiteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Beyond Work",
+        item: `${normalizedSiteUrl}/beyond-work`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: post.title,
+        item: canonicalUrl,
+      },
+    ],
+  };
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.summary,
+    image: [imageUrl],
+    datePublished: post.date,
+    dateModified: post.date,
+    mainEntityOfPage: canonicalUrl,
+    author: {
+      "@type": "Person",
+      name: "Malith Ileperuma",
+      url: normalizedSiteUrl,
+    },
+    publisher: {
+      "@type": "Person",
+      name: "Malith Ileperuma",
+      url: normalizedSiteUrl,
+    },
+    keywords: post.tags,
+    articleSection: post.category ?? "Beyond Work",
+  };
+  const shareText = encodeURIComponent(post.title);
+  const shareUrl = encodeURIComponent(canonicalUrl);
+  const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`;
+  const xShareUrl = `https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareText}`;
+  const shareLabel = language === "fi" ? "Jaa tämä merkintä" : "Share this entry";
+  const shareOnLinkedInLabel = language === "fi" ? "Jaa LinkedInissä" : "Share on LinkedIn";
+  const shareOnXLabel = language === "fi" ? "Jaa X:ssä" : "Share on X";
 
   const posts = resolveListing(language, listingByLanguage);
   const currentIndex = posts.findIndex((entry) => entry.slug === post.slug);
@@ -213,10 +271,11 @@ export function BeyondWorkDetailPageContent({
       : [];
 
   return (
-    <article className="space-y-10 sm:space-y-12">
-      <Link href="/beyond-work" className="quiet-link inline-flex min-h-11 items-center text-sm text-muted">
-        {t.common.backToBeyondWork}
-      </Link>
+    <>
+      <article className="space-y-10 sm:space-y-12">
+        <Link href="/beyond-work" className="quiet-link inline-flex min-h-11 items-center text-sm text-muted">
+          {t.common.backToBeyondWork}
+        </Link>
 
       <div className="space-y-6 sm:space-y-8">
         <div className="aspect-[16/9] overflow-hidden rounded-md border border-border">
@@ -336,15 +395,35 @@ export function BeyondWorkDetailPageContent({
         </section>
       ) : null}
 
-      <section className="space-y-4">
-        <p className="font-mono text-xs uppercase tracking-label text-muted">{storyLabel}</p>
-        <div
-          className={isWeekendCookieBake ? "content-prose max-w-none" : "content-prose max-w-reading"}
-          dangerouslySetInnerHTML={{ __html: post.contentHtml }}
-        />
-      </section>
+        <section className="space-y-4">
+          <p className="font-mono text-xs uppercase tracking-label text-muted">{storyLabel}</p>
+          <div
+            className={isWeekendCookieBake ? "content-prose max-w-none" : "content-prose max-w-reading"}
+            dangerouslySetInnerHTML={{ __html: post.contentHtml }}
+          />
+        </section>
 
-      <section className="space-y-4 border-t border-border pt-6 sm:pt-8">
+        <section className="flex flex-wrap items-center gap-3 border-t border-border pt-6">
+          <p className="font-mono text-xs uppercase tracking-label text-muted">{shareLabel}</p>
+          <a
+            href={linkedInShareUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-11 items-center rounded-md border border-border px-3 py-2 text-sm text-text transition-colors hover:border-accent hover:text-accent"
+          >
+            {shareOnLinkedInLabel}
+          </a>
+          <a
+            href={xShareUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-11 items-center rounded-md border border-border px-3 py-2 text-sm text-text transition-colors hover:border-accent hover:text-accent"
+          >
+            {shareOnXLabel}
+          </a>
+        </section>
+
+        <section className="space-y-4 border-t border-border pt-6 sm:pt-8">
         <p className="font-mono text-xs uppercase tracking-label text-muted">{t.common.gallery}</p>
         <PhotoGrid
           images={galleryImages}
@@ -384,25 +463,32 @@ export function BeyondWorkDetailPageContent({
         </section>
       ) : null}
 
-      <nav className="grid gap-3 border-t border-border pt-6 sm:grid-cols-2 sm:pt-8" aria-label={t.beyondWorkDetail.journalNavigation}>
-        {previousPost ? (
-          <Link href={`/beyond-work/${previousPost.slug}`} className="surface-card block min-h-11 p-4">
-            <p className="font-mono text-xs uppercase tracking-label text-muted">{t.common.previous}</p>
-            <p className="pt-1 font-serif text-xl text-text">{previousPost.title}</p>
-          </Link>
-        ) : (
-          <div className="hidden sm:block" />
-        )}
+        <nav className="grid gap-3 border-t border-border pt-6 sm:grid-cols-2 sm:pt-8" aria-label={t.beyondWorkDetail.journalNavigation}>
+          {previousPost ? (
+            <Link href={`/beyond-work/${previousPost.slug}`} className="surface-card block min-h-11 p-4">
+              <p className="font-mono text-xs uppercase tracking-label text-muted">{t.common.previous}</p>
+              <p className="pt-1 font-serif text-xl text-text">{previousPost.title}</p>
+            </Link>
+          ) : (
+            <div className="hidden sm:block" />
+          )}
 
-        {nextPost ? (
-          <Link href={`/beyond-work/${nextPost.slug}`} className="surface-card block min-h-11 p-4 sm:text-right">
-            <p className="font-mono text-xs uppercase tracking-label text-muted">{t.common.next}</p>
-            <p className="pt-1 font-serif text-xl text-text">{nextPost.title}</p>
-          </Link>
-        ) : (
-          <div className="hidden sm:block" />
-        )}
-      </nav>
-    </article>
+          {nextPost ? (
+            <Link href={`/beyond-work/${nextPost.slug}`} className="surface-card block min-h-11 p-4 sm:text-right">
+              <p className="font-mono text-xs uppercase tracking-label text-muted">{t.common.next}</p>
+              <p className="pt-1 font-serif text-xl text-text">{nextPost.title}</p>
+            </Link>
+          ) : (
+            <div className="hidden sm:block" />
+          )}
+        </nav>
+      </article>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([articleJsonLd, breadcrumbJsonLd]),
+        }}
+      />
+    </>
   );
 }

@@ -15,7 +15,6 @@ interface ContentRouteEntry {
 const staticRoutes: Array<{ path: string; priority: number; pageFile: string }> = [
   { path: "/", priority: 1.0, pageFile: "src/app/page.tsx" },
   { path: "/story", priority: 0.9, pageFile: "src/app/story/page.tsx" },
-  { path: "/experience", priority: 0.85, pageFile: "src/app/experience/page.tsx" },
   { path: "/case-studies", priority: 0.8, pageFile: "src/app/case-studies/page.tsx" },
   { path: "/beyond-work", priority: 0.7, pageFile: "src/app/beyond-work/page.tsx" },
   { path: "/contact", priority: 0.6, pageFile: "src/app/contact/page.tsx" },

@@ -228,7 +228,6 @@ export function PhotoGrid({
                 fill
                 sizes="90vw"
                 className="object-contain transition-opacity duration-200"
-                priority
               />
             </div>
           </div>
