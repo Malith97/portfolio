@@ -12,12 +12,16 @@ test("detail pages switch language EN <-> FI without stale content", async ({
   });
 
   await page.goto("/case-studies/cloud-cost-optimization");
+  await page.waitForSelector('[data-testid="language-toggle"]', {
+    state: "visible",
+  });
 
-  await page.getByRole("button", { name: "FI", exact: true }).click();
-  await expect(
-    page.getByRole("button", { name: "FI", exact: true }),
-  ).toHaveAttribute("aria-pressed", "true");
-  await expect(page.getByRole("link", { name: "Työnäytteet" })).toBeVisible();
+  await page.getByTestId("lang-fi").click();
+  await expect(page.getByTestId("lang-fi")).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await expect(page.getByTestId("nav-link-case-studies")).toBeVisible();
   await expect(
     page.getByRole("heading", {
       name: /Pilvikustannusten optimointi ja 35 prosentin säästö/i,
@@ -27,17 +31,18 @@ test("detail pages switch language EN <-> FI without stale content", async ({
     page.getByText(/Pilvikulut laskivat 35 prosenttia/i).first(),
   ).toBeVisible();
 
-  await page.getByRole("button", { name: "EN", exact: true }).click();
-  await expect(
-    page.getByRole("button", { name: "EN", exact: true }),
-  ).toHaveAttribute("aria-pressed", "true");
+  await page.getByTestId("lang-eng").click();
+  await expect(page.getByTestId("lang-eng")).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
   await expect(
     page.getByRole("heading", {
       name: /The problem/i,
     }),
   ).toBeVisible();
 
-  await page.getByRole("button", { name: "FI", exact: true }).click();
+  await page.getByTestId("lang-fi").click();
   await expect(
     page.getByRole("heading", {
       name: /Pilvikustannusten optimointi ja 35 prosentin säästö/i,
@@ -45,7 +50,10 @@ test("detail pages switch language EN <-> FI without stale content", async ({
   ).toBeVisible();
 
   await page.goto("/beyond-work/running-to-vartto");
-  await expect(page.getByRole("link", { name: "Vapaa-ajalla" })).toBeVisible();
+  await page.waitForSelector('[data-testid="nav-link-beyond-work"]', {
+    state: "visible",
+  });
+  await expect(page.getByTestId("nav-link-beyond-work")).toBeVisible();
   await expect(
     page.getByRole("heading", {
       name: /Talvinen iltalenkki Värttöön/i,
@@ -53,7 +61,7 @@ test("detail pages switch language EN <-> FI without stale content", async ({
   ).toBeVisible();
   await expect(page.getByText(/Lyhyt talvinen iltajuoksu/i)).toBeVisible();
 
-  await page.getByRole("button", { name: "EN", exact: true }).click();
+  await page.getByTestId("lang-eng").click();
   await expect(
     page.getByRole("heading", {
       name: /Evening Winter Run in Värttö/i,

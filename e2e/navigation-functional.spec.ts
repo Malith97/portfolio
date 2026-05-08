@@ -12,6 +12,9 @@ test("navigation, story anchors, and core routes work without console errors", a
   });
 
   await page.goto("/");
+  await page.waitForSelector('[data-testid="nav-link-story"]', {
+    state: "visible",
+  });
 
   await page.goto("/story");
   await expect(page).toHaveURL(/\/story$/);
@@ -19,10 +22,15 @@ test("navigation, story anchors, and core routes work without console errors", a
     page.getByRole("heading", { name: /From Curiosity to Reliability/i }),
   ).toBeVisible();
 
-  await expect(
-    page.getByRole("link", { name: "Story", exact: true }),
-  ).toHaveAttribute("aria-current", "page");
+  await expect(page.getByTestId("nav-link-story")).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
 
+  // Story chapter links are rendered after page hydration; wait before anchor navigation.
+  await page.waitForSelector('aside a[href="#chapter-06"]', {
+    state: "visible",
+  });
   await page.locator('aside a[href="#chapter-06"]').first().click();
   await expect(page).toHaveURL(/#chapter-06$/);
   await expect(
@@ -32,6 +40,7 @@ test("navigation, story anchors, and core routes work without console errors", a
   ).toBeVisible();
 
   await page.goto("/case-studies");
+  await page.waitForSelector('a[href^="/case-studies/"]', { state: "visible" });
   await expect(
     page.getByRole("heading", {
       name: /Infrastructure & Delivery Case Studies/i,
