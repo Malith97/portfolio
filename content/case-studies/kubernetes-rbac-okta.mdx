@@ -157,6 +157,7 @@ contentFi: |
 This case study captures the full implementation journey of integrating Kubernetes RBAC with Okta to build stronger, identity-driven access control for multi-team clusters.
 
 ## Introduction
+
 Kubernetes is a powerful platform for orchestrating applications at scale, but managing secure access to cluster resources becomes increasingly complex as teams grow.
 
 To address this, I implemented an identity-first RBAC approach by integrating Kubernetes with Okta. This made access control easier to manage, more auditable, and safer across engineering teams.
@@ -164,9 +165,11 @@ To address this, I implemented an identity-first RBAC approach by integrating Ku
 ![Kubernetes access control with centralized identity](/case-studies/kubernetes-rbac-okta/img1.webp)
 
 ## The Challenge of Traditional Kubernetes Access Management
+
 In many Kubernetes environments, access control relies on static credentials and manually maintained role bindings. Over time, this creates security and operational overhead.
 
 Core issues we faced:
+
 - **Static kubeconfig credentials** are difficult to rotate and easy to misuse.
 - **No centralized identity source** means user lifecycle events are inconsistently enforced.
 - **Manual role updates** are error-prone and slow in fast-moving teams.
@@ -175,10 +178,13 @@ Core issues we faced:
 Without centralized identity and policy alignment, cluster access can drift from least-privilege standards.
 
 ## How to Integrate Kubernetes RBAC with Okta
+
 The implementation combined Kubernetes RBAC primitives with Okta groups and OIDC authentication.
 
 ### 1. Create Okta Groups by Access Scope
+
 I created group structures in Okta to map directly to Kubernetes access patterns, for example:
+
 - `k8s-admins`
 - `k8s-developers`
 - `k8s-readonly`
@@ -186,6 +192,7 @@ I created group structures in Okta to map directly to Kubernetes access patterns
 This allowed access ownership to stay with identity governance while Kubernetes consumed group claims.
 
 ### 2. Define Kubernetes Roles and RoleBindings
+
 For each access scope, I defined Kubernetes `Role` / `ClusterRole` objects and mapped them with `RoleBinding` / `ClusterRoleBinding`.
 
 Typical workflow:
@@ -198,6 +205,7 @@ kubectl apply -f rolebinding.yaml
 The role definition scoped actions to required resources only, and the binding linked those permissions to the matching Okta group.
 
 ### 3. Configure OIDC Authentication in Kubernetes and kubectl
+
 I configured Kubernetes authentication to trust Okta as the OIDC identity provider and used OIDC-based login for client access.
 
 Representative client setup pattern:
@@ -216,7 +224,9 @@ kubectl config set-credentials okta-user \
 This ensured authenticated sessions produced identity tokens that included group claims used by RBAC bindings.
 
 ### 4. Validate Access with Group-Based Tests
+
 I validated the setup by testing access behavior across user personas:
+
 - Admin users with elevated permissions
 - Developer users with namespace-scoped privileges
 - Read-only users with view-only access
@@ -226,7 +236,9 @@ This confirmed policy boundaries worked as expected.
 ![Role mapping and secure team access flow](/case-studies/kubernetes-rbac-okta/img2.webp)
 
 ## Benefits of Using Okta for Kubernetes RBAC
+
 The integration delivered practical security and operational improvements:
+
 - **Centralized access management** through one identity platform
 - **Stronger security** via OIDC and group-based authorization
 - **Scalability** for onboarding/offboarding across many teams
@@ -236,6 +248,7 @@ The integration delivered practical security and operational improvements:
 - **Faster incident response** when revoking or updating access
 
 ## Technical Issues and How to Fix Them
+
 During implementation, several issues surfaced and were resolved:
 
 - **OIDC misconfiguration**
@@ -255,19 +268,23 @@ During implementation, several issues surfaced and were resolved:
   - Fix: use deterministic policy tests and document each role boundary clearly
 
 ## Benefits and Drawbacks
+
 A realistic implementation view includes trade-offs.
 
 ### Benefits
+
 - Security posture improves through identity-backed least privilege
 - Access lifecycle management becomes faster and cleaner
 - Governance and audits are significantly easier
 
 ### Drawbacks
+
 - Initial setup complexity is non-trivial
 - Teams need OIDC/RBAC operational familiarity
 - Identity availability and integration health become critical dependencies
 
 ## Conclusion
+
 Integrating Kubernetes RBAC with Okta is a high-leverage upgrade for organizations managing multi-team clusters.
 
 By combining centralized identity, group-based authorization, and policy-driven RBAC, teams gain better security, stronger governance, and more maintainable access operations.

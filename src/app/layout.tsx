@@ -4,6 +4,7 @@ import { Fraunces, IBM_Plex_Mono, Inter } from "next/font/google";
 import { LanguageProvider } from "@/components/language-provider";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { WebVitalsReporter } from "@/components/web-vitals-reporter";
 import { getServerLanguage } from "@/lib/i18n-server";
 import { getDictionary } from "@/lib/i18n";
 import {
@@ -103,6 +104,7 @@ export default async function RootLayout({
       className={`${headingFont.variable} ${bodyFont.variable} ${labelFont.variable}`}
     >
       <body className="font-sans text-text antialiased">
+        <WebVitalsReporter />
         <LanguageProvider initialLanguage={language}>
           <a
             href="#main-content"
@@ -118,7 +120,19 @@ export default async function RootLayout({
             >
               {children}
             </main>
-            <SiteFooter builtWithText={t.footer.builtWithCare} />
+            <SiteFooter
+              builtWithText={t.footer.builtWithCare}
+              navLabel={t.common.primaryNavigation}
+              socialLabel={t.contactPage.profilesTitle}
+              links={[
+                { href: "/", label: t.nav.home },
+                { href: "/story", label: t.nav.story },
+                { href: "/work-education", label: t.nav.workEducation },
+                { href: "/case-studies", label: t.nav.caseStudies },
+                { href: "/beyond-work", label: t.nav.beyondWork },
+                { href: "/contact", label: t.nav.contact },
+              ]}
+            />
           </div>
         </LanguageProvider>
         <script

@@ -91,7 +91,7 @@ export function ContactPageContent() {
               <a
                 href="https://www.linkedin.com/in/malith-ileperuma-8a6a97167"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="me noopener noreferrer"
                 className="quiet-link text-accent"
               >
                 {t.contactPage.quickIntro}
@@ -155,7 +155,7 @@ export function ContactPageContent() {
                   <Link
                     href={item.href}
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="me noopener noreferrer"
                     className="group inline-flex min-h-11 w-full items-center gap-2 rounded-md border border-border px-3 py-2 text-sm text-text transition-colors hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0b0b]"
                     aria-label={`${socialLabels[item.id]} · ${t.common.openProfileInNewTab}`}
                   >

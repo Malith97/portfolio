@@ -5,7 +5,7 @@ const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}"
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
@@ -16,22 +16,22 @@ const config: Config = {
         muted: "#B0A99A",
         border: "#2A2822",
         accent: "#F2C75B",
-        "accent-secondary": "#E2B449"
+        "accent-secondary": "#E2B449",
       },
       fontFamily: {
         sans: ["var(--font-sans)", "sans-serif"],
         serif: ["var(--font-serif)", "serif"],
-        mono: ["var(--font-mono)", "monospace"]
+        mono: ["var(--font-mono)", "monospace"],
       },
       maxWidth: {
-        reading: "44rem"
+        reading: "44rem",
       },
       letterSpacing: {
-        label: "0.12em"
-      }
-    }
+        label: "0.12em",
+      },
+    },
   },
-  plugins: [typography]
+  plugins: [typography],
 };
 
 export default config;

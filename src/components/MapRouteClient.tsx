@@ -2,7 +2,14 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { LatLngTuple } from "leaflet";
-import { CircleMarker, MapContainer, Polyline, TileLayer, Tooltip, useMap } from "react-leaflet";
+import {
+  CircleMarker,
+  MapContainer,
+  Polyline,
+  TileLayer,
+  Tooltip,
+  useMap,
+} from "react-leaflet";
 
 export type MapRouteMode = "bike" | "run";
 
@@ -27,7 +34,9 @@ export interface MapRouteProps {
   labels?: Partial<MapRouteLabels>;
 }
 
-function normalizeLatLng(coordinate?: [number, number]): LatLngTuple | undefined {
+function normalizeLatLng(
+  coordinate?: [number, number],
+): LatLngTuple | undefined {
   if (!coordinate) {
     return undefined;
   }
@@ -158,12 +167,17 @@ function haversineDistanceKm(from: LatLngTuple, to: LatLngTuple): number {
 
   const a =
     Math.sin(latDelta / 2) * Math.sin(latDelta / 2) +
-    Math.cos(fromLat) * Math.cos(toLat) * Math.sin(lonDelta / 2) * Math.sin(lonDelta / 2);
+    Math.cos(fromLat) *
+      Math.cos(toLat) *
+      Math.sin(lonDelta / 2) *
+      Math.sin(lonDelta / 2);
 
   return earthRadiusKm * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-function calculatePolylineDistanceKm(points: LatLngTuple[]): number | undefined {
+function calculatePolylineDistanceKm(
+  points: LatLngTuple[],
+): number | undefined {
   if (points.length < 2) {
     return undefined;
   }
@@ -207,29 +221,42 @@ function AutoFitBounds({ points }: { points: LatLngTuple[] }) {
 
     map.fitBounds(points, {
       padding: [24, 24],
-      animate: false
+      animate: false,
     });
   }, [map, points]);
 
   return null;
 }
 
-export function MapRouteClient({ title, mode, points, start, end, routeFile, distanceLabel, labels }: MapRouteProps) {
+export function MapRouteClient({
+  title,
+  mode,
+  points,
+  start,
+  end,
+  routeFile,
+  distanceLabel,
+  labels,
+}: MapRouteProps) {
   const [routePoints, setRoutePoints] = useState<LatLngTuple[] | null>(null);
   const [routeFileError, setRouteFileError] = useState<string | null>(null);
   const resolvedLabels: MapRouteLabels = {
     routeMap: labels?.routeMap ?? "Route map",
     loading: labels?.loading ?? "Loading",
-    mapDataUnavailable: labels?.mapDataUnavailable ?? "Map data is unavailable for this entry.",
+    mapDataUnavailable:
+      labels?.mapDataUnavailable ?? "Map data is unavailable for this entry.",
     runningMode: labels?.runningMode ?? "Running",
     cyclingMode: labels?.cyclingMode ?? "Cycling",
     start: labels?.start ?? "Start",
-    end: labels?.end ?? "End"
+    end: labels?.end ?? "End",
   };
 
   const normalizedPoints = useMemo(
-    () => (points ?? []).map((point) => normalizeLatLng(point)).filter((point): point is LatLngTuple => Boolean(point)),
-    [points]
+    () =>
+      (points ?? [])
+        .map((point) => normalizeLatLng(point))
+        .filter((point): point is LatLngTuple => Boolean(point)),
+    [points],
   );
   const normalizedStart = useMemo(() => normalizeLatLng(start), [start]);
   const normalizedEnd = useMemo(() => normalizeLatLng(end), [end]);
@@ -264,9 +291,14 @@ export function MapRouteClient({ title, mode, points, start, end, routeFile, dis
 
         let loadedPoints: LatLngTuple[] = [];
         const routePathLower = safeRoutePath.toLowerCase();
-        const contentType = response.headers.get("content-type")?.toLowerCase() ?? "";
+        const contentType =
+          response.headers.get("content-type")?.toLowerCase() ?? "";
 
-        if (routePathLower.endsWith(".gpx") || contentType.includes("xml") || contentType.includes("gpx")) {
+        if (
+          routePathLower.endsWith(".gpx") ||
+          contentType.includes("xml") ||
+          contentType.includes("gpx")
+        ) {
           const xmlText = await response.text();
           loadedPoints = extractRoutePointsFromGpx(xmlText);
         } else {
@@ -320,7 +352,9 @@ export function MapRouteClient({ title, mode, points, start, end, routeFile, dis
   const startPoint = routePoints?.[0] ?? normalizedPoints[0] ?? normalizedStart;
   const endPoint =
     routePoints?.[routePoints.length - 1] ??
-    (normalizedPoints.length > 0 ? normalizedPoints[normalizedPoints.length - 1] : undefined) ??
+    (normalizedPoints.length > 0
+      ? normalizedPoints[normalizedPoints.length - 1]
+      : undefined) ??
     normalizedEnd;
 
   const pointsToFit = useMemo(() => {
@@ -398,7 +432,7 @@ export function MapRouteClient({ title, mode, points, start, end, routeFile, dis
                   pathOptions={{
                     color: "#f2c75b",
                     weight: 4,
-                    opacity: 0.92
+                    opacity: 0.92,
                   }}
                 />
               ) : null}
@@ -410,7 +444,7 @@ export function MapRouteClient({ title, mode, points, start, end, routeFile, dis
                     color: "#0b0b0b",
                     weight: 2,
                     fillColor: "#22c55e",
-                    fillOpacity: 0.95
+                    fillOpacity: 0.95,
                   }}
                 >
                   <Tooltip direction="top" offset={[0, -6]} opacity={0.95}>
@@ -426,7 +460,7 @@ export function MapRouteClient({ title, mode, points, start, end, routeFile, dis
                     color: "#0b0b0b",
                     weight: 2,
                     fillColor: "#ef4444",
-                    fillOpacity: 0.95
+                    fillOpacity: 0.95,
                   }}
                 >
                   <Tooltip direction="top" offset={[0, -6]} opacity={0.95}>

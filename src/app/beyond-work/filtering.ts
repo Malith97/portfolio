@@ -11,7 +11,10 @@ export const filters = [
 
 export type FilterKey = (typeof filters)[number]["key"];
 
-export type BeyondWorkFilterablePost = Pick<PostMeta, "categoryId" | "category">;
+export type BeyondWorkFilterablePost = Pick<
+  PostMeta,
+  "categoryId" | "category"
+>;
 
 export function toFilterKey(
   categoryId?: string,

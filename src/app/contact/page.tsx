@@ -6,6 +6,12 @@ export const metadata = createMetadata({
   description:
     "Get in touch for DevOps, cloud automation, and platform engineering opportunities, consulting, or collaboration.",
   path: "/contact",
+  keywords: [
+    "Hire DevOps engineer",
+    "Cloud automation consultant",
+    "Platform engineer contact",
+    "DevOps opportunities Finland",
+  ],
 });
 
 export default function ContactPage() {

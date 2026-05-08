@@ -75,8 +75,8 @@ export const fi: Dictionary = {
     heroSummary:
       "Suunnittelen, automatisoin ja ylläpidän toimitusalustoja tiimeille, jotka tarvitsevat nopeutta, luotettavuutta ja hallittavuutta.",
     heroMeta: "Avoin DevOps-rooleille Suomessa, EU:ssa ja etätiimeissä",
-    ctaViewWork: "Katso työt",
-    ctaDownloadResume: "Ota yhteyttä",
+    ctaViewWork: "Katso DevOps-työnäytteet",
+    ctaDownloadResume: "Aloita DevOps-keskustelu",
     summaryLabel: "Yhteenveto",
     summaryTitle: "Ammatillinen yhteenveto",
     educationLabel: "Koulutus",

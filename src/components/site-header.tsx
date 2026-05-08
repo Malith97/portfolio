@@ -113,6 +113,7 @@ export function SiteHeader() {
           <div className="flex items-center justify-between min-[769px]:block">
             <Link
               href="/"
+              data-testid="nav-home"
               className="inline-flex items-center gap-2.5 text-text transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               onClick={closeMobileMenu}
             >
@@ -121,8 +122,8 @@ export function SiteHeader() {
                   src="/media/malith-avatar.png"
                   alt={
                     language === "fi"
-                      ? "Malithin profiilikuva"
-                      : "Malith avatar"
+                      ? "Malith Ileperuman profiilikuva"
+                      : "Profile photo of Malith Ileperuma"
                   }
                   width={32}
                   height={32}
@@ -180,7 +181,9 @@ export function SiteHeader() {
                   return (
                     <li key={item.href}>
                       <motion.div
-                        whileHover={prefersReducedMotion ? undefined : { y: -1 }}
+                        whileHover={
+                          prefersReducedMotion ? undefined : { y: -1 }
+                        }
                         whileTap={
                           prefersReducedMotion ? undefined : { scale: 0.98 }
                         }
@@ -188,6 +191,7 @@ export function SiteHeader() {
                       >
                         <Link
                           href={item.href}
+                          data-testid={`nav-link-${item.href.replace(/\//g, "-").replace(/^-/, "") || "home"}`}
                           prefetch={false}
                           className={`relative inline-flex items-center rounded-md px-2.5 py-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                             isActive
@@ -222,11 +226,13 @@ export function SiteHeader() {
             </nav>
 
             <div
+              data-testid="language-toggle"
               className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-2.5 py-1 text-[11px] uppercase tracking-label text-muted"
               aria-label={t.language.label}
             >
               <button
                 type="button"
+                data-testid="lang-eng"
                 className={`rounded-full px-2 py-0.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 focus-visible:ring-offset-1 focus-visible:ring-offset-surface ${
                   language === "eng"
                     ? "bg-accent/15 text-accent"
@@ -240,6 +246,7 @@ export function SiteHeader() {
               <span aria-hidden="true">↔</span>
               <button
                 type="button"
+                data-testid="lang-fi"
                 className={`rounded-full px-2 py-0.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 focus-visible:ring-offset-1 focus-visible:ring-offset-surface ${
                   language === "fi"
                     ? "bg-accent/15 text-accent"
@@ -271,6 +278,7 @@ export function SiteHeader() {
             <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
             <motion.div
               id={mobileMenuId}
+              data-testid="mobile-menu"
               className="absolute inset-x-4 top-4 z-10 rounded-2xl border border-border bg-[#111111] p-4 shadow-[0_14px_34px_rgba(0,0,0,0.5)]"
               role="dialog"
               aria-modal="true"
@@ -302,6 +310,7 @@ export function SiteHeader() {
                       <li key={`mobile-${item.href}`}>
                         <Link
                           href={item.href}
+                          data-testid={`mobile-nav-link-${item.href.replace(/\//g, "-").replace(/^-/, "") || "home"}`}
                           prefetch={false}
                           onClick={closeMobileMenu}
                           className={`inline-flex min-h-11 w-full items-center rounded-md px-3 py-2 text-base transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 focus-visible:ring-offset-2 focus-visible:ring-offset-[#111111] ${
@@ -320,11 +329,13 @@ export function SiteHeader() {
               </nav>
 
               <div
+                data-testid="mobile-language-toggle"
                 className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-full border border-border bg-surface px-2.5 py-1 text-[11px] uppercase tracking-label text-muted"
                 aria-label={t.language.label}
               >
                 <button
                   type="button"
+                  data-testid="mobile-lang-eng"
                   className={`min-h-8 rounded-full px-2 py-0.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 focus-visible:ring-offset-1 focus-visible:ring-offset-surface ${
                     language === "eng"
                       ? "bg-accent/15 text-accent"
@@ -341,6 +352,7 @@ export function SiteHeader() {
                 <span aria-hidden="true">↔</span>
                 <button
                   type="button"
+                  data-testid="mobile-lang-fi"
                   className={`min-h-8 rounded-full px-2 py-0.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 focus-visible:ring-offset-1 focus-visible:ring-offset-surface ${
                     language === "fi"
                       ? "bg-accent/15 text-accent"

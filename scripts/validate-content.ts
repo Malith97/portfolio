@@ -12,10 +12,11 @@ const ALLOWED_BEYOND_WORK_CATEGORIES = new Set([
   "photography",
   "cooking",
   "achievements",
-  "other"
+  "other",
 ]);
 
-const PLACEHOLDER_PATTERN = /\b(placeholder|demo|sample|template|todo|tbd|lorem)\b/i;
+const PLACEHOLDER_PATTERN =
+  /\b(placeholder|demo|sample|template|todo|tbd|lorem)\b/i;
 
 interface ValidationIssue {
   file: string;
@@ -35,21 +36,28 @@ async function getMdxFiles(directory: string): Promise<string[]> {
         return getMdxFiles(entryPath);
       }
 
-      if (entry.isFile() && (entry.name.endsWith(".md") || entry.name.endsWith(".mdx"))) {
+      if (
+        entry.isFile() &&
+        (entry.name.endsWith(".md") || entry.name.endsWith(".mdx"))
+      ) {
         return [entryPath];
       }
 
       return [];
-    })
+    }),
   );
 
   return files.flat().sort((a, b) => a.localeCompare(b));
 }
 
-function pushIssue(issues: ValidationIssue[], file: string, message: string): void {
+function pushIssue(
+  issues: ValidationIssue[],
+  file: string,
+  message: string,
+): void {
   issues.push({
     file: toPosix(path.relative(PROJECT_ROOT, file)),
-    message
+    message,
   });
 }
 
@@ -58,7 +66,10 @@ function isNonEmptyString(value: unknown): value is string {
 }
 
 function isNonEmptyStringArray(value: unknown): value is string[] {
-  return Array.isArray(value) && value.every((item) => typeof item === "string" && item.trim().length > 0);
+  return (
+    Array.isArray(value) &&
+    value.every((item) => typeof item === "string" && item.trim().length > 0)
+  );
 }
 
 async function fileExists(filePath: string): Promise<boolean> {
@@ -70,7 +81,11 @@ async function fileExists(filePath: string): Promise<boolean> {
   }
 }
 
-async function validateImageReference(contentFile: string, imagePath: string, issues: ValidationIssue[]): Promise<void> {
+async function validateImageReference(
+  contentFile: string,
+  imagePath: string,
+  issues: ValidationIssue[],
+): Promise<void> {
   if (!isNonEmptyString(imagePath)) {
     return;
   }
@@ -87,7 +102,11 @@ async function validateImageReference(contentFile: string, imagePath: string, is
   const existsInProject = await fileExists(projectPath);
 
   if (!existsInPublic && !existsInProject) {
-    pushIssue(issues, contentFile, `Referenced image does not exist: ${imagePath}`);
+    pushIssue(
+      issues,
+      contentFile,
+      `Referenced image does not exist: ${imagePath}`,
+    );
   }
 }
 
@@ -108,13 +127,26 @@ async function validateCaseStudies(issues: ValidationIssue[]): Promise<number> {
     const photos = data.photos;
     const summary = data.summary;
 
-    if (!isNonEmptyString(title)) pushIssue(issues, file, "Missing required field: title");
-    if (!isNonEmptyString(slug)) pushIssue(issues, file, "Missing required field: slug");
-    if (!isNonEmptyString(date)) pushIssue(issues, file, "Missing required field: date");
-    if (!isNonEmptyString(category)) pushIssue(issues, file, "Missing required field: category");
-    if (!isNonEmptyString(coverImage)) pushIssue(issues, file, "Missing required field: coverImage");
+    if (!isNonEmptyString(title))
+      pushIssue(issues, file, "Missing required field: title");
+    if (!isNonEmptyString(slug))
+      pushIssue(issues, file, "Missing required field: slug");
+    if (!isNonEmptyString(date))
+      pushIssue(issues, file, "Missing required field: date");
+    if (!isNonEmptyString(category))
+      pushIssue(issues, file, "Missing required field: category");
+    if (!isNonEmptyString(coverImage))
+      pushIssue(issues, file, "Missing required field: coverImage");
 
-    const placeholderSource = [title, slug, summary, category, path.basename(file)].filter(isNonEmptyString).join(" ");
+    const placeholderSource = [
+      title,
+      slug,
+      summary,
+      category,
+      path.basename(file),
+    ]
+      .filter(isNonEmptyString)
+      .join(" ");
     if (PLACEHOLDER_PATTERN.test(placeholderSource)) {
       pushIssue(issues, file, "Contains placeholder/demo-like content");
     }
@@ -156,22 +188,40 @@ async function validateBeyondWork(issues: ValidationIssue[]): Promise<number> {
     const photos = data.photos;
     const summary = data.summary;
 
-    if (!isNonEmptyString(title)) pushIssue(issues, file, "Missing required field: title");
-    if (!isNonEmptyString(slug)) pushIssue(issues, file, "Missing required field: slug");
-    if (!isNonEmptyString(date)) pushIssue(issues, file, "Missing required field: date");
-    if (!isNonEmptyString(category)) pushIssue(issues, file, "Missing required field: category");
-    if (!isNonEmptyString(coverImage)) pushIssue(issues, file, "Missing required field: coverImage");
+    if (!isNonEmptyString(title))
+      pushIssue(issues, file, "Missing required field: title");
+    if (!isNonEmptyString(slug))
+      pushIssue(issues, file, "Missing required field: slug");
+    if (!isNonEmptyString(date))
+      pushIssue(issues, file, "Missing required field: date");
+    if (!isNonEmptyString(category))
+      pushIssue(issues, file, "Missing required field: category");
+    if (!isNonEmptyString(coverImage))
+      pushIssue(issues, file, "Missing required field: coverImage");
 
-    const normalizedCategory = isNonEmptyString(category) ? category.trim().toLowerCase() : "";
-    if (normalizedCategory && !ALLOWED_BEYOND_WORK_CATEGORIES.has(normalizedCategory)) {
+    const normalizedCategory = isNonEmptyString(category)
+      ? category.trim().toLowerCase()
+      : "";
+    if (
+      normalizedCategory &&
+      !ALLOWED_BEYOND_WORK_CATEGORIES.has(normalizedCategory)
+    ) {
       pushIssue(
         issues,
         file,
-        `Invalid category "${category}". Allowed values: ${Array.from(ALLOWED_BEYOND_WORK_CATEGORIES).join(", ")}`
+        `Invalid category "${category}". Allowed values: ${Array.from(ALLOWED_BEYOND_WORK_CATEGORIES).join(", ")}`,
       );
     }
 
-    const placeholderSource = [title, slug, summary, category, path.basename(file)].filter(isNonEmptyString).join(" ");
+    const placeholderSource = [
+      title,
+      slug,
+      summary,
+      category,
+      path.basename(file),
+    ]
+      .filter(isNonEmptyString)
+      .join(" ");
     if (PLACEHOLDER_PATTERN.test(placeholderSource)) {
       pushIssue(issues, file, "Contains placeholder/demo-like content");
     }
@@ -200,7 +250,7 @@ async function main(): Promise<void> {
   const issues: ValidationIssue[] = [];
   const [caseStudyCount, beyondWorkCount] = await Promise.all([
     validateCaseStudies(issues),
-    validateBeyondWork(issues)
+    validateBeyondWork(issues),
   ]);
 
   if (issues.length > 0) {
@@ -213,7 +263,7 @@ async function main(): Promise<void> {
   }
 
   console.log(
-    `Content validation passed for ${caseStudyCount} case study file(s) and ${beyondWorkCount} beyond-work file(s).`
+    `Content validation passed for ${caseStudyCount} case study file(s) and ${beyondWorkCount} beyond-work file(s).`,
   );
 }
 

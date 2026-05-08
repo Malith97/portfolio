@@ -18,7 +18,9 @@ export async function generateStaticParams() {
   return posts.map((post) => ({ slug: post.slug }));
 }
 
-export async function generateMetadata({ params }: BeyondWorkPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: BeyondWorkPageProps): Promise<Metadata> {
   const { slug } = await params;
   const language = await getServerLanguage();
   const t = getDictionary(language);
@@ -37,10 +39,13 @@ export async function generateMetadata({ params }: BeyondWorkPageProps): Promise
     path: `/beyond-work/${post.slug}`,
     image: post.coverImage || post.image,
     openGraphType: "article",
+    keywords: post.tags,
   });
 }
 
-export default async function BeyondWorkDetailPage({ params }: BeyondWorkPageProps) {
+export default async function BeyondWorkDetailPage({
+  params,
+}: BeyondWorkPageProps) {
   const { slug } = await params;
   const [postEng, postFi, postsEng, postsFi] = await Promise.all([
     getBeyondWorkPostBySlug(slug, "eng"),

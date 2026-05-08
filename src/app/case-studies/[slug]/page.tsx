@@ -20,7 +20,9 @@ export async function generateStaticParams() {
   return posts.map((post) => ({ slug: post.slug }));
 }
 
-export async function generateMetadata({ params }: CaseStudyPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: CaseStudyPageProps): Promise<Metadata> {
   const { slug } = await params;
   const language = await getServerLanguage();
   const t = getDictionary(language);
@@ -29,7 +31,7 @@ export async function generateMetadata({ params }: CaseStudyPageProps): Promise<
   if (!post) {
     return createMetadata({
       title: t.caseStudyDetail.notFoundTitle,
-      path: `/case-studies/${slug}`
+      path: `/case-studies/${slug}`,
     });
   }
 
@@ -39,10 +41,13 @@ export async function generateMetadata({ params }: CaseStudyPageProps): Promise<
     path: `/case-studies/${post.slug}`,
     image: post.coverImage || post.image,
     openGraphType: "article",
+    keywords: post.tags,
   });
 }
 
-export default async function CaseStudyDetailPage({ params }: CaseStudyPageProps) {
+export default async function CaseStudyDetailPage({
+  params,
+}: CaseStudyPageProps) {
   const { slug } = await params;
   const [postEng, postFi] = await Promise.all([
     getCaseStudyBySlug(slug, "eng"),

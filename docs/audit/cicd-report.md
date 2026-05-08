@@ -1,9 +1,11 @@
 # CI/CD Report
 
 ## Root Cause
+
 Cloudflare deployment was misconfigured to run Worker-version upload behavior (`wrangler versions upload`) instead of Cloudflare Pages static deployment. At the same time, the app was not guaranteed to emit a static Pages bundle (`out/index.html`) because it still relied on runtime-only features.
 
 ## What Was Fixed
+
 1. Converted app to static export compatibility for Pages direct upload.
    - `next.config.mjs` now uses `output: "export"`.
    - `next/image` export compatibility enabled with `images.unoptimized: true`.
@@ -22,18 +24,22 @@ Cloudflare deployment was misconfigured to run Worker-version upload behavior (`
    - No `wrangler versions upload` usage in workflow.
 
 ## Required GitHub Secrets and Variables
+
 - `secrets.CLOUDFLARE_API_TOKEN`
 - `secrets.CLOUDFLARE_ACCOUNT_ID`
 - `vars.CLOUDFLARE_PROJECT_NAME`
 
 ## Correct Cloudflare Settings
+
 ### If using Cloudflare Pages Dashboard Git Integration
+
 - Build command: `npm run build`
 - Output directory: `out`
 - Deploy command: leave empty
 - Do **not** use: `npx wrangler versions upload`
 
 ### If using GitHub Actions Direct Upload (this repo)
+
 - Keep deploy in `.github/workflows/cloudflare-pages-ci-cd.yml`.
 - In Cloudflare Pages project settings, disable Git auto-deploy/build to avoid duplicate deployments.
 - Deploy command executed by action:
@@ -41,6 +47,7 @@ Cloudflare deployment was misconfigured to run Worker-version upload behavior (`
   - Production: `pages deploy out --project-name=<PROJECT_NAME> --branch=main`
 
 ## Workflow Summary
+
 - Triggers:
   - `pull_request` to `main` (preview)
   - `push` to `main` (production)
@@ -51,5 +58,6 @@ Cloudflare deployment was misconfigured to run Worker-version upload behavior (`
 - Artifacts include `out`, coverage/test/audit outputs.
 
 ## Known Limitations
+
 - Server-side language detection via request cookie was removed for static export compatibility.
 - Language selection still persists on client, but static HTML is emitted from default language at build time.

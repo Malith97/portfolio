@@ -7,6 +7,13 @@ export const metadata = createMetadata({
   description:
     "Real project case studies covering cloud cost optimization, platform migration, delivery automation, and reliability improvements.",
   path: "/case-studies",
+  keywords: [
+    "DevOps case studies",
+    "Cloud cost optimization case study",
+    "Kubernetes RBAC case study",
+    "Platform migration",
+    "Infrastructure automation results",
+  ],
 });
 
 export default async function CaseStudiesPage() {

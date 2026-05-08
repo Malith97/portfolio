@@ -3,10 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { Language, normalizeLanguage } from "@/lib/i18n";
-import {
-  getPreferredLanguage,
-  LANGUAGE_CHANGE_EVENT,
-} from "@/lib/i18n-client";
+import { getPreferredLanguage, LANGUAGE_CHANGE_EVENT } from "@/lib/i18n-client";
 
 interface HomeHeroTitleTextProps {
   fallbackLanguage: Language;
@@ -38,11 +35,17 @@ export function HomeHeroTitleText({
       setLanguage(getPreferredLanguage(fallbackLanguage));
     };
 
-    window.addEventListener(LANGUAGE_CHANGE_EVENT, handleLanguageChange as EventListener);
+    window.addEventListener(
+      LANGUAGE_CHANGE_EVENT,
+      handleLanguageChange as EventListener,
+    );
     window.addEventListener("storage", handleStorage);
 
     return () => {
-      window.removeEventListener(LANGUAGE_CHANGE_EVENT, handleLanguageChange as EventListener);
+      window.removeEventListener(
+        LANGUAGE_CHANGE_EVENT,
+        handleLanguageChange as EventListener,
+      );
       window.removeEventListener("storage", handleStorage);
     };
   }, [fallbackLanguage]);

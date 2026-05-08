@@ -46,14 +46,17 @@ async function expectRouteInLanguage(
 }
 
 async function switchLanguage(page: Page, language: "eng" | "fi") {
-  const buttonLabel = language === "fi" ? "FI" : "EN";
-  const markerLabel = language === "fi" ? "Työnäytteet" : "Case Studies";
+  const toggleId = language === "fi" ? "lang-fi" : "lang-eng";
 
-  await page.getByRole("button", { name: buttonLabel, exact: true }).click();
-  await expect(
-    page.getByRole("button", { name: buttonLabel, exact: true }),
-  ).toHaveAttribute("aria-pressed", "true");
-  await expect(page.getByRole("link", { name: markerLabel })).toBeVisible();
+  await page.waitForSelector('[data-testid="language-toggle"]', {
+    state: "visible",
+  });
+  await page.getByTestId(toggleId).click();
+  await expect(page.getByTestId(toggleId)).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await expect(page.getByTestId("nav-link-case-studies")).toBeVisible();
   await page.waitForLoadState("networkidle");
 }
 

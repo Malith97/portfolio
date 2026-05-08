@@ -5,10 +5,13 @@ import dynamic from "next/dynamic";
 import type { MapRouteProps } from "@/components/MapRouteClient";
 
 const DynamicMapRoute = dynamic(
-  () => import("@/components/MapRouteClient").then((module) => module.MapRouteClient),
+  () =>
+    import("@/components/MapRouteClient").then(
+      (module) => module.MapRouteClient,
+    ),
   {
-    ssr: false
-  }
+    ssr: false,
+  },
 );
 
 export function MapRoute(props: MapRouteProps) {
