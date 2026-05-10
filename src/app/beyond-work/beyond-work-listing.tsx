@@ -41,7 +41,10 @@ function buildMetadataLine(
   }
 
   if (toFilterKey(post.categoryId, post.category) === "cooking") {
-    const parts: string[] = [labels.kitchenNotes.toUpperCase()];
+    const isSpecialLunch = post.slug === "sri-lankan-rice-and-curry-special-lunch";
+    const parts: string[] = isSpecialLunch
+      ? []
+      : [labels.kitchenNotes.toUpperCase()];
     if (post.dishType) parts.push(post.dishType.toUpperCase());
     if (post.cuisine) parts.push(post.cuisine.toUpperCase());
     if (post.timeSpent) parts.push(post.timeSpent.toUpperCase());
@@ -149,7 +152,9 @@ export function BeyondWorkListing({
                             {post.timeSpent}
                           </p>
                         ) : null}
-                        {post.whatILearned ? (
+                        {post.whatILearned &&
+                        post.slug !==
+                          "sri-lankan-rice-and-curry-special-lunch" ? (
                           <p className="text-sm text-muted">
                             <span className="font-mono text-xs uppercase tracking-label text-text">
                               {labels.whatILearned}:

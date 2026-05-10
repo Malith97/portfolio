@@ -302,7 +302,6 @@ export function BeyondWorkDetailPageContent({
   const metaItems = buildMetaItems(post, t, language);
   const highlights = post.highlights.length > 0 ? post.highlights : post.tags;
   const type = categoryType(post.categoryId, post.category);
-  const kitchenLabel = type === "cooking" ? `${t.common.kitchenNotes} · ` : "";
   const localizedCategoryLabel =
     post.category || post.categoryId
       ? localizedCategory(post.categoryId, post.category, t)
@@ -311,6 +310,7 @@ export function BeyondWorkDetailPageContent({
   const isLumoLightFestival = slug === "lumo-light-festival-oulu";
   const isWeekendCookieBake = slug === "weekend-cookie-bake";
   const isSailorsHomeMuseum = slug === "sailors-home-museum-oulu";
+  const isSpecialLunch = slug === "sri-lankan-rice-and-curry-special-lunch";
   const shouldShowRouteSnapshot =
     type === "run_ride" && !isCyclingToHailuoto && !isLumoLightFestival;
   const shouldShowHighlights =
@@ -318,7 +318,10 @@ export function BeyondWorkDetailPageContent({
     !isCyclingToHailuoto &&
     !isLumoLightFestival &&
     !isWeekendCookieBake &&
-    !isSailorsHomeMuseum;
+    !isSailorsHomeMuseum &&
+    !isSpecialLunch;
+  const kitchenLabel =
+    type === "cooking" && !isSpecialLunch ? `${t.common.kitchenNotes} · ` : "";
   const galleryImages =
     (isCyclingToHailuoto || isLumoLightFestival) && post.coverImage
       ? post.photos.filter((image) => image !== post.coverImage)
@@ -588,6 +591,7 @@ export function BeyondWorkDetailPageContent({
               slug === "juhannus-oulu" ||
               slug === "lumo-light-festival-oulu" ||
               slug === "coffee-cake-weekend-bake" ||
+              slug === "sri-lankan-rice-and-curry-special-lunch" ||
               slug === "frozen-sea-walk-nallikari" ||
               slug === "northern-lights-oulu"
             }
