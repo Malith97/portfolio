@@ -3,8 +3,9 @@ import path from "node:path";
 
 import type { MetadataRoute } from "next";
 import matter from "gray-matter";
+import { siteUrl } from "@/lib/metadata";
 
-const baseUrl = "https://malithileperuma.com";
+const baseUrl = siteUrl.endsWith("/") ? siteUrl.slice(0, -1) : siteUrl;
 export const dynamic = "force-static";
 
 interface ContentRouteEntry {
@@ -71,6 +72,16 @@ async function getContentRouteEntries(
           ? data.slug.trim()
           : null;
       const slug = frontmatterSlug ?? fileSlug;
+      const shouldExclude =
+        data.draft === true ||
+        data.private === true ||
+        data.unlisted === true ||
+        data.noindex === true;
+
+      if (shouldExclude) {
+        return null;
+      }
+
       const lastModified =
         parseLastModified(data.updatedAt) ??
         parseLastModified(data.lastModified) ??
@@ -84,7 +95,9 @@ async function getContentRouteEntries(
     }),
   );
 
-  return entries.sort((a, b) => a.path.localeCompare(b.path));
+  return entries
+    .filter((entry): entry is ContentRouteEntry => entry !== null)
+    .sort((a, b) => a.path.localeCompare(b.path));
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
