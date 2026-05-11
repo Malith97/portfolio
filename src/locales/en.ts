@@ -113,54 +113,54 @@ export const en: Dictionary = {
     eyebrow: "My Story",
     title: "From Curiosity to Reliability",
     summary:
-      "I grew up in Sri Lanka, took apart electronics as a child, learned Java early, freelanced through university, and became a DevOps engineer focused on reliable systems, automation, and cloud platforms. Today, I am building my next chapter in Finland.",
+      "From a small island in the Indian Ocean to the north of Finland. This is how I got here.",
     timelineLabel: "Chapters",
     chapterNav: [
-      { id: "prologue", label: "Prologue: A small island, a quiet beginning" },
+      { id: "prologue", label: "Prologue" },
       {
         id: "chapter-01",
-        label: "Chapter 01: The computer that opened a door",
+        label: "Chapter 01 The first machine",
       },
       {
         id: "chapter-02",
-        label: "Chapter 02: Circuits, mistakes, and small discoveries",
+        label: "Chapter 02 The bedroom workshop",
       },
       {
         id: "chapter-03",
-        label: "Chapter 03: Learning the language of machines",
+        label: "Chapter 03 University and ownership",
       },
-      { id: "chapter-04", label: "Chapter 04: Learning under pressure" },
+      { id: "chapter-04", label: "Chapter 04 Software becomes real" },
       {
         id: "chapter-05",
-        label: "Chapter 05: Where software met responsibility",
+        label: "Chapter 05 Building what did not exist",
       },
       {
         id: "chapter-06",
-        label: "Chapter 06: Becoming the first DevOps engineer in the room",
+        label: "Chapter 06 The first DevOps role in the team",
       },
       {
         id: "chapter-07",
-        label: "Chapter 07: Building for systems that cannot afford to fail",
+        label: "Chapter 07 Financial systems and zero margin",
       },
-      { id: "chapter-08", label: "Chapter 08: A new beginning in the north" },
+      { id: "chapter-08", label: "Chapter 08 The leap to Finland" },
       {
         id: "chapter-09",
-        label: "Chapter 09: The engineer I am still becoming",
+        label: "Chapter 09 What I am looking for",
       },
       {
         id: "epilogue",
-        label: "Epilogue: The dream was never only the machine",
+        label: "Epilogue",
       },
     ],
     chapters: [
       {
         id: "prologue",
         shortLabel: "Prologue",
-        title: "A small island, a quiet beginning",
+        title: "A small island and a long way north",
         paragraphs: [
-          "I was born and raised in Sri Lanka, a small island in the Indian Ocean where one journey can take you from warm beaches to misty hills, from crowded streets to quiet green mountains.",
-          "My story began in Colombo. I grew up in a family of four and studied at Royal College Colombo, a school known for discipline, leadership, and ambition.",
-          "My path into technology did not begin with a job title or a polished plan. It began with curiosity.",
+          "I build systems that cannot afford to fail.",
+          "That sentence took me fifteen years to earn. For a long time, I was not sure I would get there.",
+          "I was born in Colombo, Sri Lanka. It is a small island in the Indian Ocean, warm most of the year and green in a way that stays with you.",
         ],
         imageAlt:
           "Scenic collage representing Sri Lanka, where Malith's story began.",
@@ -169,10 +169,11 @@ export const en: Dictionary = {
       {
         id: "chapter-01",
         shortLabel: "Chapter 01",
-        title: "The computer that opened a door",
+        title: "The machine that changed the question",
         paragraphs: [
-          "In 2006, my parents bought me my first computer: a Windows XP machine with 128 MB RAM, a 16 MB VGA card, and a large CRT monitor that took over my desk.",
-          "To someone else, it may have looked outdated. To me, it felt like a doorway. Every program, every error, and every small discovery made me want to understand what was happening inside.",
+          "In 2006 my parents brought home a Pentium 3 machine with 128 MB of RAM, a 16 MB graphics card, and a heavy CRT monitor that made the desk creak.",
+          "By any modern standard it was old. To me it was the most interesting object I had ever seen.",
+          "I did not want to play games on it. I wanted to know what happened inside when I pressed a key and why the fan changed sound when the workload changed. That question became a habit.",
         ],
         imageAlt:
           "Old desktop computer with CRT monitor representing Malith’s first computer.",
@@ -182,56 +183,57 @@ export const en: Dictionary = {
       {
         id: "chapter-02",
         shortLabel: "Chapter 02",
-        title: "Circuits, mistakes, and small discoveries",
+        title: "The bedroom that looked like a repair shop",
         paragraphs: [
-          "I bought children's technology magazines and tried to build what I saw. At home, I collected PCB boards, transistors, capacitors, LEDs, buzzers, and wires.",
-          "Sometimes I took apart old devices for parts. Sometimes my mother had to remind me not to break things that still worked.",
-          "That was my first engineering classroom: trying, breaking, rebuilding, and trying again.",
+          "I spent my pocket money on children's electronics magazines and tried to build whatever I saw on the pages.",
+          "PCB boards, resistors, capacitors, LEDs, buzzers, and loose wires slowly took over my desk and then the floor around it.",
+          "My mother had one rule. Do not break things that still work. I broke that rule more than I should have.",
+          "At twelve I sat the Sun Certified Java Programmer exam because I wanted to test myself against something real.",
         ],
       },
       {
         id: "chapter-03",
         shortLabel: "Chapter 03",
-        title: "Learning the language of machines",
+        title: "What university really taught me",
         paragraphs: [
-          "My curiosity moved from electronics into software. Java was my first programming language, and becoming a Sun Certified Programmer at twelve felt like a serious milestone.",
-          "I later explored JavaFX and built small desktop apps. They were simple, but they taught me that code is not only text. Code becomes tools that people can use.",
+          "At university I studied computer science. The labs were good and the friends were better. We built things with Arduino, Raspberry Pi, and Microbit boards and stayed late because nobody wanted to leave before the project worked.",
+          "The part that changed me most was freelancing. I funded my tuition and expenses through client work while studying.",
+          "Many times I accepted projects before I knew every answer. Then I worked backwards from the deadline, reading documentation for hours until I understood enough to deliver properly.",
+          "There was no AI shortcut then. Ownership meant doing the hard part when nobody was watching.",
         ],
       },
       {
         id: "chapter-04",
         shortLabel: "Chapter 04",
-        title: "Learning under pressure",
+        title: "Where software stops being theoretical",
         paragraphs: [
-          "After school, I studied physical sciences and then completed my computer science degree. University gave structure to my curiosity.",
-          "In labs, my friends and I built software and hardware projects with Arduino, Raspberry Pi, Microbit boards, and whatever else helped us turn ideas into working prototypes.",
-          "During university I freelanced to fund my fees and expenses. That period taught me responsibility, communication, and persistence. I often accepted work before I knew every answer, then learned by reading documentation for hours until I solved the problem.",
-          "There was no AI assistant helping me then. Only patience, focus, and the belief that I could figure it out.",
+          "My first professional role was at SyLabs, a startup where small teams carried full responsibility.",
+          "Outside tutorials, software behaves differently. Real users depend on it. Deadlines are real and mistakes have real consequences.",
+          "That chapter taught me to treat code as infrastructure people must trust, not just text that compiles.",
         ],
         imageAlt:
           "Group of friends in Sri Lanka during a personal journey chapter.",
         imageCaption:
-          "The people and friendships that made the journey meaningful.",
+          "The teams and people who shaped the way I work.",
       },
       {
         id: "chapter-05",
         shortLabel: "Chapter 05",
-        title: "Where software met responsibility",
+        title: "Building something that was not there before",
         paragraphs: [
-          "My first professional role was as a full stack developer at SyLabs, a startup where small teams carried big responsibilities.",
-          "It was fast, practical, and sometimes chaotic. We worked close to clients, solved problems quickly, and learned ownership because there was no room to wait for someone else.",
-          "That experience taught me how software behaves outside tutorials, where people, deadlines, and consequences are real.",
+          "In 2021 I joined Zebra Technologies in Sri Lanka and started on SmartLens, an RFID based system where software had to work in the physical world.",
+          "Later I moved to a new department where I became the first DevOps engineer in the team. There was no platform to inherit and no existing release pipeline to extend.",
+          "Around twenty five engineers were spending days on manual build and release work. That was the baseline I had to change.",
         ],
       },
       {
         id: "chapter-06",
         shortLabel: "Chapter 06",
-        title: "Becoming the first DevOps engineer in the room",
+        title: "Designing the platform from scratch",
         paragraphs: [
-          "In 2021, I graduated and joined Zebra Technologies in Sri Lanka. I first worked on SmartLens, where software met the physical world through RFID-based real-time object movement tracking.",
-          "Later, I moved into DevOps in another department as the first DevOps engineer in that team. Many build, test, and release steps were manual and slowing developers down.",
-          "I designed a cloud-based CI/CD platform from scratch: architecture, infrastructure, and Jenkins pipelines for checkout, build, testing, reporting, and artifact publishing to JFrog.",
-          "The impact was immediate. Manual repetition became a reliable flow the team could trust.",
+          "I designed and built the full DevOps flow from the ground up. Cloud infrastructure, Jenkins pipelines, automated testing and reporting, artifact publishing to JFrog Artifactory, and deployment delivery to production.",
+          "Release cycles that used to take three or four days of manual coordination became automated runs that finished in under two hours.",
+          "The biggest change was not just speed. Deployments stopped being a stressful event and became a normal, trusted process.",
         ],
         imageAlt:
           "Zebra Technologies office and engineering workspace from Malith’s career.",
@@ -241,12 +243,12 @@ export const en: Dictionary = {
       {
         id: "chapter-07",
         shortLabel: "Chapter 07",
-        title: "Building for systems that cannot afford to fail",
+        title: "The standard financial infrastructure demands",
         paragraphs: [
-          "At LSEG, I entered a larger scale of responsibility. I supported teams connected to London Stock Exchange and Turquoise products with CI/CD pipelines, cloud migrations, scripting, and automation improvements.",
-          "In financial technology, reliability is not optional. Systems must be stable, secure, traceable, and maintainable because people depend on them.",
-          "Later, in Millennium Surveillance, I worked as the senior engineer in a small team across cloud cost management, governance, pipeline hardening, migrations, upgrades, and GitLab migration work.",
-          "That phase taught me to think beyond what works today: will this stay secure, understandable, affordable at scale, and maintainable under pressure?",
+          "At LSEG I worked with teams connected to London Stock Exchange, Turquoise products, and Millennium Surveillance systems.",
+          "In that environment a bug is not an inconvenience. Systems must be correct, auditable, traceable, and recoverable under pressure.",
+          "Later, as a senior engineer in Millennium Surveillance's cloud team, I owned work across cloud cost governance, pipeline hardening, service upgrades, and a full GitLab migration.",
+          "That chapter taught me to operate with near zero margin for error while still making practical engineering decisions at pace.",
         ],
         imageAlt:
           "Malith at LSEG workplace during his DevOps engineering chapter.",
@@ -256,11 +258,11 @@ export const en: Dictionary = {
       {
         id: "chapter-08",
         shortLabel: "Chapter 08",
-        title: "A new beginning in the north",
+        title: "The leap north",
         paragraphs: [
-          "In 2025, I moved to Oulu, Finland with my wife to begin a new chapter. I continued working remotely for a time, then chose to close that chapter and focus on building my long-term future here.",
-          "Moving to Finland has taught me patience, independence, and clarity. New country, new systems, new expectations, new opportunities.",
-          "I have always believed in beginnings.",
+          "In 2025 my wife and I moved to Oulu, Finland to build the next part of our lives.",
+          "It meant a new country, new language, and a new professional ecosystem. We moved without a guaranteed landing because we believed choosing difficulty deliberately is how growth continues.",
+          "Finland has been exactly as hard and exactly as rewarding as that sounds. It has taught me the kind of patience that keeps building even when progress is slow.",
         ],
         imageAlt:
           "Winter photos from Finland representing Malith’s move to Oulu.",
@@ -269,20 +271,21 @@ export const en: Dictionary = {
       {
         id: "chapter-09",
         shortLabel: "Chapter 09",
-        title: "The engineer I am still becoming",
+        title: "What I am looking for",
         paragraphs: [
-          "When I look back, every chapter is still present: the child who opened devices, the student who researched until answers appeared, the freelancer who learned under pressure, and the engineer who removed friction for teams.",
-          "Today, I focus on becoming the kind of DevOps engineer, cloud engineer, platform engineer, infrastructure engineer, and reliability engineering practitioner teams can trust.",
-          "I care about practical engineering, clear documentation, calm systems, secure foundations, cost-aware decisions, and automation that helps people move with confidence.",
+          "I am not looking for any DevOps role. I am looking for teams that care deeply about reliability and the developer experience around their platforms.",
+          "The problems I want to own sit at the intersection of cloud infrastructure, developer tooling, system reliability, and cost aware engineering at scale.",
+          "I want to be the engineer who helps the wider organization move faster with confidence because the underlying platform is calm, secure, and dependable.",
         ],
       },
       {
         id: "epilogue",
         shortLabel: "Epilogue",
-        title: "The dream was never only the machine",
+        title: "Trust was always the point",
         paragraphs: [
-          "My story is still being written. It began on a small island in the Indian Ocean, with a computer that filled my desk and curiosity that refused to stay quiet.",
-          "The dream was never only to own that machine. The dream was to understand it, build with it, and create systems people can trust.",
+          "The child who spent evenings taking electronics apart in Colombo was not fascinated by the parts. He was fascinated by the fact that it worked.",
+          "I still chase that same idea now. Build systems so well made and quietly reliable that people depending on them do not need to think about them.",
+          "The machine was never the point. Trust was always the point, and I have spent fifteen years learning how to earn it.",
         ],
       },
     ],

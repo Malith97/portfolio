@@ -1,19 +1,13 @@
-import { WorkEducationPageContent } from "@/components/work-education-page-content";
-import { createMetadata } from "@/lib/metadata";
+import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 
-export const metadata = createMetadata({
-  title: "Experience and Education",
-  description:
-    "Professional experience timeline and education highlights across DevOps, platform engineering, and software delivery.",
-  path: "/work-education",
-  keywords: [
-    "DevOps experience",
-    "Cloud engineer experience",
-    "Platform engineering career",
-    "Engineering education",
-  ],
-});
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default function WorkEducationPage() {
-  return <WorkEducationPageContent />;
+  redirect("/experience");
 }

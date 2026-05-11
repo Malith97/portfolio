@@ -9,13 +9,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: [
-        "/*.txt",
-        "/*.html",
-        "/experience",
-        "/experience/",
-        "/beyond-work/juhannus-oul",
-      ],
+      disallow: ["/*.txt", "/*.html"],
     },
     host: baseUrl,
     sitemap: `${baseUrl}/sitemap.xml`,

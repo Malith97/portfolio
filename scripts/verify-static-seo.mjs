@@ -10,7 +10,7 @@ const requiredBaseRoutes = [
   "/",
   "/story",
   "/about",
-  "/work-education",
+  "/experience",
   "/case-studies",
   "/beyond-work",
   "/contact",

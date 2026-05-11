@@ -27,7 +27,7 @@ export function SiteHeader() {
   const navigation = [
     { href: "/", label: t.nav.home },
     { href: "/story", label: t.nav.story },
-    { href: "/work-education", label: t.nav.experience },
+    { href: "/experience", label: t.nav.experience },
     { href: "/case-studies", label: t.nav.caseStudies },
     { href: "/beyond-work", label: t.nav.beyondWork },
     { href: "/contact", label: t.nav.contact },

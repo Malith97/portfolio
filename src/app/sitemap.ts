@@ -33,9 +33,9 @@ const staticRoutes: Array<{
   { path: "/contact", priority: 0.6, pageFile: "src/app/contact/page.tsx" },
   { path: "/about", priority: 0.6, pageFile: "src/app/about/page.tsx" },
   {
-    path: "/work-education",
+    path: "/experience",
     priority: 0.6,
-    pageFile: "src/app/work-education/page.tsx",
+    pageFile: "src/app/experience/page.tsx",
   },
 ];
 

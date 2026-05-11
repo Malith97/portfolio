@@ -6,7 +6,7 @@ import {
   homepageTitle,
 } from "@/lib/metadata";
 
-const HERO_PORTRAIT_SRC = "/media/malith-portrait.png";
+const HERO_PORTRAIT_SRC = "/media/malith-portrait.webp";
 
 export const metadata = createMetadata({
   fullTitle: homepageTitle,
