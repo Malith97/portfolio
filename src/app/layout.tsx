@@ -53,7 +53,7 @@ const personSchema = {
   familyName: "Ileperuma",
   url: normalizedSiteUrl,
   jobTitle: "DevOps Engineer",
-  image: `${normalizedSiteUrl}/media/malith-portrait.jpg`,
+  image: `${normalizedSiteUrl}/media/malith-portrait.webp`,
   description: homepageDescription,
   knowsAbout: [
     "DevOps",
@@ -123,12 +123,9 @@ export default async function RootLayout({
             <SiteFooter
               builtWithText={t.footer.builtWithCare}
               navLabel={t.common.primaryNavigation}
-              socialLabel={t.contactPage.profilesTitle}
               links={[
-                { href: "/", label: t.nav.home },
                 { href: "/story", label: t.nav.story },
-                { href: "/work-education", label: t.nav.workEducation },
-                { href: "/case-studies", label: t.nav.caseStudies },
+                { href: "/experience", label: t.nav.experience },
                 { href: "/beyond-work", label: t.nav.beyondWork },
                 { href: "/contact", label: t.nav.contact },
               ]}

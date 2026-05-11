@@ -89,7 +89,7 @@ function localizeBeyondCategory(
 
   return t.beyondWorkPage.filters.other;
 }
-const HERO_PORTRAIT_SRC = "/media/malith-portrait.png";
+const HERO_PORTRAIT_SRC = "/media/malith-portrait.webp";
 
 const METRIC_HIGHLIGHT_SPLIT_REGEX =
   /(~?\$\d+(?:[.,]\d+)?(?:K|M|B)?(?:\/[a-zA-Z]+)?|\d+(?:[.,]\d+)?%)/g;
@@ -227,6 +227,12 @@ export function HomePageContent({
               className="inline-flex items-center rounded-md border border-accent bg-accent px-4 py-2 text-sm font-medium text-[#0b0b0b] transition-colors hover:bg-[#f1cc74] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/90 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               {t.home.ctaViewWork}
+            </Link>
+            <Link
+              href="/story"
+              className="inline-flex items-center rounded-md border border-border px-4 py-2 text-sm font-medium text-text transition-colors hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/90 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              {t.nav.story}
             </Link>
             <Link
               href="/contact"
@@ -440,7 +446,7 @@ export function HomePageContent({
             </p>
           </div>
           <Link
-            href="/work-education"
+            href="/experience"
             className="inline-flex items-center rounded-md border border-accent bg-accent px-4 py-2 text-sm font-medium text-[#0b0b0b] transition-colors hover:bg-[#f1cc74] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/90 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             {`${t.common.exploreFullExperience} →`}

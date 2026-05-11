@@ -4,7 +4,7 @@ export const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL || "https://malithileperuma.com";
 
 export const homepageTitle =
-  "Malith Ileperuma | DevOps Engineer and Cloud Automation Specialist";
+  "Malith Ileperuma | DevOps Engineer, Platform and Cloud Reliability";
 
 export const homepageDescription =
   "DevOps Engineer specializing in cloud automation, infrastructure as code, CI/CD pipelines, and scalable software delivery.";
@@ -48,7 +48,7 @@ export function createMetadata(input: MetadataInput = {}): Metadata {
   const description = input.description ?? siteDescription;
   const path = input.path ?? "/";
   const url = resolveCanonicalUrl(normalizedSiteUrl, path);
-  const image = input.image ?? "/media/malith-portrait.jpg";
+  const image = input.image ?? "/media/malith-portrait.webp";
   const openGraphType = input.openGraphType ?? "website";
   const imageUrl = image.startsWith("http")
     ? image

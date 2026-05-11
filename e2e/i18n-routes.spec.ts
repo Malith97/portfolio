@@ -15,7 +15,7 @@ const routeExpectations: RouteExpectation[] = [
     headingFi: /Uteliaisuudesta luotettavuuteen/i,
   },
   {
-    path: "/work-education",
+    path: "/experience",
     headingEn: /Work & Education/i,
     headingFi: /Työkokemus ja koulutus/i,
   },

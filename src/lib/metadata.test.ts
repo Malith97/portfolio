@@ -13,7 +13,7 @@ describe("createMetadata", () => {
     const metadata = createMetadata();
 
     expect(metadata.title).toBe(
-      "Malith Ileperuma | DevOps Engineer and Cloud Automation Specialist",
+      "Malith Ileperuma | DevOps Engineer, Platform and Cloud Reliability",
     );
     expect(metadata.alternates?.canonical).toBe("https://malithileperuma.com");
     expect(metadata.openGraph?.images).toBeDefined();
@@ -25,7 +25,7 @@ describe("createMetadata", () => {
       title: "Case Studies",
       description: "Practical work",
       path: "/case-studies",
-      image: "/media/malith-portrait.jpg",
+      image: "/media/malith-portrait.webp",
     });
 
     expect(metadata.title).toBe("Case Studies | Malith Ileperuma");
