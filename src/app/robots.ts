@@ -8,16 +8,24 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
+        userAgent: "Claude-User",
+        allow: "/",
+      },
+      {
+        userAgent: "anthropic.com",
+        allow: "/",
+      },
+      {
+        userAgent: "ClaudeBot",
+        allow: "/",
+      },
+      {
         userAgent: "*",
         allow: "/",
         disallow: ["/*.txt", "/*.html"],
       },
       {
         userAgent: "GPTBot",
-        disallow: "/",
-      },
-      {
-        userAgent: "ClaudeBot",
         disallow: "/",
       },
       {
