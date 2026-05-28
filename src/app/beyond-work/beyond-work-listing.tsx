@@ -32,41 +32,6 @@ interface BeyondWorkListingProps {
   labels: BeyondWorkListingLabels;
 }
 
-function buildMetadataLine(
-  post: PostMeta,
-  labels: BeyondWorkListingLabels,
-): string {
-  if (post.cardMeta) {
-    return post.cardMeta.toUpperCase();
-  }
-
-  if (toFilterKey(post.categoryId, post.category) === "cooking") {
-    const isSpecialLunch = post.slug === "sri-lankan-rice-and-curry-special-lunch";
-    const parts: string[] = isSpecialLunch
-      ? []
-      : [labels.kitchenNotes.toUpperCase()];
-    if (post.dishType) parts.push(post.dishType.toUpperCase());
-    if (post.cuisine) parts.push(post.cuisine.toUpperCase());
-    if (post.timeSpent) parts.push(post.timeSpent.toUpperCase());
-    return parts.join(" · ");
-  }
-
-  const category =
-    labels.filters[toFilterKey(post.categoryId, post.category)].toUpperCase();
-  const parts: string[] = [category];
-
-  if (post.distance) parts.push(post.distance.toUpperCase());
-  if (post.duration) parts.push(post.duration.toUpperCase());
-  if (post.weather) parts.push(post.weather.toUpperCase());
-
-  if (!post.distance && !post.duration && !post.weather) {
-    if (post.location) parts.push(post.location.toUpperCase());
-    if (post.photoCount) parts.push(post.photoCount.toUpperCase());
-  }
-
-  return parts.join(" · ");
-}
-
 export function BeyondWorkListing({
   language,
   posts,
@@ -137,9 +102,6 @@ export function BeyondWorkListing({
                     </h2>
                     <p className="text-sm leading-relaxed text-muted">
                       {post.summary}
-                    </p>
-                    <p className="font-mono text-xs uppercase tracking-label text-accent">
-                      {buildMetadataLine(post, labels)}
                     </p>
                     {toFilterKey(post.categoryId, post.category) ===
                     "cooking" ? (

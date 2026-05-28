@@ -300,7 +300,7 @@ export function BeyondWorkDetailPageContent({
       ? posts[currentIndex + 1]
       : null;
   const metaItems = buildMetaItems(post, t, language);
-  const highlights = post.highlights.length > 0 ? post.highlights : post.tags;
+  const highlights = post.highlights;
   const type = categoryType(post.categoryId, post.category);
   const localizedCategoryLabel =
     post.category || post.categoryId
