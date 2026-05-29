@@ -36,6 +36,10 @@ export function BeyondWorkPageContent({
           kitchenNotes: t.common.kitchenNotes,
           timeSpent: t.beyondWorkDetail.timeSpent,
           whatILearned: t.beyondWorkDetail.whatILearned,
+          pagination: t.common.pagination,
+          previous: t.common.previous,
+          next: t.common.next,
+          page: t.common.page,
           filters: t.beyondWorkPage.filters,
         }}
       />

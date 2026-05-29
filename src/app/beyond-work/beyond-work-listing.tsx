@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
+import { PaginationControls } from "@/components/pagination-controls";
 import { SafeImage } from "@/components/safe-image";
 import type { Language } from "@/lib/i18n";
 import { formatDate } from "@/lib/format";
 import type { PostMeta } from "@/lib/content";
+import { getPaginationState, paginateItems } from "@/lib/pagination";
 
 import {
   type FilterKey,
@@ -23,6 +25,10 @@ interface BeyondWorkListingLabels {
   kitchenNotes: string;
   timeSpent: string;
   whatILearned: string;
+  pagination: string;
+  previous: string;
+  next: string;
+  page: string;
   filters: Record<FilterKey, string>;
 }
 
@@ -38,13 +44,23 @@ export function BeyondWorkListing({
   labels,
 }: BeyondWorkListingProps) {
   const [selectedFilter, setSelectedFilter] = useState<FilterKey>("all");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const filteredPosts = useMemo(
     () => filterBeyondWorkPosts(posts, selectedFilter),
     [posts, selectedFilter],
   );
+  const pagination = useMemo(
+    () => getPaginationState(filteredPosts.length, currentPage, 9),
+    [currentPage, filteredPosts.length],
+  );
+  const paginatedPosts = useMemo(
+    () => paginateItems(filteredPosts, pagination.currentPage, 9),
+    [filteredPosts, pagination.currentPage],
+  );
 
   const hasFilteredPosts = filteredPosts.length > 0;
+  const shouldShowPagination = filteredPosts.length > 9;
 
   return (
     <>
@@ -60,7 +76,10 @@ export function BeyondWorkListing({
               <li key={filter.key}>
                 <button
                   type="button"
-                  onClick={() => setSelectedFilter(filter.key)}
+                  onClick={() => {
+                    setSelectedFilter(filter.key);
+                    setCurrentPage(1);
+                  }}
                   aria-pressed={isActive}
                   className={`inline-flex min-h-11 items-center rounded-md border px-3 py-2 text-xs uppercase tracking-label transition-colors ${
                     isActive
@@ -79,7 +98,7 @@ export function BeyondWorkListing({
       {hasFilteredPosts ? (
         <div id="beyond-work-grid" className="space-y-6 sm:space-y-8">
           <div className="grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {filteredPosts.map((post) => (
+            {paginatedPosts.map((post) => (
               <article key={post.slug} className="surface-card overflow-hidden">
                 <Link href={`/beyond-work/${post.slug}`} className="block">
                   <div className="aspect-[16/10] overflow-hidden border-b border-border">
@@ -131,6 +150,23 @@ export function BeyondWorkListing({
               </article>
             ))}
           </div>
+
+          {shouldShowPagination ? (
+            <PaginationControls
+              currentPage={pagination.currentPage}
+              pageCount={pagination.pageCount}
+              pages={pagination.pages}
+              hasPreviousPage={pagination.hasPreviousPage}
+              hasNextPage={pagination.hasNextPage}
+              labels={{
+                pagination: labels.pagination,
+                previous: labels.previous,
+                next: labels.next,
+                page: labels.page,
+              }}
+              onPageChange={setCurrentPage}
+            />
+          ) : null}
         </div>
       ) : (
         <section className="surface-card p-5 sm:p-6">
