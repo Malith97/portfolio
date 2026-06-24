@@ -108,7 +108,7 @@ export function BeyondWorkListing({
                       width={1200}
                       height={760}
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="hover-lift image-frame h-full w-full object-cover grayscale transition duration-500 ease-out hover:grayscale-0"
+                      className="hover-lift image-frame h-full w-full object-cover transition duration-500 ease-out"
                     />
                   </div>
 

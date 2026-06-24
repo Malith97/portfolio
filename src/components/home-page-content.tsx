@@ -33,29 +33,51 @@ import {
   experienceTimeline,
   getLocalizedText,
   professionalSummary,
-  selectedBeyondWorkSlugs,
   sortExperienceByMostRecent,
   toolCategories,
 } from "@/lib/profile";
 
-function selectItemsBySlug<T extends { slug: string }>(
-  items: T[],
-  slugs: readonly string[],
-  limit: number,
-): T[] {
-  const selected: T[] = slugs
-    .map((slug) => items.find((item) => item.slug === slug))
-    .filter((item): item is T => Boolean(item));
+const beyondWorkCategoryOrder = [
+  "cooking",
+  "cycling",
+  "running",
+  "achievements",
+  "other",
+] as const;
 
-  if (selected.length >= limit) {
-    return selected.slice(0, limit);
+function toBeyondWorkCategoryKey(post: PostMeta): string {
+  const normalizedId = post.categoryId?.toLowerCase();
+  if (
+    normalizedId &&
+    beyondWorkCategoryOrder.some((category) => category === normalizedId)
+  ) {
+    return normalizedId;
   }
 
-  const selectedSlugs = new Set(selected.map((item) => item.slug));
-  const fallback = items
-    .filter((item) => !selectedSlugs.has(item.slug))
-    .slice(0, limit - selected.length);
-  return [...selected, ...fallback];
+  const normalizedCategory = post.category?.toLowerCase() ?? "";
+  const matchingCategory = beyondWorkCategoryOrder.find((category) =>
+    normalizedCategory.includes(category),
+  );
+
+  return matchingCategory ?? "other";
+}
+
+function selectNewestByBeyondWorkCategory(items: PostMeta[]): PostMeta[] {
+  const selected = new Map<string, PostMeta>();
+
+  for (const post of items) {
+    const category = toBeyondWorkCategoryKey(post);
+    const current = selected.get(category);
+
+    if (!current || post.date.localeCompare(current.date) > 0) {
+      selected.set(category, post);
+    }
+  }
+
+  return beyondWorkCategoryOrder
+    .map((category) => selected.get(category))
+    .filter((post): post is PostMeta => Boolean(post))
+    .sort((a, b) => b.date.localeCompare(a.date));
 }
 
 function localizeBeyondCategory(
@@ -153,11 +175,7 @@ export function HomePageContent({
     newestCaseStudies.length > 3
       ? newestCaseStudies.slice(0, 3)
       : newestCaseStudies;
-  const selectedBeyondWork = selectItemsBySlug(
-    beyondWorkPosts,
-    selectedBeyondWorkSlugs,
-    3,
-  );
+  const selectedBeyondWork = selectNewestByBeyondWorkCategory(beyondWorkPosts);
   const selectedWorkGridClass =
     selectedWork.length === 2
       ? "grid gap-4 md:grid-cols-2"
@@ -229,16 +247,10 @@ export function HomePageContent({
               {t.home.ctaViewWork}
             </Link>
             <Link
-              href="/story"
-              className="inline-flex items-center rounded-md border border-border px-4 py-2 text-sm font-medium text-text transition-colors hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/90 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-            >
-              {t.nav.story}
-            </Link>
-            <Link
               href="/contact"
               className="inline-flex items-center rounded-md border border-border px-4 py-2 text-sm font-medium text-text transition-colors hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/90 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
-              {t.home.ctaDownloadResume}
+              {t.nav.contact}
             </Link>
           </HeroCtaRow>
         </HeroStagger>
@@ -623,7 +635,7 @@ export function HomePageContent({
           </Link>
         </div>
 
-        <StaggerInView className="grid items-stretch gap-4 md:grid-cols-3">
+        <StaggerInView className="grid items-stretch gap-4 [grid-template-columns:repeat(auto-fit,minmax(220px,1fr))]">
           {selectedBeyondWork.map((post, index) => (
             <StaggerItem
               key={post.slug}
