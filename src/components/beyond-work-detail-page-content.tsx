@@ -591,6 +591,7 @@ export function BeyondWorkDetailPageContent({
               slug === "juhannus-oulu" ||
               slug === "lumo-light-festival-oulu" ||
               slug === "coffee-cake-weekend-bake" ||
+              slug === "chocolate-strawberry-celebration-cake" ||
               slug === "sri-lankan-rice-and-curry-special-lunch" ||
               slug === "frozen-sea-walk-nallikari" ||
               slug === "northern-lights-oulu"
