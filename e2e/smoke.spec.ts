@@ -7,7 +7,7 @@ test("homepage renders core hero content", async ({ page }) => {
   });
   await expect(
     page.getByRole("heading", {
-      name: /DevOps Engineer building resilient cloud systems/i,
+      name: /DevOps Engineer for cloud systems teams rely on/i,
     }),
   ).toBeVisible();
   await expect(page.getByTestId("nav-link-case-studies")).toBeVisible();
@@ -23,7 +23,7 @@ test("primary navigation opens case studies", async ({ page }) => {
   await expect(page).toHaveURL(/\/case-studies$/);
   await expect(
     page.getByRole("heading", {
-      name: "Infrastructure & Delivery Case Studies",
+      name: "Infrastructure decisions, written clearly",
     }),
   ).toBeVisible();
 });
@@ -60,7 +60,7 @@ test("language toggle switches both ways and persists after refresh", async ({
   });
   await expect(
     page.getByRole("heading", {
-      name: /DevOps Engineer building resilient cloud systems/i,
+      name: /DevOps Engineer for cloud systems teams rely on/i,
     }),
   ).toBeVisible();
 
@@ -82,7 +82,7 @@ test("language toggle switches both ways and persists after refresh", async ({
   await page.getByTestId("lang-eng").click();
   await expect(
     page.getByRole("heading", {
-      name: /DevOps Engineer building resilient cloud systems/i,
+      name: /DevOps Engineer for cloud systems teams rely on/i,
     }),
   ).toBeVisible();
   await expect(page.getByTestId("nav-link-case-studies")).toBeVisible();
@@ -94,7 +94,7 @@ test("language toggle switches both ways and persists after refresh", async ({
   await page.reload();
   await expect(
     page.getByRole("heading", {
-      name: /DevOps Engineer building resilient cloud systems/i,
+      name: /DevOps Engineer for cloud systems teams rely on/i,
     }),
   ).toBeVisible();
 });
