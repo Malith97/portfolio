@@ -65,41 +65,41 @@ export const en: Dictionary = {
   },
   footer: {
     builtWithCare:
-      "Engineered with a focus on reliability, scalability, and clear system design.",
+      "Built with attention to reliability, accessibility, and clear system design.",
   },
   home: {
     label: "Home",
     heroRoleLine: "Malith Ileperuma · DevOps Engineer",
-    heroTitle: "DevOps Engineer building resilient cloud systems.",
+    heroTitle: "DevOps Engineer for cloud systems teams rely on.",
     heroPortraitAlt: "Portrait of Malith Ileperuma",
     heroSummary:
-      "I design, automate, and operate delivery platforms for teams that need speed, reliability, and control.",
+      "I build and operate delivery platforms where release speed, cost, security, and reliability have to be balanced.",
     heroMeta: "Open to EU, Finland, and remote DevOps opportunities",
-    ctaViewWork: "View DevOps Case Studies",
-    ctaDownloadResume: "Start a DevOps Conversation",
+    ctaViewWork: "View case studies",
+    ctaDownloadResume: "Download resume",
     summaryLabel: "Summary",
-    summaryTitle: "Professional summary",
+    summaryTitle: "What I bring",
     educationLabel: "Education",
     certificationsLabel: "Certifications",
     certificationsDescription:
-      "Credentials that support my DevOps, cloud, and security expertise.",
+      "Current credentials that match the systems I work on: cloud, Kubernetes, and security.",
     pastCertificationLabel: "Expired",
     toolsLabel: "Tools & Technologies",
     toolsDescription:
-      "Practical tools I use to build, automate, monitor, and secure cloud systems.",
+      "Tools I have used in production work across cloud, CI/CD, observability, security, and automation.",
     recentExperienceLabel: "Recent Experience",
-    recentExperienceTitle: "Trusted with business-critical cloud systems",
+    recentExperienceTitle: "Recent systems I was trusted to own",
     recentExperienceDescription:
-      "Designing and operating systems where reliability is not optional.",
+      "Work from teams where releases, access, cost, and availability had direct business consequences.",
     impactLabel: "Impact",
     stackPreviewLabel: "Stack Preview",
     selectedWorkLabel: "Selected Work",
     selectedWorkTitle: "Selected Work",
-    selectedWorkDescription: "Only the strongest outcome-focused deliveries.",
+    selectedWorkDescription: "Two deeper examples of how I approach cost, reliability, and platform control.",
     photoNotesLabel: "Beyond Work",
     photoNotesTitle: "Life outside work",
     beyondWorkDescription:
-      "Small stories from running, cycling, cooking, events, and everyday life in Finland.",
+      "A quieter view of the person behind the work: running, cycling, cooking, events, and everyday life in Finland.",
     metrics: {
       yearsExperience: "Years experience",
       cloudCostReduction: "Cloud cost reduction",
@@ -111,56 +111,56 @@ export const en: Dictionary = {
   storyPage: {
     label: "Story",
     eyebrow: "My Story",
-    title: "From Curiosity to Reliability",
+    title: "The Engineer Behind the Systems",
     summary:
-      "From a small island in the Indian Ocean to the north of Finland. This is how I got here.",
+      "I learned engineering the slow way: by breaking things, owning the repair, and building systems other people could trust.",
     timelineLabel: "Chapters",
     chapterNav: [
       { id: "prologue", label: "Prologue" },
       {
         id: "chapter-01",
-        label: "Chapter 01 The first machine",
+        label: "Chapter 01 Who was I?",
       },
       {
         id: "chapter-02",
-        label: "Chapter 02 The bedroom workshop",
+        label: "Chapter 02 What shaped me?",
       },
       {
         id: "chapter-03",
-        label: "Chapter 03 University and ownership",
+        label: "Chapter 03 What did failure teach me?",
       },
-      { id: "chapter-04", label: "Chapter 04 Software becomes real" },
+      { id: "chapter-04", label: "Chapter 04 Why engineering?" },
       {
         id: "chapter-05",
-        label: "Chapter 05 Building what did not exist",
+        label: "Chapter 05 Why DevOps?",
       },
       {
         id: "chapter-06",
-        label: "Chapter 06 The first DevOps role in the team",
+        label: "Chapter 06 What did ownership become?",
       },
       {
         id: "chapter-07",
-        label: "Chapter 07 Financial systems and zero margin",
+        label: "Chapter 07 What standard changed me?",
       },
-      { id: "chapter-08", label: "Chapter 08 The leap to Finland" },
+      { id: "chapter-08", label: "Chapter 08 How did Finland change me?" },
       {
         id: "chapter-09",
-        label: "Chapter 09 What I am looking for",
+        label: "Chapter 09 What kind of engineer am I now?",
       },
       {
         id: "epilogue",
-        label: "Epilogue",
+        label: "Why talk?",
       },
     ],
     chapters: [
       {
         id: "prologue",
         shortLabel: "Prologue",
-        title: "A small island and a long way north",
+        title: "Why should someone trust me?",
         paragraphs: [
-          "I build systems that cannot afford to fail.",
-          "That sentence took me fifteen years to earn. For a long time, I was not sure I would get there.",
-          "I was born in Colombo, Sri Lanka. It is a small island in the Indian Ocean, warm most of the year and green in a way that stays with you.",
+          "I do not think trust is earned by sounding impressive. It is earned when people can hand you a hard problem, walk away, and know you will bring back the truth, the trade-offs, and a system that behaves under pressure.",
+          "That is the engineer I have been trying to become since I was a child in Colombo, Sri Lanka.",
+          "The path from that small island to Oulu, Finland was not neat. It was built through old hardware, client deadlines, startup pressure, release pipelines, financial systems, language study, and a few decisions I would make differently now.",
         ],
         imageAlt:
           "Scenic collage representing Sri Lanka, where Malith's story began.",
@@ -169,11 +169,11 @@ export const en: Dictionary = {
       {
         id: "chapter-01",
         shortLabel: "Chapter 01",
-        title: "The machine that changed the question",
+        title: "Who was I before engineering had a name?",
         paragraphs: [
           "In 2006 my parents brought home a Pentium 3 machine with 128 MB of RAM, a 16 MB graphics card, and a heavy CRT monitor that made the desk creak.",
-          "By any modern standard it was old. To me it was the most interesting object I had ever seen.",
-          "I did not want to play games on it. I wanted to know what happened inside when I pressed a key and why the fan changed sound when the workload changed. That question became a habit.",
+          "It was not a powerful computer. That did not matter. To me it felt like a room with no walls.",
+          "I wanted to know why it froze, why the fan changed sound, why one program made the whole machine slow, and what happened after I pressed a key. Before I knew the word systems, I was already looking for causes.",
         ],
         imageAlt:
           "Old desktop computer with CRT monitor representing Malith’s first computer.",
@@ -183,33 +183,33 @@ export const en: Dictionary = {
       {
         id: "chapter-02",
         shortLabel: "Chapter 02",
-        title: "The bedroom that looked like a repair shop",
+        title: "What shaped the way I learn?",
         paragraphs: [
           "I spent my pocket money on children's electronics magazines and tried to build whatever I saw on the pages.",
           "PCB boards, resistors, capacitors, LEDs, buzzers, and loose wires slowly took over my desk and then the floor around it.",
-          "My mother had one rule. Do not break things that still work. I broke that rule more than I should have.",
-          "At twelve I sat the Sun Certified Java Programmer exam because I wanted to test myself against something real.",
+          "My mother had one rule: do not break things that still work. I broke that rule more than I should have, usually because I wanted one part from inside an old device or one answer I could not get any other way.",
+          "At twelve I sat the Sun Certified Java Programmer exam because I wanted to test myself against something real. I learned early that curiosity is useful only when it survives frustration.",
         ],
       },
       {
         id: "chapter-03",
         shortLabel: "Chapter 03",
-        title: "What university really taught me",
+        title: "What did failure teach me?",
         paragraphs: [
-          "At university I studied computer science. The labs were good and the friends were better. We built things with Arduino, Raspberry Pi, and Microbit boards and stayed late because nobody wanted to leave before the project worked.",
-          "The part that changed me most was freelancing. I funded my tuition and expenses through client work while studying.",
-          "Many times I accepted projects before I knew every answer. Then I worked backwards from the deadline, reading documentation for hours until I understood enough to deliver properly.",
-          "There was no AI shortcut then. Ownership meant doing the hard part when nobody was watching.",
+          "At university I studied computer science, but freelancing while studying taught me the lessons that stayed sharp. I used client work to help pay for tuition and expenses, and I often accepted work before I fully understood the path to delivery.",
+          "That confidence helped me grow, but it also cost me. On one project I underestimated the unknowns, waited too long to expose the risk, and had to recover under pressure. I delivered, but the experience stayed with me because delivery alone was not the standard I wanted.",
+          "What I would do differently now is simple: surface uncertainty earlier, split the work smaller, and make the risk visible before it becomes a deadline problem. That lesson is still in how I run engineering work today.",
         ],
       },
       {
         id: "chapter-04",
         shortLabel: "Chapter 04",
-        title: "Where software stops being theoretical",
+        title: "Why did software start to feel real?",
         paragraphs: [
-          "My first professional role was at SyLabs, a startup where small teams carried full responsibility.",
-          "Outside tutorials, software behaves differently. Real users depend on it. Deadlines are real and mistakes have real consequences.",
-          "That chapter taught me to treat code as infrastructure people must trust, not just text that compiles.",
+          "My first professional role was at SyLabs, a startup where there was very little distance between code, customer pressure, and consequence.",
+          "I worked on a production rental platform with real-time tracking, user management, authentication, RBAC, database performance work, and CI/CD automation. The stack included React, Node.js, PostgreSQL, Docker, Jenkins, and AWS, but the harder lesson was not the stack. It was learning how product behavior, data shape, access control, and deployment habits all affect whether users can trust the system.",
+          "In a small team, nobody gets to hide behind a narrow job description. Some days the best engineering decision was not the cleverest implementation, but the one the team could understand, ship, and support.",
+          "SyLabs changed my relationship with software. Code stopped being something I wrote to prove I could write it. It became something people were waiting on.",
         ],
         imageAlt:
           "Group of friends in Sri Lanka during a personal journey chapter.",
@@ -219,21 +219,21 @@ export const en: Dictionary = {
       {
         id: "chapter-05",
         shortLabel: "Chapter 05",
-        title: "Building something that was not there before",
+        title: "Why did DevOps become the work?",
         paragraphs: [
-          "In 2021 I joined Zebra Technologies in Sri Lanka and started on SmartLens, an RFID based system where software had to work in the physical world.",
-          "Later I moved to a new department where I became the first DevOps engineer in the team. There was no platform to inherit and no existing release pipeline to extend.",
-          "Around twenty five engineers were spending days on manual build and release work. That was the baseline I had to change.",
+          "In 2021 I joined Zebra Technologies in Sri Lanka and started on SmartLens, an RFID-based system where software had to deal with physical-world messiness: devices, environments, timing, data, and people using the product in real operations.",
+          "Later I moved to a new department as the first DevOps engineer in the team. There was no mature platform waiting for me, no clean release system to extend, and around twenty five engineers were losing days to manual build and release work.",
+          "That was the moment DevOps became more than tooling for me. It was the practice of removing repeated pain from good engineers so they could spend more time solving product problems.",
         ],
       },
       {
         id: "chapter-06",
         shortLabel: "Chapter 06",
-        title: "Designing the platform from scratch",
+        title: "What did ownership become at Zebra?",
         paragraphs: [
-          "I designed and built the full DevOps flow from the ground up. Cloud infrastructure, Jenkins pipelines, automated testing and reporting, artifact publishing to JFrog Artifactory, and deployment delivery to production.",
-          "Release cycles that used to take three or four days of manual coordination became automated runs that finished in under two hours.",
-          "The biggest change was not just speed. Deployments stopped being a stressful event and became a normal, trusted process.",
+          "I designed and built the delivery flow from the ground up: cloud infrastructure, Jenkins pipelines, automated testing and reporting, artifact publishing to JFrog Artifactory, and deployment delivery to production.",
+          "The trade-off was between moving fast with a brittle script collection or slowing down enough to build a path the team could operate after I was not in the room. I chose the second path. Reusable pipeline stages, clearer failure points, and visible reports mattered as much as the automation itself.",
+          "Release work that used to take three or four days of manual coordination became automated runs that finished in under two hours. More important, release day became less dramatic. The team could see what happened, where it failed, and how to recover.",
         ],
         imageAlt:
           "Zebra Technologies office and engineering workspace from Malith’s career.",
@@ -243,12 +243,12 @@ export const en: Dictionary = {
       {
         id: "chapter-07",
         shortLabel: "Chapter 07",
-        title: "The standard financial infrastructure demands",
+        title: "What standard did financial systems teach me?",
         paragraphs: [
           "At LSEG I worked with teams connected to London Stock Exchange, Turquoise products, and Millennium Surveillance systems.",
-          "In that environment a bug is not an inconvenience. Systems must be correct, auditable, traceable, and recoverable under pressure.",
-          "Later, as a senior engineer in Millennium Surveillance's cloud team, I owned work across cloud cost governance, pipeline hardening, service upgrades, and a full GitLab migration.",
-          "That chapter taught me to operate with near zero margin for error while still making practical engineering decisions at pace.",
+          "That environment changed my tolerance for vague engineering. A change needed a reason. A deployment needed a rollback path. Access needed boundaries. Cost needed ownership. An incident needed facts before opinions.",
+          "Later, as a senior engineer in Millennium Surveillance's cloud team, I owned work across cloud cost governance, pipeline hardening, service upgrades, cloud migration, reliability improvements, and GitLab migration work. Some of that work was measurable: cloud governance reduced spend by 35%, around $75K per year, and reliability work helped reduce downtime by 20%.",
+          "The lesson was not to become slow. It was to become deliberate. In financial infrastructure, good judgment means knowing when to automate, when to stop, when to ask for review, and when a small operational detail is actually a business risk.",
         ],
         imageAlt:
           "Malith at LSEG workplace during his DevOps engineering chapter.",
@@ -258,11 +258,12 @@ export const en: Dictionary = {
       {
         id: "chapter-08",
         shortLabel: "Chapter 08",
-        title: "The leap north",
+        title: "How did Finland change me?",
         paragraphs: [
           "In 2025 my wife and I moved to Oulu, Finland to build the next part of our lives.",
-          "It meant a new country, new language, and a new professional ecosystem. We moved without a guaranteed landing because we believed choosing difficulty deliberately is how growth continues.",
-          "Finland has been exactly as hard and exactly as rewarding as that sounds. It has taught me the kind of patience that keeps building even when progress is slow.",
+          "Finland made progress quieter. I started learning Finnish from A1 toward B2, not because language study looks impressive on a profile, but because I want to participate properly in the country I chose. Some days that means grammar tables. Some days it means understanding one more sentence at the grocery store, in a classroom, or in a local conversation.",
+          "Oulu has given me specific memories that changed how this place feels: walking on the frozen sea at Nallikari, watching the sky refuse to get dark during Juhannus, cycling long summer roads toward Hailuoto and Kiiminki, and joining OYSTER Hack4Health, where our cross-functional team won Best Pitch for a wearable-based glucose prediction concept.",
+          "Starting again in a new country has made me more patient, more direct, and more aware of what it feels like to be new in a system. That matters for engineering too. The best platforms remember the beginner without slowing down the expert.",
         ],
         imageAlt:
           "Winter photos from Finland representing Malith’s move to Oulu.",
@@ -271,21 +272,22 @@ export const en: Dictionary = {
       {
         id: "chapter-09",
         shortLabel: "Chapter 09",
-        title: "What I am looking for",
+        title: "What kind of engineer am I today?",
         paragraphs: [
-          "I am not looking for any DevOps role. I am looking for teams that care deeply about reliability and the developer experience around their platforms.",
-          "The problems I want to own sit at the intersection of cloud infrastructure, developer tooling, system reliability, and cost aware engineering at scale.",
-          "I want to be the engineer who helps the wider organization move faster with confidence because the underlying platform is calm, secure, and dependable.",
+          "I am a DevOps and cloud reliability engineer who is strongest when the work sits between infrastructure, delivery systems, developer experience, and production responsibility.",
+          "The problems that pull me in are specific: CI/CD systems that teams actually trust, Kubernetes platforms with clear access boundaries, cloud environments where cost has an owner, observability that helps people decide instead of admire dashboards, incident processes that produce learning, and automation that removes toil without hiding risk.",
+          "My engineering philosophy is practical. Make the path easy to use, hard to misuse, and clear when it fails. Prefer boring reliability over clever fragility. Document the decision, not just the command. Treat security, cost, and operability as design inputs from the beginning.",
+          "I want to work with teams that care about pace, but not panic; autonomy, but not heroics; high standards, but not ego. I do my best work where platform quality is understood as a business advantage and developer empathy is part of reliability.",
         ],
       },
       {
         id: "epilogue",
         shortLabel: "Epilogue",
-        title: "Trust was always the point",
+        title: "Why talk?",
         paragraphs: [
-          "The child who spent evenings taking electronics apart in Colombo was not fascinated by the parts. He was fascinated by the fact that it worked.",
-          "I still chase that same idea now. Build systems so well made and quietly reliable that people depending on them do not need to think about them.",
-          "The machine was never the point. Trust was always the point, and I have spent fifteen years learning how to earn it.",
+          "If your team is building the kind of infrastructure where reliability, delivery speed, cost, and trust all have to live in the same room, I would like to talk.",
+          "Bring me a messy pipeline, a cloud platform that has outgrown its first design, a release process people fear, or a reliability problem that needs calm ownership.",
+          "I will bring curiosity, judgment, follow-through, and the habit that started with that old Pentium 3: look closely, understand the system, and leave it more trustworthy than I found it.",
         ],
       },
     ],
@@ -294,7 +296,7 @@ export const en: Dictionary = {
     label: "Work & Education",
     title: "Work & Education",
     description:
-      "Building and operating resilient cloud systems for high-scale, business-critical environments.",
+      "A career path from full-stack product work to DevOps, regulated platforms, cloud reliability, and life in Finland.",
     workSection: "Work Experience",
     educationSection: "Education",
     workTag: "Work",
@@ -311,9 +313,9 @@ export const en: Dictionary = {
   },
   caseStudiesPage: {
     label: "CASE STUDIES",
-    title: "Infrastructure & Delivery Case Studies",
+    title: "Infrastructure decisions, written clearly",
     description:
-      "Real-world DevOps, cloud, automation, and reliability work focused on measurable delivery outcomes.",
+      "Selected work where the important part is not the tool choice, but the reasoning, trade-offs, and outcome.",
     allLabel: "All case studies",
     fallbackOutcome: "Operational improvements",
   },
@@ -321,7 +323,7 @@ export const en: Dictionary = {
     label: "Beyond Work",
     title: "Life outside work",
     description:
-      "Small stories from running, cycling, cooking, events, and everyday life in Finland.",
+      "Small notes from running, cycling, cooking, events, and ordinary life in Finland.",
     categoriesAriaLabel: "Beyond work categories",
     emptyStateTitle: "No entries for this filter yet",
     emptyStateDescription:
@@ -394,19 +396,19 @@ export const en: Dictionary = {
   caseStudyDetail: {
     outcome: "Outcome",
     previewNote:
-      "Full long-form write-up is being prepared. This preview focuses on outcome, scope, and core stack signals for faster review.",
+      "This summary focuses on outcome, scope, and the engineering choices behind the work.",
     fallbackOutcome: "Operational improvements",
     notFoundTitle: "Case Study Not Found",
   },
   contactPage: {
     label: "Contact",
-    title: "Let’s build reliable systems together",
+    title: "Let’s talk about the system you need to make calmer",
     description:
       "Open to DevOps, platform engineering, and cloud reliability roles across Finland, the EU, and remote teams.",
-    hook: "I design and operate production-grade cloud systems where reliability is not optional.",
+    hook: "I can help with cloud platforms, CI/CD systems, Kubernetes access, cost control, and reliability work that needs calm ownership.",
     startConversation: "Start a conversation",
     intro:
-      "If you're hiring for DevOps, platform engineering, cloud infrastructure, or reliability work, feel free to reach out.",
+      "If you are hiring for DevOps, platform engineering, cloud infrastructure, or reliability work, send the context. I am happiest when the problem is specific.",
     responseTime: "Usually respond within 24 hours",
     quickIntro: "Or connect on LinkedIn for a quick intro",
     locationLabel: "Location",
@@ -419,8 +421,8 @@ export const en: Dictionary = {
     openToItems: [
       "DevOps Engineer roles",
       "Platform Engineering roles",
-      "Cloud Reliability work",
-      "CI/CD and automation projects",
+      "Cloud reliability ownership",
+      "CI/CD, Kubernetes, and automation work",
       "Finland, EU, and remote opportunities",
     ],
     profilesTitle: "Profiles and work",

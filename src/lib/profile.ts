@@ -93,7 +93,7 @@ export const experienceTimeline: ExperienceItem[] = [
     period: "2023–2025",
     kind: "work",
     summary: {
-      eng: "Owned cloud infrastructure, reliability, and delivery systems for regulated financial platforms across trading and surveillance domains, operating in high-availability environments where system failure directly impacts business operations.",
+      eng: "Owned cloud infrastructure, reliability, and delivery systems for regulated financial platforms across trading and surveillance domains.",
       fi: "Vastasin säädeltyjen finanssialustojen pilvi-infrastruktuurista, luotettavuudesta ja toimitusjärjestelmistä kaupankäynnin ja valvonnan alueilla. Työ tapahtui korkean saatavuuden ympäristöissä, joissa järjestelmävirheillä on suora vaikutus liiketoimintaan.",
     },
     impactBullets: [
@@ -102,11 +102,11 @@ export const experienceTimeline: ExperienceItem[] = [
         fi: "Pienensin pilvikuluja 35 % (~$75K/vuosi) ottamalla käyttöön hallintamallit ja käytönhallinnan monitiliympäristöissä.",
       },
       {
-        eng: "Led migration of regulated workloads from on-prem to cloud, redesigning architecture for isolation, security, and scalability.",
+        eng: "Led migration of regulated workloads from on-prem to cloud, redesigning architecture around isolation, security boundaries, and future growth.",
         fi: "Johdin säädeltyjen työkuormien siirtoa omasta konesaliympäristöstä pilveen ja uudistin arkkitehtuuria eristyksen, tietoturvan ja skaalautuvuuden näkökulmista.",
       },
       {
-        eng: "Introduced Chaos Engineering practices to simulate failures and improve resilience, reducing downtime by 20%.",
+        eng: "Introduced controlled failure testing to expose weak points earlier, contributing to a 20% reduction in downtime.",
         fi: "Otin käyttöön hallittuja vikakokeiluja Chaos Engineering -periaatteilla vikatilanteiden simulointiin ja resilienssin parantamiseen, mikä vähensi käyttökatkoja 20 %.",
       },
       {
@@ -114,7 +114,7 @@ export const experienceTimeline: ExperienceItem[] = [
         fi: "Vastasin toimitusjärjestelmästä päästä päähän (infrastruktuuri + CI/CD), mikä lyhensi julkaisuaikaa 40 % ja vähensi virheitä 35 %.",
       },
       {
-        eng: "Defined and enforced Kubernetes RBAC and network segmentation for secure multi-team environments.",
+        eng: "Defined Kubernetes RBAC and network segmentation so multiple teams could share platforms without broad access by default.",
         fi: "Määrittelin ja jalkautin Kubernetesin RBAC-mallin sekä verkon segmentoinnin turvallisiin monitiimiympäristöihin.",
       },
     ],
@@ -124,7 +124,7 @@ export const experienceTimeline: ExperienceItem[] = [
         fi: "Johdin häiriötilanteiden hallintaa, juurisyyanalyysiä ja tuotantojärjestelmien luotettavuusparannuksia.",
       },
       {
-        eng: "Introduced AI-assisted DevOps automation with governance controls to prevent sensitive data exposure.",
+        eng: "Tested AI-assisted DevOps automation with guardrails for sensitive data and reviewability.",
         fi: "Rakensin AI-avusteista DevOps-automaatiota hallintakontrolleilla, jotta arkaluonteinen data ei altistu.",
       },
     ],
@@ -154,7 +154,7 @@ export const experienceTimeline: ExperienceItem[] = [
     period: "2022–2023",
     kind: "work",
     summary: {
-      eng: "Led DevOps transformation for SDK engineering teams, driving cloud migration, delivery standardization, and automation strategy.",
+      eng: "Built delivery automation and cloud migration paths for SDK engineering teams that were still carrying too much manual release work.",
       fi: "Johdin SDK-tiimien DevOps-muutosta ja vauhditin pilvimigraatiota, toimitusmallien standardointia sekä automaatiostrategiaa.",
     },
     impactBullets: [
@@ -163,11 +163,11 @@ export const experienceTimeline: ExperienceItem[] = [
         fi: "Rakensin CI/CD-putket alusta asti, mikä lyhensi julkaisuaikaa 50 % ja paransi toimitusvarmuutta.",
       },
       {
-        eng: "Led cloud migration to Azure, improving scalability, security, and infrastructure efficiency.",
+        eng: "Led cloud migration to Azure, improving isolation, deployment control, and infrastructure efficiency.",
         fi: "Johdin pilvimigraatiota Azureen ja paransin skaalautuvuutta, tietoturvaa sekä infrastruktuurin tehokkuutta.",
       },
       {
-        eng: "Increased engineering productivity by 30% through workflow standardization.",
+        eng: "Improved engineering throughput by 30% through workflow standardization.",
         fi: "Nostin kehitystiimin tuottavuutta 30 % työnkulkujen standardoinnilla.",
       },
       {
@@ -213,7 +213,7 @@ export const experienceTimeline: ExperienceItem[] = [
     period: "2019–2021",
     kind: "work",
     summary: {
-      eng: "Built and scaled a production-grade rental platform, combining full-stack engineering with DevOps practices.",
+      eng: "Built a rental platform while working across product code, database performance, access control, and deployment automation.",
       fi: "Rakensin ja skaalasin tuotantotasoisen vuokrausalustan, jossa yhdistyivät full-stack-kehitys ja DevOps-käytännöt.",
     },
     impactBullets: [
@@ -222,7 +222,7 @@ export const experienceTimeline: ExperienceItem[] = [
         fi: "Toimitin reaaliaikaisen vuokrausalustan seurantaan ja käyttäjähallintaan.",
       },
       {
-        eng: "Built scalable applications using React, Node.js, PostgreSQL.",
+        eng: "Built application features using React, Node.js, and PostgreSQL.",
         fi: "Rakensin skaalautuvia sovelluksia Reactilla, Node.js:llä ja PostgreSQL:llä.",
       },
       {
@@ -234,13 +234,13 @@ export const experienceTimeline: ExperienceItem[] = [
         fi: "Lyhensin julkaisuaikaa 40 % CI/CD-automaation avulla.",
       },
       {
-        eng: "Optimized database performance and system efficiency.",
+        eng: "Improved database performance and system efficiency.",
         fi: "Optimoin tietokantojen suorituskykyä ja järjestelmän tehokkuutta.",
       },
     ],
     additionalImpactBullets: [
       {
-        eng: "Applied clean architecture and design principles for scalability.",
+        eng: "Used clear boundaries and design principles to keep the codebase easier to change.",
         fi: "Hyödynsin clean architecture- ja design-periaatteita skaalautuvuuden varmistamiseksi.",
       },
     ],
@@ -344,7 +344,7 @@ export const certifications: CredentialItem[] = [
 
 export const professionalSummary: LocalizedText[] = [
   {
-    eng: "Results-driven DevOps Engineer with 6 years of experience across software development, cloud automation, infrastructure as code, and CI/CD optimization. Experienced in AWS and Azure environments, cloud cost optimization, large-scale migrations, secure platform engineering, and building resilient systems for financial and enterprise teams. Strong hands-on background in Terraform, Ansible, Kubernetes, Helm, Jenkins, GitLab, Docker, Prometheus, Grafana, and Datadog. Known for leading cross-functional teams, mentoring engineers, improving deployment reliability, incident response, system reliability engineering, and delivering business value through automation and continuous improvement.",
+    eng: "DevOps Engineer with 6 years across software development, cloud automation, infrastructure as code, and CI/CD. I have worked in AWS and Azure environments, including cost governance, cloud migration, secure platform work, Kubernetes access control, and production reliability for financial and enterprise teams.",
     fi: "Tuloshakuinen DevOps-insinööri, jolla on kuuden vuoden kokemus ohjelmistokehityksestä, pilviautomaatiosta, infrastruktuurista koodina ja CI/CD-optimoinnista. Minulla on vahva tausta AWS- ja Azure-ympäristöistä, pilvikustannusten optimoinnista, laajoista migraatioista, turvallisesta platform engineeringistä ja kestävien järjestelmien rakentamisesta finanssi- ja yritystiimeille. Käytännön osaamiseni kattaa muun muassa Terraformin, Ansiblen, Kubernetesin, Helmin, Jenkinsin, GitLabin, Dockerin, Prometheuksen, Grafanan ja Datadogin. Olen tunnettu poikkitiimisen työn johtamisesta, mentoroinnista, toimitusvarmuuden parantamisesta, häiriötilanteiden hallinnasta sekä automaation ja jatkuvan parantamisen kautta syntyvästä liiketoimintahyödystä.",
   },
 ];

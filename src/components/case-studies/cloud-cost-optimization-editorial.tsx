@@ -69,12 +69,12 @@ export async function CloudCostOptimizationEditorial() {
   const t = getDictionary(language);
   const title = getLocalizedPostTitle(
     "cloud-cost-optimization",
-    "Cloud Cost Optimization",
+    "Cloud Cost Governance That Reduced Spend by 35%",
     language,
   );
   const summary = getLocalizedPostSummary(
     "cloud-cost-optimization",
-    "How I reduced cloud spend by 35% (~$75K/year) through visibility, governance, automation, and continuous monitoring.",
+    "How cost visibility, ownership, and automation reduced cloud spend by 35% (~$75K/year) without weakening reliability.",
     language,
   );
 
@@ -95,9 +95,8 @@ export async function CloudCostOptimizationEditorial() {
 
       <Section title="The problem">
         <p>
-          In this case study from my previous role, I share the full cloud cost
-          optimization journey, from identifying spend drivers to implementing
-          long-term controls.
+          In this case study from my previous role, I share the path from cloud
+          cost drift to long-term operating controls.
         </p>
         <p>
           As cloud adoption increased, cloud bills increased with it. Without
@@ -106,8 +105,9 @@ export async function CloudCostOptimizationEditorial() {
         </p>
         <p>
           The objective was not cost-cutting in isolation. The objective was to
-          optimize cost while preserving performance, delivery speed, and
-          scalability.
+          make cost visible enough that engineering and business teams could
+          reduce waste while protecting performance, delivery speed, and
+          reliability.
         </p>
         <ArticleImage
           src="/case-studies/cloud-cost-optimization/img1.webp"
@@ -154,9 +154,8 @@ export async function CloudCostOptimizationEditorial() {
 
       <Section title="Finding the cost drivers">
         <p>
-          To address escalating costs, I applied a structured approach combining
-          data analysis, team collaboration, automation, and continuous
-          governance.
+          To address escalating costs, I used a practical model built around
+          data, cross-team ownership, automation, and recurring review.
         </p>
         <p>
           Monthly spend averaged around $20,000 and was projected to rise toward
@@ -295,25 +294,25 @@ export async function CloudCostOptimizationEditorial() {
         />
       </Section>
 
-      <Section title="Making savings sustainable">
+      <Section title="Keeping savings from drifting back">
         <p>
-          Sustained cloud savings require continuous monitoring and governance.
-          Without operational follow-through, initial gains erode and waste
-          patterns return.
+          Cloud savings disappear if the operating model does not change.
+          Without follow-through, the same waste patterns return under new
+          names.
         </p>
         <p>
           Real-time dashboards and alerts helped detect anomalies early.
           Automated policy enforcement kept tagging, resource limits, and access
           controls consistent across teams and environments.
         </p>
-        <p>Key sustainability practices:</p>
+        <p>Practices that kept the work alive:</p>
         <ul className="list-disc space-y-2 pl-6">
           <li>
             Continuous monitoring with real-time dashboards and anomaly alerting
           </li>
           <li>Automated governance for tagging and resource usage rules</li>
           <li>Regular cost reviews with cross-functional stakeholders</li>
-          <li>Training and culture-building around cost awareness</li>
+          <li>Team education around cost ownership</li>
           <li>
             Expanded lifecycle automation for recurring optimization tasks
           </li>
@@ -363,7 +362,8 @@ export async function CloudCostOptimizationEditorial() {
           </li>
           <li>Governance must be ongoing to prevent regression.</li>
           <li>
-            Automation makes optimization repeatable and sustainable at scale.
+            Automation makes cost control repeatable, but ownership keeps it
+            honest.
           </li>
         </ul>
       </Section>

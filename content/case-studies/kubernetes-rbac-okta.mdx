@@ -1,7 +1,7 @@
 ---
-title: "Supercharge Kubernetes RBAC with Okta"
+title: "Kubernetes RBAC with Okta for Safer Team Access"
 titleFi: "Kubernetes RBAC kuntoon Okta-integraatiolla"
-summary: "Improving Kubernetes access control with identity-driven RBAC, Okta integration, and safer multi-team cluster access."
+summary: "How centralized identity, group-based RBAC, and OIDC made Kubernetes access easier to audit and safer for multi-team use."
 summaryFi: "Kubernetesin käyttöoikeushallinta parani identiteettiohjatulla RBAC-mallilla ja Okta-integraatiolla."
 slug: "kubernetes-rbac-okta"
 date: "2025-06-15"
@@ -152,15 +152,15 @@ contentFi: |
   [Avaa alkuperäinen artikkeli Mediumissa](https://medium.com/@mileperuma/supercharge-kubernetes-rbac-with-okta-1e0462a04abe)
 ---
 
-**Full Case Study — Originally published on Medium**
+**Full case study, originally published on Medium**
 
-This case study captures the full implementation journey of integrating Kubernetes RBAC with Okta to build stronger, identity-driven access control for multi-team clusters.
+This case study explains how I connected Kubernetes RBAC with Okta so access control could be managed through identity groups instead of scattered credentials.
 
-## Introduction
+## Why Access Needed a Better Model
 
-Kubernetes is a powerful platform for orchestrating applications at scale, but managing secure access to cluster resources becomes increasingly complex as teams grow.
+Kubernetes access becomes harder to reason about as more teams share the same clusters.
 
-To address this, I implemented an identity-first RBAC approach by integrating Kubernetes with Okta. This made access control easier to manage, more auditable, and safer across engineering teams.
+I implemented an identity-first RBAC model by integrating Kubernetes with Okta. The outcome was easier access management, better auditability, and less reliance on static credentials.
 
 ![Kubernetes access control with centralized identity](/case-studies/kubernetes-rbac-okta/img1.webp)
 
@@ -177,7 +177,7 @@ Core issues we faced:
 
 Without centralized identity and policy alignment, cluster access can drift from least-privilege standards.
 
-## How to Integrate Kubernetes RBAC with Okta
+## How the Model Worked
 
 The implementation combined Kubernetes RBAC primitives with Okta groups and OIDC authentication.
 

@@ -7,7 +7,7 @@ export const homepageTitle =
   "Malith Ileperuma | DevOps Engineer, Platform and Cloud Reliability";
 
 export const homepageDescription =
-  "DevOps Engineer specializing in cloud automation, infrastructure as code, CI/CD pipelines, and scalable software delivery.";
+  "DevOps Engineer focused on cloud infrastructure, CI/CD, Kubernetes, cost governance, and reliable delivery platforms.";
 
 export const homepageTitleFi =
   "Malith Ileperuma | DevOps Engineer ja pilviautomaation asiantuntija";

@@ -23,7 +23,7 @@ export function SiteFooter({
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="transition-colors hover:text-accent"
+                  className="rounded-sm transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 >
                   {link.label}
                 </Link>
