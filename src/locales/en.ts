@@ -262,7 +262,7 @@ export const en: Dictionary = {
         title: "How did Finland change me?",
         paragraphs: [
           "In 2025 my wife and I moved to Oulu, Finland to build the next part of our lives.",
-          "Finland made progress quieter. I started learning Finnish from A1 toward B2, not because language study looks impressive on a profile, but because I want to participate properly in the country I chose. Some days that means grammar tables. Some days it means understanding one more sentence at the grocery store, in a classroom, or in a local conversation.",
+          "Finland made progress quieter. I started learning Finnish from A1 toward A2, not because language study looks impressive on a profile, but because I want to participate properly in the country I chose. Some days that means grammar tables. Some days it means understanding one more sentence at the grocery store, in a classroom, or in a local conversation.",
           "Oulu has given me specific memories that changed how this place feels: walking on the frozen sea at Nallikari, watching the sky refuse to get dark during Juhannus, cycling long summer roads toward Hailuoto and Kiiminki, and joining OYSTER Hack4Health, where our cross-functional team won Best Pitch for a wearable-based glucose prediction concept.",
           "Starting again in a new country has made me more patient, more direct, and more aware of what it feels like to be new in a system. I think about that when I build platform workflows now. A new engineer should be able to make the first safe change without needing a private tour from the person who built it.",
         ],

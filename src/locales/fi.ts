@@ -389,7 +389,7 @@ export const fi: Dictionary = {
       "Avoin DevOps-, Platform Engineering- ja pilviluotettavuuden rooleille Suomessa, EU:ssa ja etätiimeissä.",
     hook: "Suunnittelen ja ylläpidän tuotantotason pilvijärjestelmiä, joissa luotettavuus on perusvaatimus.",
     finnish_note:
-      "Voit kirjoittaa minulle suomeksi — olen opiskelemassa sitä ja puhun jo tasolla B2.",
+      "Voit kirjoittaa minulle suomeksi — olen opiskelemassa sitä ja puhun jo tasolla A2.",
     startConversation: "Aloitetaan keskustelu",
     intro:
       "Jos etsit osaajaa DevOpsiin, platform engineeringiin, pilvi-infrastruktuuriin tai luotettavuustyöhön, ota mielellään yhteyttä.",

@@ -123,26 +123,17 @@ export function BeyondWorkListing({
                       {post.summary}
                     </p>
                     {toFilterKey(post.categoryId, post.category) ===
-                    "cooking" ? (
+                      "cooking" &&
+                    post.whatILearned &&
+                    post.slug !==
+                      "sri-lankan-rice-and-curry-special-lunch" ? (
                       <div className="space-y-2 border-t border-border pt-3">
-                        {post.timeSpent ? (
-                          <p className="text-sm text-muted">
-                            <span className="font-mono text-xs uppercase tracking-label text-text">
-                              {labels.timeSpent}:
-                            </span>{" "}
-                            {post.timeSpent}
-                          </p>
-                        ) : null}
-                        {post.whatILearned &&
-                        post.slug !==
-                          "sri-lankan-rice-and-curry-special-lunch" ? (
-                          <p className="text-sm text-muted">
-                            <span className="font-mono text-xs uppercase tracking-label text-text">
-                              {labels.whatILearned}:
-                            </span>{" "}
-                            {post.whatILearned}
-                          </p>
-                        ) : null}
+                        <p className="text-sm text-muted">
+                          <span className="font-mono text-xs uppercase tracking-label text-text">
+                            {labels.whatILearned}
+                          </span>{" "}
+                          {post.whatILearned}
+                        </p>
                       </div>
                     ) : null}
                   </div>

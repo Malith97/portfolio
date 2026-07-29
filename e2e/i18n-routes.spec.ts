@@ -11,7 +11,7 @@ type RouteExpectation = {
 const routeExpectations: RouteExpectation[] = [
   {
     path: "/story",
-    headingEn: /From Curiosity to Reliability/i,
+    headingEn: /The Engineer Behind the Systems/i,
     headingFi: /Uteliaisuudesta luotettavuuteen/i,
   },
   {
@@ -26,7 +26,7 @@ const routeExpectations: RouteExpectation[] = [
   },
   {
     path: "/contact",
-    headingEn: /Let’s build reliable systems together/i,
+    headingEn: /Let’s talk about the system you need to make calmer/i,
     headingFi: /Rakennetaan luotettavia järjestelmiä yhdessä/i,
   },
 ];
@@ -37,6 +37,7 @@ async function expectRouteInLanguage(
   language: "eng" | "fi",
 ) {
   await page.goto(route.path, { waitUntil: "domcontentloaded" });
+  await expect(page).toHaveURL(new RegExp(`${route.path}$`));
 
   const headingPattern = language === "fi" ? route.headingFi : route.headingEn;
 

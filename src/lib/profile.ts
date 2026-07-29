@@ -256,7 +256,7 @@ export const experienceTimeline: ExperienceItem[] = [
     ],
   },
   {
-    role: "Finnish Language Studies — currently B2",
+    role: "Finnish Language Studies — currently A2",
     company: "Arffman Oy",
     companyUrl: "https://www.arffman.fi",
     period: "2025–2026",
@@ -267,8 +267,8 @@ export const experienceTimeline: ExperienceItem[] = [
     },
     impactBullets: [
       {
-        eng: "Developed practical communication capability from A1 to B2 level for workplace integration.",
-        fi: "Kehitin käytännön viestintävalmiutta tasolta A1 tasolle B2 työelämään integroitumista varten.",
+      eng: "Developed practical communication capability from A1 to A2 level for workplace integration.",
+      fi: "Kehitin käytännön viestintävalmiutta tasolta A1 tasolle A2 työelämään integroitumista varten.",
       },
     ],
     tech: ["Finnish Language Training"],

@@ -59,7 +59,7 @@ describe("experience helpers", () => {
 
     expect(
       localizeEducationRole("Finnish Language Studies (A1–B2)", "fi", labels),
-    ).toBe("Suomen kielen opinnot — tällä hetkellä B2");
+    ).toBe("Suomen kielen opinnot — tällä hetkellä A2");
     expect(
       localizeEducationRole("BSc (Hons) Computer Science", "fi", labels),
     ).toBe("Bachelor of Science (Hons), Tietojenkäsittelytiede");

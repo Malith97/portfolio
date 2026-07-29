@@ -105,21 +105,6 @@ const CHAPTER_PULL_QUOTES: Record<string, { eng: string; fi: string }> = {
   },
 };
 
-const SCAN_POINTS = {
-  eng: [
-    "DevOps and cloud reliability",
-    "Zebra delivery automation",
-    "LSEG financial systems",
-    "Finland, Oulu",
-  ],
-  fi: [
-    "DevOps ja pilviluotettavuus",
-    "Zebran toimitusautomaatio",
-    "LSEG:n finanssijärjestelmät",
-    "Suomi, Oulu",
-  ],
-};
-
 function StoryImage({
   src,
   alt,
@@ -166,7 +151,6 @@ export function StoryPageContent() {
   );
   const activeChapter =
     content.chapterNav[Math.max(activeChapterIndex, 0)] ?? content.chapterNav[0];
-  const scanPoints = SCAN_POINTS[localeKey];
   const chapterCountSummary =
     language === "fi"
       ? `${content.chapters.length} lukua ensimmäisestä koneesta nykyiseen insinöörifilosofiaan.`
@@ -273,19 +257,6 @@ export function StoryPageContent() {
           <p className="max-w-[900px] text-base leading-7 text-muted sm:text-lg sm:leading-8">
             {content.summary}
           </p>
-          <ul
-            aria-label="Story highlights"
-            className="flex flex-wrap gap-2 pt-1"
-          >
-            {scanPoints.map((point) => (
-              <li
-                key={point}
-                className="rounded-full border border-border px-3 py-1.5 font-mono text-[11px] uppercase tracking-label text-muted"
-              >
-                {point}
-              </li>
-            ))}
-          </ul>
         </FadeInOnView>
       </header>
 
@@ -334,7 +305,7 @@ export function StoryPageContent() {
           </ul>
         </nav>
 
-        <div className="grid gap-8 lg:grid-cols-[260px_minmax(0,760px)] lg:gap-12">
+        <div className="grid gap-8 lg:grid-cols-[260px_minmax(0,900px)] lg:gap-12">
           <aside className="hidden lg:block">
             <nav aria-label={content.timelineLabel} className="sticky top-24">
               <ol className="relative space-y-2 border-l border-border pl-4">
@@ -374,7 +345,6 @@ export function StoryPageContent() {
           <div className="space-y-12 sm:space-y-16">
             {content.chapters.map((chapter, index) => {
               const chapterImageSrc = STORY_CHAPTER_IMAGES[chapter.id];
-              const chapterYear = CHAPTER_YEARS[chapter.id]?.[localeKey];
               const takeaway = CHAPTER_TAKEAWAYS[chapter.id]?.[localeKey];
               const pullQuote = CHAPTER_PULL_QUOTES[chapter.id]?.[localeKey];
               const isFirstChapter = index === 0;
@@ -389,19 +359,7 @@ export function StoryPageContent() {
                     aria-labelledby={`${chapter.id}-title`}
                     className="scroll-mt-24 border-t border-border/80 pt-8 first:border-t-0 first:pt-0"
                   >
-                    <div className="grid gap-5 sm:grid-cols-[92px_minmax(0,1fr)]">
-                      <div className="space-y-2">
-                        <p className="font-mono text-xs uppercase tracking-label text-accent">
-                          {chapter.shortLabel}
-                        </p>
-                        {chapterYear ? (
-                          <p className="font-mono text-[11px] uppercase tracking-label text-neutral-500">
-                            <time>{chapterYear}</time>
-                          </p>
-                        ) : null}
-                      </div>
-
-                      <div className="space-y-5">
+                    <div className="space-y-5">
                         <header className="space-y-3">
                           <h2
                             id={`${chapter.id}-title`}
@@ -442,7 +400,6 @@ export function StoryPageContent() {
                             />
                           </div>
                         ) : null}
-                      </div>
                     </div>
                   </section>
                 </FadeInOnView>
