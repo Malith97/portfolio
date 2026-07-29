@@ -12,7 +12,7 @@ const postTranslations: Record<string, PostTranslation> = {
       "Käytännön FinOps-työ pudotti kustannuksia 35 prosenttia ilman palvelutason heikkenemistä.",
   },
   "kubernetes-rbac-okta": {
-    titleFi: "Kubernetesin RBAC-mallin tehostaminen Oktalla",
+    titleFi: "Kubernetes RBAC ja Okta turvallisempaan tiimipääsyyn",
     summaryFi:
       "Kubernetes-käyttöoikeuksien hallinta parani identiteettiohjatulla RBAC-mallilla ja Okta-integraatiolla.",
   },

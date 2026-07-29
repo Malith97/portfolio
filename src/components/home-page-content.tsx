@@ -36,49 +36,7 @@ import {
   sortExperienceByMostRecent,
   toolCategories,
 } from "@/lib/profile";
-
-const beyondWorkCategoryOrder = [
-  "cooking",
-  "cycling",
-  "running",
-  "achievements",
-  "other",
-] as const;
-
-function toBeyondWorkCategoryKey(post: PostMeta): string {
-  const normalizedId = post.categoryId?.toLowerCase();
-  if (
-    normalizedId &&
-    beyondWorkCategoryOrder.some((category) => category === normalizedId)
-  ) {
-    return normalizedId;
-  }
-
-  const normalizedCategory = post.category?.toLowerCase() ?? "";
-  const matchingCategory = beyondWorkCategoryOrder.find((category) =>
-    normalizedCategory.includes(category),
-  );
-
-  return matchingCategory ?? "other";
-}
-
-function selectNewestByBeyondWorkCategory(items: PostMeta[]): PostMeta[] {
-  const selected = new Map<string, PostMeta>();
-
-  for (const post of items) {
-    const category = toBeyondWorkCategoryKey(post);
-    const current = selected.get(category);
-
-    if (!current || post.date.localeCompare(current.date) > 0) {
-      selected.set(category, post);
-    }
-  }
-
-  return beyondWorkCategoryOrder
-    .map((category) => selected.get(category))
-    .filter((post): post is PostMeta => Boolean(post))
-    .sort((a, b) => b.date.localeCompare(a.date));
-}
+import { siteConfig } from "@/lib/site-config";
 
 function localizeBeyondCategory(
   categoryId: string | undefined,
@@ -175,7 +133,9 @@ export function HomePageContent({
     newestCaseStudies.length > 3
       ? newestCaseStudies.slice(0, 3)
       : newestCaseStudies;
-  const selectedBeyondWork = selectNewestByBeyondWorkCategory(beyondWorkPosts);
+  const selectedBeyondWork = [...beyondWorkPosts]
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .slice(0, 3);
   const selectedWorkGridClass =
     selectedWork.length === 2
       ? "grid gap-4 md:grid-cols-2"
@@ -237,6 +197,9 @@ export function HomePageContent({
 
           <p className="font-mono text-xs uppercase tracking-label text-accent">
             {t.home.heroMeta}
+          </p>
+          <p className="font-mono text-xs uppercase tracking-label text-muted">
+            Available from {siteConfig.availabilityStart}
           </p>
 
           <HeroCtaRow className="flex flex-wrap gap-3 pt-1">
@@ -342,7 +305,7 @@ export function HomePageContent({
           <p className="text-sm text-muted">{t.home.toolsDescription}</p>
         </div>
 
-        <StaggerInView className="grid items-stretch gap-4 [grid-template-columns:repeat(auto-fit,minmax(220px,1fr))]">
+        <StaggerInView className="grid items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {toolCategories.map((category, index) => (
             <StaggerItem
               key={category.label.eng}
@@ -390,7 +353,7 @@ export function HomePageContent({
           </p>
         </div>
 
-        <StaggerInView className="grid items-stretch gap-4 [grid-template-columns:repeat(auto-fit,minmax(220px,1fr))]">
+        <StaggerInView className="grid items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {homepageCertifications.map((certification, index) => (
             <StaggerItem
               key={certification.name}

@@ -50,6 +50,11 @@ export function ContactPageContent() {
         <p className="max-w-reading text-base leading-relaxed text-text">
           {t.contactPage.hook}
         </p>
+        {t.contactPage.finnish_note ? (
+          <p className="max-w-reading text-base leading-relaxed text-text">
+            {t.contactPage.finnish_note}
+          </p>
+        ) : null}
         <p className="max-w-reading text-base leading-relaxed text-muted">
           {t.contactPage.description}
         </p>

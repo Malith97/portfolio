@@ -311,6 +311,7 @@ export function BeyondWorkDetailPageContent({
   const isWeekendCookieBake = slug === "weekend-cookie-bake";
   const isSailorsHomeMuseum = slug === "sailors-home-museum-oulu";
   const isSpecialLunch = slug === "sri-lankan-rice-and-curry-special-lunch";
+  const shouldShowFieldMetadata = slug !== "being-consistent";
   const shouldShowRouteSnapshot =
     type === "run_ride" && !isCyclingToHailuoto && !isLumoLightFestival;
   const shouldShowHighlights =
@@ -402,26 +403,28 @@ export function BeyondWorkDetailPageContent({
           </header>
         </div>
 
-        <section className="space-y-4">
-          <p className="font-mono text-xs uppercase tracking-label text-muted">
-            {t.beyondWorkDetail.fieldMetadata}
-          </p>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {metaItems.map((item) => (
-              <article
-                key={`${item.label}-${item.value}`}
-                className="surface-card p-4"
-              >
-                <p className="font-mono text-xs uppercase tracking-label text-muted">
-                  {item.label}
-                </p>
-                <p className="pt-1 text-sm leading-relaxed text-text">
-                  {item.value}
-                </p>
-              </article>
-            ))}
-          </div>
-        </section>
+        {shouldShowFieldMetadata ? (
+          <section className="space-y-4">
+            <p className="font-mono text-xs uppercase tracking-label text-muted">
+              {t.beyondWorkDetail.fieldMetadata}
+            </p>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {metaItems.map((item) => (
+                <article
+                  key={`${item.label}-${item.value}`}
+                  className="surface-card p-4"
+                >
+                  <p className="font-mono text-xs uppercase tracking-label text-muted">
+                    {item.label}
+                  </p>
+                  <p className="pt-1 text-sm leading-relaxed text-text">
+                    {item.value}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </section>
+        ) : null}
 
         {shouldShowRouteSnapshot ? (
           <BeyondWorkMap
@@ -587,6 +590,7 @@ export function BeyondWorkDetailPageContent({
               slug === "cycling-to-kiiminki-from-oulu" ||
               slug === "cycling-to-hailuoto" ||
               slug === "running-to-vartto" ||
+              slug === "being-consistent" ||
               slug === "oyster-hack4health-best-pitch-award" ||
               slug === "juhannus-oulu" ||
               slug === "lumo-light-festival-oulu" ||

@@ -15,7 +15,7 @@ export function AboutPageContent() {
         description={
           isFinnish
             ? "DevOps-insinööri, joka rakentaa luotettavaa pilvi-infrastruktuuria ja automatisoituja toimitusputkia."
-            : "DevOps Engineer building reliable cloud infrastructure and automated delivery pipelines."
+            : "DevOps Engineer focused on cloud infrastructure, delivery automation, and reliability."
         }
       />
 
@@ -23,12 +23,12 @@ export function AboutPageContent() {
         <p>
           {isFinnish
             ? "Suunnittelen ja ylläpidän tuotantotason järjestelmiä keskittyen CI/CD-putkiin, Kubernetes-ympäristöihin, Terraform-pohjaiseen infrastruktuuriin sekä käytännön automaatioon."
-            : "I design and operate production-grade systems with a focus on CI/CD pipelines, Kubernetes platforms, Terraform infrastructure, and practical automation."}
+            : "I design and operate systems around CI/CD pipelines, Kubernetes platforms, Terraform infrastructure, and practical automation."}
         </p>
         <p>
           {isFinnish
             ? "Työni painopiste on luotettavuudessa, toimitusnopeudessa ja selkeässä teknisessä toteutuksessa, joka auttaa tiimejä julkaisemaan turvallisesti ja toistettavasti."
-            : "My work prioritizes reliability, delivery speed, and clear technical implementation so teams can ship safely and consistently."}
+            : "My work is usually about making releases safer, infrastructure easier to reason about, and operational risk visible before it becomes an incident."}
         </p>
       </section>
     </div>

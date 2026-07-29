@@ -66,12 +66,12 @@ export async function KubernetesRbacOktaEditorial() {
   const t = getDictionary(language);
   const title = getLocalizedPostTitle(
     "kubernetes-rbac-okta",
-    "Supercharge Kubernetes RBAC with Okta",
+    "Kubernetes RBAC with Okta for Safer Team Access",
     language,
   );
   const summary = getLocalizedPostSummary(
     "kubernetes-rbac-okta",
-    "Improving Kubernetes access control with identity-driven RBAC, Okta integration, and safer multi-team cluster access.",
+    "How centralized identity, group-based RBAC, and OIDC made Kubernetes access easier to audit and safer for multi-team use.",
     language,
   );
 
@@ -90,16 +90,15 @@ export async function KubernetesRbacOktaEditorial() {
         </p>
       </header>
 
-      <Section title="Introduction">
+      <Section title="Why access needed a better model">
         <p>
-          Kubernetes is a powerful platform for orchestrating applications at
-          scale, but managing secure access to cluster resources becomes
-          increasingly complex as teams grow.
+          Kubernetes access becomes harder to reason about as more teams share
+          the same clusters.
         </p>
         <p>
-          To address this, I implemented an identity-first RBAC approach by
-          integrating Kubernetes with Okta. This made access control easier to
-          manage, more auditable, and safer across engineering teams.
+          I implemented an identity-first RBAC model by integrating Kubernetes
+          with Okta. The outcome was easier access management, better
+          auditability, and less reliance on static credentials.
         </p>
         <Callout
           title="Identity Before Permissions"
@@ -142,7 +141,7 @@ export async function KubernetesRbacOktaEditorial() {
         </p>
       </Section>
 
-      <Section title="How to Integrate Kubernetes RBAC with Okta">
+      <Section title="How the model worked">
         <p>
           The implementation combined Kubernetes RBAC primitives with Okta
           groups and OIDC authentication.
@@ -228,14 +227,14 @@ kubectl apply -f rolebinding.yaml`}</code>
         />
       </Section>
 
-      <Section title="Benefits of Using Okta for Kubernetes RBAC">
+      <Section title="What improved">
         <p>
           The integration delivered practical security and operational
           improvements:
         </p>
         <ul className="list-disc space-y-2 pl-6">
           <li>Centralized access management through one identity platform</li>
-          <li>Stronger security via OIDC and group-based authorization</li>
+          <li>Safer access through OIDC and group-based authorization</li>
           <li>Scalability for onboarding/offboarding across many teams</li>
           <li>Improved compliance with clearer audit trails</li>
           <li>Consistent access policy enforcement across clusters</li>
@@ -244,7 +243,7 @@ kubectl apply -f rolebinding.yaml`}</code>
         </ul>
       </Section>
 
-      <Section title="Technical Issues and How to Fix Them">
+      <Section title="Implementation issues and fixes">
         <p>During implementation, several issues surfaced and were resolved:</p>
         <ul className="list-disc space-y-2 pl-6">
           <li>
@@ -299,15 +298,15 @@ kubectl apply -f rolebinding.yaml`}</code>
         </ul>
       </Section>
 
-      <Section title="Conclusion">
+      <Section title="What I would carry forward">
         <p>
-          Integrating Kubernetes RBAC with Okta is a high-leverage upgrade for
-          organizations managing multi-team clusters.
+          Integrating Kubernetes RBAC with Okta was valuable because it moved
+          access decisions closer to identity ownership.
         </p>
         <p>
           By combining centralized identity, group-based authorization, and
-          policy-driven RBAC, teams gain better security, stronger governance,
-          and more maintainable access operations.
+          policy-driven RBAC, teams get clearer access boundaries and more
+          maintainable access operations.
         </p>
         <p>
           For organizations scaling Kubernetes adoption, this pattern creates a

@@ -227,6 +227,7 @@ export interface Dictionary {
     title: string;
     description: string;
     hook: string;
+    finnish_note?: string;
     startConversation: string;
     intro: string;
     responseTime: string;

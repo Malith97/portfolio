@@ -74,8 +74,12 @@ export function localizeEducationRole(
     return role;
   }
 
-  if (role === "Finnish Language Studies (A1–B2)") {
-    return `${labels.finnishLanguageStudies} (A1–B2)`;
+  if (
+    role === "Finnish Language Studies (A1–B2)" ||
+    role === "Finnish Language Studies — currently B2" ||
+    role === "Finnish Language Studies — currently A2"
+  ) {
+    return `${labels.finnishLanguageStudies} — tällä hetkellä A2`;
   }
 
   if (role === "BSc (Hons) Computer Science") {

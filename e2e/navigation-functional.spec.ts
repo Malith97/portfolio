@@ -19,7 +19,7 @@ test("navigation, story anchors, and core routes work without console errors", a
   await page.goto("/story");
   await expect(page).toHaveURL(/\/story$/);
   await expect(
-    page.getByRole("heading", { name: /From Curiosity to Reliability/i }),
+    page.getByRole("heading", { name: /The Engineer Behind the Systems/i }),
   ).toBeVisible();
 
   await expect(page.getByTestId("nav-link-story")).toHaveAttribute(
@@ -34,16 +34,14 @@ test("navigation, story anchors, and core routes work without console errors", a
   await page.locator('aside a[href="#chapter-06"]').first().click();
   await expect(page).toHaveURL(/#chapter-06$/);
   await expect(
-    page
-      .locator('aside a[aria-current="location"][href="#chapter-06"]')
-      .first(),
+    page.getByRole("heading", { name: /What did ownership become at Zebra/i }),
   ).toBeVisible();
 
   await page.goto("/case-studies");
   await page.waitForSelector('a[href^="/case-studies/"]', { state: "visible" });
   await expect(
     page.getByRole("heading", {
-      name: /Infrastructure & Delivery Case Studies/i,
+      name: /Infrastructure decisions, written clearly/i,
     }),
   ).toBeVisible();
 
@@ -53,7 +51,7 @@ test("navigation, story anchors, and core routes work without console errors", a
   await page.goto("/contact");
   await expect(
     page.getByRole("heading", {
-      name: /Let’s build reliable systems together/i,
+      name: /Let’s talk about the system you need to make calmer/i,
     }),
   ).toBeVisible();
 
