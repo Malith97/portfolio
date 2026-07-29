@@ -199,7 +199,7 @@ export function HomePageContent({
             {t.home.heroMeta}
           </p>
           <p className="font-mono text-xs uppercase tracking-label text-muted">
-            Available from {siteConfig.availabilityStart}
+            Available {siteConfig.availabilityStart}
           </p>
 
           <HeroCtaRow className="flex flex-wrap gap-3 pt-1">

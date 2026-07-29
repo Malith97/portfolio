@@ -31,80 +31,6 @@ const CHAPTER_YEARS: Record<string, { eng: string; fi: string }> = {
   epilogue: { eng: "Next", fi: "Seuraava" },
 };
 
-const CHAPTER_TAKEAWAYS: Record<string, { eng: string; fi: string }> = {
-  prologue: {
-    eng: "Trust is the through-line.",
-    fi: "Luottamus kulkee koko tarinan läpi.",
-  },
-  "chapter-01": {
-    eng: "Curiosity became systems thinking.",
-    fi: "Uteliaisuudesta tuli systeemiajattelua.",
-  },
-  "chapter-02": {
-    eng: "Learning came from taking things apart.",
-    fi: "Oppiminen alkoi purkamisesta ja uudelleen rakentamisesta.",
-  },
-  "chapter-03": {
-    eng: "Failure changed how I expose risk.",
-    fi: "Epäonnistuminen muutti tapaani tuoda riskit näkyviin.",
-  },
-  "chapter-04": {
-    eng: "Software became customer responsibility.",
-    fi: "Ohjelmistosta tuli vastuuta käyttäjiä kohtaan.",
-  },
-  "chapter-05": {
-    eng: "DevOps became developer empathy in practice.",
-    fi: "DevOpsista tuli käytännön empatiaa kehittäjiä kohtaan.",
-  },
-  "chapter-06": {
-    eng: "Automation made releases visible and repeatable.",
-    fi: "Automaatio teki julkaisuista näkyviä ja toistettavia.",
-  },
-  "chapter-07": {
-    eng: "Financial systems sharpened my judgment.",
-    fi: "Finanssijärjestelmät terävöittivät harkintaani.",
-  },
-  "chapter-08": {
-    eng: "Finland made progress quieter and deeper.",
-    fi: "Suomi teki edistymisestä hiljaisempaa ja syvempää.",
-  },
-  "chapter-09": {
-    eng: "I build calm, operable platforms.",
-    fi: "Rakennan rauhallisia ja ylläpidettäviä alustoja.",
-  },
-  epilogue: {
-    eng: "Bring me the messy reliability problem.",
-    fi: "Tuo minulle sotkuinen luotettavuusongelma.",
-  },
-};
-
-const CHAPTER_PULL_QUOTES: Record<string, { eng: string; fi: string }> = {
-  prologue: {
-    eng: "When someone gives me a hard problem, I try to bring back the truth first.",
-    fi: "Luottamus syntyy, kun vaikean ongelman voi antaa sinulle ja tietää, että tuot takaisin totuuden.",
-  },
-  "chapter-03": {
-    eng: "Delivery alone was not the standard I wanted.",
-    fi: "Pelkkä toimitus ei ollut se taso, johon halusin tyytyä.",
-  },
-  "chapter-06": {
-    eng: "I chose the second path — slow down enough to build something the team could operate after I was not in the room.",
-    fi: "Julkaisupäivästä tuli vähemmän dramaattinen.",
-  },
-  "chapter-07": {
-    eng: "A deployment needed a rollback path. Access needed boundaries. Cost needed ownership.",
-    fi: "Julkaisu tarvitsi paluupolun. Pääsy tarvitsi rajat. Kustannukset tarvitsivat omistajan.",
-  },
-  "chapter-09": {
-    eng: "Make the path easy to use, hard to misuse, and clear when it fails.",
-    fi: "Tee polusta helppo käyttää, vaikea käyttää väärin ja selkeä silloin kun se epäonnistuu.",
-  },
-  epilogue: {
-    eng: "Look closely, understand the system, and leave it more trustworthy than I found it.",
-    fi: "Katso tarkasti, ymmärrä järjestelmä ja jätä se luotettavammaksi kuin löysit sen.",
-  },
-};
-
 function StoryImage({
   src,
   alt,
@@ -345,8 +271,6 @@ export function StoryPageContent() {
           <div className="space-y-12 sm:space-y-16">
             {content.chapters.map((chapter, index) => {
               const chapterImageSrc = STORY_CHAPTER_IMAGES[chapter.id];
-              const takeaway = CHAPTER_TAKEAWAYS[chapter.id]?.[localeKey];
-              const pullQuote = CHAPTER_PULL_QUOTES[chapter.id]?.[localeKey];
               const isFirstChapter = index === 0;
 
               return (
@@ -367,18 +291,7 @@ export function StoryPageContent() {
                           >
                             {chapter.title}
                           </h2>
-                          {takeaway ? (
-                            <p className="max-w-[680px] border-l-2 border-accent/70 pl-4 text-sm leading-6 text-neutral-300">
-                              {takeaway}
-                            </p>
-                          ) : null}
                         </header>
-
-                        {pullQuote ? (
-                          <blockquote className="max-w-[720px] rounded-lg border border-border bg-surface/45 px-4 py-4 font-serif text-xl leading-8 text-text sm:px-5 sm:text-2xl sm:leading-9">
-                            {pullQuote}
-                          </blockquote>
-                        ) : null}
 
                         <div className="max-w-[760px] space-y-4 text-base leading-7 text-muted sm:text-[1.03rem] sm:leading-8">
                           {chapter.paragraphs.map((paragraph) => (
