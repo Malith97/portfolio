@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 import { useLanguage } from "@/components/language-provider";
@@ -79,7 +80,7 @@ const CHAPTER_TAKEAWAYS: Record<string, { eng: string; fi: string }> = {
 
 const CHAPTER_PULL_QUOTES: Record<string, { eng: string; fi: string }> = {
   prologue: {
-    eng: "Trust is earned when people can hand you a hard problem and know you will bring back the truth.",
+    eng: "When someone gives me a hard problem, I try to bring back the truth first.",
     fi: "Luottamus syntyy, kun vaikean ongelman voi antaa sinulle ja tietää, että tuot takaisin totuuden.",
   },
   "chapter-03": {
@@ -87,7 +88,7 @@ const CHAPTER_PULL_QUOTES: Record<string, { eng: string; fi: string }> = {
     fi: "Pelkkä toimitus ei ollut se taso, johon halusin tyytyä.",
   },
   "chapter-06": {
-    eng: "Release day became less dramatic.",
+    eng: "I chose the second path — slow down enough to build something the team could operate after I was not in the room.",
     fi: "Julkaisupäivästä tuli vähemmän dramaattinen.",
   },
   "chapter-07": {
@@ -447,6 +448,32 @@ export function StoryPageContent() {
                 </FadeInOnView>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-border pt-10 text-center sm:pt-12">
+        <div className="mx-auto max-w-2xl space-y-5">
+          <h2 className="font-serif text-3xl leading-tight text-text sm:text-4xl">
+            Ready to work on something real?
+          </h2>
+          <p className="text-base leading-7 text-muted">
+            If the work described here matches the kind of problem you&apos;re
+            trying to solve, I&apos;d like to hear about it.
+          </p>
+          <div className="mx-auto flex max-w-sm flex-col gap-3 sm:max-w-none sm:flex-row sm:justify-center">
+            <Link
+              href="/case-studies"
+              className="inline-flex min-h-11 items-center justify-center rounded-md border border-border px-4 py-2 text-sm font-medium text-text transition-colors hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/90 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              See the work
+            </Link>
+            <Link
+              href="/contact"
+              className="inline-flex min-h-11 items-center justify-center rounded-md border border-border px-4 py-2 text-sm font-medium text-text transition-colors hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/90 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              Get in touch
+            </Link>
           </div>
         </div>
       </section>

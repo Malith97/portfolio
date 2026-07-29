@@ -36,6 +36,7 @@ import {
   sortExperienceByMostRecent,
   toolCategories,
 } from "@/lib/profile";
+import { siteConfig } from "@/lib/site-config";
 
 const beyondWorkCategoryOrder = [
   "cooking",
@@ -238,6 +239,10 @@ export function HomePageContent({
           <p className="font-mono text-xs uppercase tracking-label text-accent">
             {t.home.heroMeta}
           </p>
+          <div className="space-y-1 font-mono text-xs uppercase tracking-label text-muted">
+            <p>Available from {siteConfig.availabilityStart}</p>
+            <p>🏆 Best Pitch — OYSTER Hack4Health 2025, Oulu</p>
+          </div>
 
           <HeroCtaRow className="flex flex-wrap gap-3 pt-1">
             <Link

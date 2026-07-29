@@ -173,7 +173,7 @@ export const en: Dictionary = {
         paragraphs: [
           "In 2006 my parents brought home a Pentium 3 machine with 128 MB of RAM, a 16 MB graphics card, and a heavy CRT monitor that made the desk creak.",
           "It was not a powerful computer. That did not matter. To me it felt like a room with no walls.",
-          "I wanted to know why it froze, why the fan changed sound, why one program made the whole machine slow, and what happened after I pressed a key. Before I knew the word systems, I was already looking for causes.",
+          "I wanted to know why it froze, why the fan changed sound, why one program made the whole machine slow, and what happened after I pressed a key. I did not have a word for systems yet. I just kept asking what caused the machine to behave that way.",
         ],
         imageAlt:
           "Old desktop computer with CRT monitor representing Malith’s first computer.",
@@ -222,7 +222,7 @@ export const en: Dictionary = {
         title: "Why did DevOps become the work?",
         paragraphs: [
           "In 2021 I joined Zebra Technologies in Sri Lanka and started on SmartLens, an RFID-based system where software had to deal with physical-world messiness: devices, environments, timing, data, and people using the product in real operations.",
-          "Later I moved to a new department as the first DevOps engineer in the team. There was no mature platform waiting for me, no clean release system to extend, and around twenty five engineers were losing days to manual build and release work.",
+          "Later I moved to a new department as the first DevOps engineer in the team. On a Tuesday I noticed a taped-up 17-step manual release checklist near the team area. There was no mature platform waiting for me, and around twenty five engineers were losing days to manual build and release work.",
           "That was the moment DevOps became more than tooling for me. It was the practice of removing repeated pain from good engineers so they could spend more time solving product problems.",
         ],
       },
@@ -232,7 +232,7 @@ export const en: Dictionary = {
         title: "What did ownership become at Zebra?",
         paragraphs: [
           "I designed and built the delivery flow from the ground up: cloud infrastructure, Jenkins pipelines, automated testing and reporting, artifact publishing to JFrog Artifactory, and deployment delivery to production.",
-          "The trade-off was between moving fast with a brittle script collection or slowing down enough to build a path the team could operate after I was not in the room. I chose the second path. Reusable pipeline stages, clearer failure points, and visible reports mattered as much as the automation itself.",
+          "The choice was practical: keep adding scripts that only I understood, or slow down and build a release path the team could run without me sitting beside them. I chose the second path. Reusable pipeline stages, clearer failure points, and visible reports mattered as much as the automation itself.",
           "Release work that used to take three or four days of manual coordination became automated runs that finished in under two hours. More important, release day became less dramatic. The team could see what happened, where it failed, and how to recover.",
         ],
         imageAlt:
@@ -247,8 +247,9 @@ export const en: Dictionary = {
         paragraphs: [
           "At LSEG I worked with teams connected to London Stock Exchange, Turquoise products, and Millennium Surveillance systems.",
           "That environment changed my tolerance for vague engineering. A change needed a reason. A deployment needed a rollback path. Access needed boundaries. Cost needed ownership. An incident needed facts before opinions.",
-          "Later, as a senior engineer in Millennium Surveillance's cloud team, I owned work across cloud cost governance, pipeline hardening, service upgrades, cloud migration, reliability improvements, and GitLab migration work. Some of that work was measurable: cloud governance reduced spend by 35%, around $75K per year, and reliability work helped reduce downtime by 20%.",
+          "Later, as a senior engineer in Millennium Surveillance's cloud team, I owned cloud cost governance, pipeline hardening, service upgrades, cloud migration, reliability improvements, and GitLab migration work. Some of that work was measurable: cloud governance reduced spend by 35%, around $75K per year, and reliability work cut downtime by 20%.",
           "The lesson was not to become slow. It was to become deliberate. In financial infrastructure, good judgment means knowing when to automate, when to stop, when to ask for review, and when a small operational detail is actually a business risk.",
+          "What I would do differently now is document the pipeline decisions before touching the pipelines. During the GitLab migration, the runner configuration worked, but two engineers later told me they did not fully understand why it was shaped that way. That was a documentation gap, not a tooling problem.",
         ],
         imageAlt:
           "Malith at LSEG workplace during his DevOps engineering chapter.",
@@ -263,7 +264,7 @@ export const en: Dictionary = {
           "In 2025 my wife and I moved to Oulu, Finland to build the next part of our lives.",
           "Finland made progress quieter. I started learning Finnish from A1 toward B2, not because language study looks impressive on a profile, but because I want to participate properly in the country I chose. Some days that means grammar tables. Some days it means understanding one more sentence at the grocery store, in a classroom, or in a local conversation.",
           "Oulu has given me specific memories that changed how this place feels: walking on the frozen sea at Nallikari, watching the sky refuse to get dark during Juhannus, cycling long summer roads toward Hailuoto and Kiiminki, and joining OYSTER Hack4Health, where our cross-functional team won Best Pitch for a wearable-based glucose prediction concept.",
-          "Starting again in a new country has made me more patient, more direct, and more aware of what it feels like to be new in a system. That matters for engineering too. The best platforms remember the beginner without slowing down the expert.",
+          "Starting again in a new country has made me more patient, more direct, and more aware of what it feels like to be new in a system. I think about that when I build platform workflows now. A new engineer should be able to make the first safe change without needing a private tour from the person who built it.",
         ],
         imageAlt:
           "Winter photos from Finland representing Malith’s move to Oulu.",
@@ -276,8 +277,8 @@ export const en: Dictionary = {
         paragraphs: [
           "I am a DevOps and cloud reliability engineer who is strongest when the work sits between infrastructure, delivery systems, developer experience, and production responsibility.",
           "The problems that pull me in are specific: CI/CD systems that teams actually trust, Kubernetes platforms with clear access boundaries, cloud environments where cost has an owner, observability that helps people decide instead of admire dashboards, incident processes that produce learning, and automation that removes toil without hiding risk.",
-          "My engineering philosophy is practical. Make the path easy to use, hard to misuse, and clear when it fails. Prefer boring reliability over clever fragility. Document the decision, not just the command. Treat security, cost, and operability as design inputs from the beginning.",
-          "I want to work with teams that care about pace, but not panic; autonomy, but not heroics; high standards, but not ego. I do my best work where platform quality is understood as a business advantage and developer empathy is part of reliability.",
+          "My engineering philosophy is practical. Make the normal path obvious. Make failures visible. Prefer boring reliability over clever fragility. Document the decision, not just the command. Treat security, cost, and operability as design inputs from the beginning.",
+          "I want to work with teams that can move quickly without turning every release into a rescue mission. I do my best work where platform quality is understood as a business advantage and developer empathy is part of reliability.",
         ],
       },
       {

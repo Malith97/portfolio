@@ -106,7 +106,7 @@ export const experienceTimeline: ExperienceItem[] = [
         fi: "Johdin säädeltyjen työkuormien siirtoa omasta konesaliympäristöstä pilveen ja uudistin arkkitehtuuria eristyksen, tietoturvan ja skaalautuvuuden näkökulmista.",
       },
       {
-        eng: "Introduced controlled failure testing to expose weak points earlier, contributing to a 20% reduction in downtime.",
+        eng: "Introduced controlled failure testing to expose weak points earlier and cut downtime by 20%.",
         fi: "Otin käyttöön hallittuja vikakokeiluja Chaos Engineering -periaatteilla vikatilanteiden simulointiin ja resilienssin parantamiseen, mikä vähensi käyttökatkoja 20 %.",
       },
       {
@@ -256,7 +256,7 @@ export const experienceTimeline: ExperienceItem[] = [
     ],
   },
   {
-    role: "Finnish Language Studies (A1–B2)",
+    role: "Finnish Language Studies — currently B2",
     company: "Arffman Oy",
     companyUrl: "https://www.arffman.fi",
     period: "2025–2026",
@@ -344,7 +344,7 @@ export const certifications: CredentialItem[] = [
 
 export const professionalSummary: LocalizedText[] = [
   {
-    eng: "DevOps Engineer with 6 years across software development, cloud automation, infrastructure as code, and CI/CD. I have worked in AWS and Azure environments, including cost governance, cloud migration, secure platform work, Kubernetes access control, and production reliability for financial and enterprise teams.",
+    eng: "I have spent 6 years moving from product software into DevOps, cloud automation, infrastructure as code, and CI/CD. My recent work has been in AWS and Azure: cost governance, cloud migration, secure platform work, Kubernetes access control, and production reliability for financial and enterprise teams.",
     fi: "Tuloshakuinen DevOps-insinööri, jolla on kuuden vuoden kokemus ohjelmistokehityksestä, pilviautomaatiosta, infrastruktuurista koodina ja CI/CD-optimoinnista. Minulla on vahva tausta AWS- ja Azure-ympäristöistä, pilvikustannusten optimoinnista, laajoista migraatioista, turvallisesta platform engineeringistä ja kestävien järjestelmien rakentamisesta finanssi- ja yritystiimeille. Käytännön osaamiseni kattaa muun muassa Terraformin, Ansiblen, Kubernetesin, Helmin, Jenkinsin, GitLabin, Dockerin, Prometheuksen, Grafanan ja Datadogin. Olen tunnettu poikkitiimisen työn johtamisesta, mentoroinnista, toimitusvarmuuden parantamisesta, häiriötilanteiden hallinnasta sekä automaation ja jatkuvan parantamisen kautta syntyvästä liiketoimintahyödystä.",
   },
 ];
